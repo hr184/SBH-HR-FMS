@@ -14,54 +14,167 @@ const MisReport = () => {
   const [isNewPIPRecord, setIsNewPIPRecord] = useState(false);
   const [pipData, setPipData] = useState([]);
   const [emailForm, setEmailForm] = useState({
-    recipientName: '',
-    recipientEmail: '',
-    subject: '',
-    message: '',
-    startDate: '',
-    endDate: '',
-    totalDays: 0
+    recipientName: "",
+    recipientEmail: "",
+    subject: "",
+    message: "",
+    startDate: "",
+    endDate: "",
+    totalDays: 0,
   });
   const [employeeEmails, setEmployeeEmails] = useState({});
-  const [showExtendPopup, setShowExtendPopup] = useState(false); 
+  const [showExtendPopup, setShowExtendPopup] = useState(false);
   const [selectedPIPRecord, setSelectedPIPRecord] = useState(null);
   const [extendForm, setExtendForm] = useState({
-  startDate: "",
-  endDate: "",
-  totalDays: 0,
+    startDate: "",
+    endDate: "",
+    totalDays: 0,
   });
 
-  const handleExtendClick = (record) => {
-  setSelectedPIPRecord(record);
-  setExtendForm({
-    startDate: record.startDate || '',
-    endDate: record.endDate || '',
-    totalDays: record.totalDays || 0
-  });
-  setShowExtendPopup(true);
-};
+  const handleDownloadData = () => {
+  // Determine what data to download based on current view
+  let dataToDownload = [];
+  let filename = '';
+  let headers = [];
 
-const handleExtendFormChange = (field, value) => {
-  if (field === 'startDate' || field === 'endDate') {
-    const updatedForm = {
-      ...extendForm,
-      [field]: value
-    };
-    
-    // Calculate total days if both dates are selected
-    if (updatedForm.startDate && updatedForm.endDate) {
-      const start = new Date(updatedForm.startDate);
-      const end = new Date(updatedForm.endDate);
-      const timeDiff = end.getTime() - start.getTime();
-      const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1;
-      updatedForm.totalDays = dayDiff > 0 ? dayDiff : 0;
+  if (showPIPPage) {
+    // Download PIP data
+    dataToDownload = pipData.filter((record) => record.status !== "Done");
+    filename = 'PIP_Records.csv';
+    headers = [
+      'Timestamp',
+      'Employee Name',
+      'Latest Score',
+      '3-Month Average',
+      'Status',
+      'Email',
+      'Start Date',
+      'End Date',
+      'Total Days',
+      'Email Content'
+    ];
+  } else if (selectedEmployee) {
+    // Download employee history
+    dataToDownload = filteredData;
+    filename = `${selectedEmployee}_History.csv`;
+    headers = [
+      'Name',
+      'Date Start',
+      'Date End',
+      'Target',
+      'Actual Week Done',
+      'Actual Work Done On Time',
+      'Work Not Done On Time',
+      'Work Done On Time %',
+      'Work Not Done',
+      'Work Not Done %',
+      'Overall Done %'
+    ];
+  } else {
+    // Download main scorecard data
+    dataToDownload = filteredData;
+    filename = 'MIS_Scorecard.csv';
+    headers = [
+      'Name',
+      'Date Start',
+      'Date End',
+      'Target',
+      'Actual Week Done',
+      'Actual Work Done On Time',
+      'Work Not Done On Time',
+      'Work Done On Time %',
+      'Work Not Done',
+      'Work Not Done %',
+      'Overall Done %'
+    ];
+  }
+
+  if (dataToDownload.length === 0) {
+    alert('No data available to download');
+    return;
+  }
+
+  // Convert data to CSV format
+  let csvContent = headers.join(',') + '\n';
+
+  dataToDownload.forEach((row) => {
+    let rowData = [];
+    if (showPIPPage) {
+      rowData = [
+        row.timestamp,
+        row.employeeName,
+        row.latestScore,
+        row.monthlyAverage,
+        row.status,
+        row.email,
+        row.startDate,
+        row.endDate,
+        row.totalDays,
+        `"${(row.emailContent || '').replace(/"/g, '""')}"` // Escape quotes in email content
+      ];
     } else {
-      updatedForm.totalDays = 0;
+      rowData = [
+        row.name,
+        row.dateStart,
+        row.dateEnd,
+        row.target,
+        row.actualWeekDone,
+        row.actualWorkDoneOnTime,
+        row.workNotDoneOnTime,
+        row.workDoneOnTime,
+        row.workNotDone,
+        row.workNotDonePercent,
+        row.overallDone
+      ];
     }
-    
-    setExtendForm(updatedForm);
+    csvContent += rowData.join(',') + '\n';
+  });
+
+  // Create blob and download
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  if (link.download !== undefined) {
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 };
+
+  const handleExtendClick = (record) => {
+    setSelectedPIPRecord(record);
+    setExtendForm({
+      startDate: record.startDate || "",
+      endDate: record.endDate || "",
+      totalDays: record.totalDays || 0,
+    });
+    setShowExtendPopup(true);
+  };
+
+  const handleExtendFormChange = (field, value) => {
+    if (field === "startDate" || field === "endDate") {
+      const updatedForm = {
+        ...extendForm,
+        [field]: value,
+      };
+
+      // Calculate total days if both dates are selected
+      if (updatedForm.startDate && updatedForm.endDate) {
+        const start = new Date(updatedForm.startDate);
+        const end = new Date(updatedForm.endDate);
+        const timeDiff = end.getTime() - start.getTime();
+        const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1;
+        updatedForm.totalDays = dayDiff > 0 ? dayDiff : 0;
+      } else {
+        updatedForm.totalDays = 0;
+      }
+
+      setExtendForm(updatedForm);
+    }
+  };
 
   useEffect(() => {
     fetchData();
@@ -70,65 +183,72 @@ const handleExtendFormChange = (field, value) => {
 
   const fetchEmployeeEmails = async () => {
     try {
-      const response = await fetch('https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec?sheet=JOINING&action=fetch');
-      
+      const response = await fetch(
+        "https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec?sheet=JOINING&action=fetch"
+      );
+
       if (!response.ok) {
-        throw new Error('Failed to fetch email data');
+        throw new Error("Failed to fetch email data");
       }
-      
+
       const data = await response.json();
-      
+
       if (data.success) {
         const emailMap = processEmailData(data.data);
         setEmployeeEmails(emailMap);
       } else {
-        console.warn('Failed to fetch email data from JOINING sheet:', data.error);
+        console.warn(
+          "Failed to fetch email data from JOINING sheet:",
+          data.error
+        );
       }
     } catch (err) {
-      console.warn('Error fetching email data:', err);
+      console.warn("Error fetching email data:", err);
       // Don't set error state as this is non-critical functionality
     }
   };
 
   const processEmailData = (sheetData) => {
     if (!sheetData || sheetData.length < 2) return {};
-    
+
     const rows = sheetData.slice(1);
     const emailMap = {};
-    
-    rows.forEach(row => {
-      const name = row[2] || ''; // Column C (index 2)
-      const email = row[18] || ''; // Column S (index 18)
-      
+
+    rows.forEach((row) => {
+      const name = row[2] || ""; // Column C (index 2)
+      const email = row[18] || ""; // Column S (index 18)
+
       if (name && email) {
         emailMap[name] = email;
       }
     });
-    
+
     return emailMap;
   };
 
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await fetch('https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec?sheet=MIS Scorecard&action=fetch');
-      
+      const response = await fetch(
+        "https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec?sheet=MIS Scorecard&action=fetch"
+      );
+
       if (!response.ok) {
-        throw new Error('Failed to fetch data');
+        throw new Error("Failed to fetch data");
       }
-      
+
       const data = await response.json();
-      
+
       if (data.success) {
         const processedData = processSheetData(data.data);
         setPeopleData(processedData);
         setFilteredData(processedData);
       } else {
-        throw new Error(data.error || 'Failed to fetch data from sheet');
+        throw new Error(data.error || "Failed to fetch data from sheet");
       }
     } catch (err) {
       setError(err.message);
-      console.error('Error fetching data:', err);
+      console.error("Error fetching data:", err);
     } finally {
       setLoading(false);
     }
@@ -137,24 +257,31 @@ const handleExtendFormChange = (field, value) => {
   const fetchHistoryData = async (employeeName) => {
     try {
       setLoading(true);
-      const response = await fetch('https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec?sheet=MIS Scorecard History&action=fetch');
-      
+      const response = await fetch(
+        "https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec?sheet=MIS Scorecard History&action=fetch"
+      );
+
       if (!response.ok) {
-        throw new Error('Failed to fetch history data');
+        throw new Error("Failed to fetch history data");
       }
-      
+
       const data = await response.json();
-      
+
       if (data.success) {
-        const processedHistoryData = processHistoryData(data.data, employeeName);
+        const processedHistoryData = processHistoryData(
+          data.data,
+          employeeName
+        );
         setHistoryData(processedHistoryData);
         setFilteredData(processedHistoryData);
       } else {
-        throw new Error(data.error || 'Failed to fetch history data from sheet');
+        throw new Error(
+          data.error || "Failed to fetch history data from sheet"
+        );
       }
     } catch (err) {
       setError(err.message);
-      console.error('Error fetching history data:', err);
+      console.error("Error fetching history data:", err);
     } finally {
       setLoading(false);
     }
@@ -163,23 +290,25 @@ const handleExtendFormChange = (field, value) => {
   const fetchPIPData = async () => {
     try {
       setLoading(true);
-      const response = await fetch('https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec?sheet=PIP&action=fetch');
-      
+      const response = await fetch(
+        "https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec?sheet=PIP&action=fetch"
+      );
+
       if (!response.ok) {
-        throw new Error('Failed to fetch PIP data');
+        throw new Error("Failed to fetch PIP data");
       }
-      
+
       const data = await response.json();
-      
+
       if (data.success) {
         const processedPIPData = processPIPData(data.data);
         setPipData(processedPIPData);
       } else {
-        throw new Error(data.error || 'Failed to fetch PIP data from sheet');
+        throw new Error(data.error || "Failed to fetch PIP data from sheet");
       }
     } catch (err) {
       setError(err.message);
-      console.error('Error fetching PIP data:', err);
+      console.error("Error fetching PIP data:", err);
     } finally {
       setLoading(false);
     }
@@ -187,51 +316,51 @@ const handleExtendFormChange = (field, value) => {
 
   const processSheetData = (sheetData) => {
     if (!sheetData || sheetData.length < 2) return [];
-    
+
     const rows = sheetData.slice(1);
-    
+
     return rows.map((row, index) => {
       return {
         id: index + 1,
-        name: row[2] || '',
-        dateStart: row[0] || '',
-        dateEnd: row[1] || '',
-        target: row[3] || '',
-        actualWeekDone: row[4] || '',
-        actualWorkDoneOnTime: row[5] || '',
-        workNotDoneOnTime: row[6] || '',
+        name: row[2] || "",
+        dateStart: row[0] || "",
+        dateEnd: row[1] || "",
+        target: row[3] || "",
+        actualWeekDone: row[4] || "",
+        actualWorkDoneOnTime: row[5] || "",
+        workNotDoneOnTime: row[6] || "",
         workDoneOnTime: parseInt(row[7]) || 0,
-        workNotDone: row[8] || '',
-        workNotDonePercent: row[9] || '',
-        overallDone: (row[10]) || 0,
+        workNotDone: row[8] || "",
+        workNotDonePercent: row[9] || "",
+        overallDone: row[10] || 0,
       };
     });
   };
 
   const processHistoryData = (sheetData, employeeName) => {
     if (!sheetData || sheetData.length < 2) return [];
-    
+
     const rows = sheetData.slice(1);
-    
+
     const filteredHistory = rows
-      .filter(row => row[2] === employeeName)
+      .filter((row) => row[2] === employeeName)
       .map((row, index) => {
         return {
           id: index + 1,
-          name: row[2] || '',
-          dateStart: row[0] || '',
-          dateEnd: row[1] || '',
-          target: row[3] || '',
-          actualWeekDone: row[4] || '',
-          actualWorkDoneOnTime: row[5] || '',
-          workNotDoneOnTime: row[6] || '',
+          name: row[2] || "",
+          dateStart: row[0] || "",
+          dateEnd: row[1] || "",
+          target: row[3] || "",
+          actualWeekDone: row[4] || "",
+          actualWorkDoneOnTime: row[5] || "",
+          workNotDoneOnTime: row[6] || "",
           workDoneOnTime: parseInt(row[7]) || 0,
-          workNotDone: row[8] || '',
-          workNotDonePercent: row[9] || '',
+          workNotDone: row[8] || "",
+          workNotDonePercent: row[9] || "",
           overallDone: parseFloat(row[10]) || 0,
         };
       });
-    
+
     // Sort by date (latest first) - assuming dateEnd format is consistent
     return filteredHistory.sort((a, b) => {
       const dateA = parseDate(a.dateEnd);
@@ -240,174 +369,185 @@ const handleExtendFormChange = (field, value) => {
     });
   };
 
-const processPIPData = (sheetData) => {
+  const processPIPData = (sheetData) => {
     if (!sheetData || sheetData.length < 2) return [];
-    
+
     const rows = sheetData.slice(1);
-    
+
     return rows.map((row, index) => {
       return {
         id: index + 1,
-        timestamp: row[0] || '',
-        employeeName: row[1] || '',
-        latestScore: row[2] || '',
-        monthlyAverage: row[3] || '',
-        status: row[4] || '',           // Column E (index 4) - status
-        email: row[5] || '',            // Column F (index 5) - email
-        emailContent: row[6] || '',     // Column G (index 6) - email content
-        startDate: row[7] || '',        // Column H (index 7) - start date
-        endDate: row[8] || '',          // Column I (index 8) - end date
-        totalDays: row[9] || 0,         // Column J (index 9) - total days
+        timestamp: row[0] || "",
+        employeeName: row[1] || "",
+        latestScore: row[2] || "",
+        monthlyAverage: row[3] || "",
+        status: row[4] || "", // Column E (index 4) - status
+        email: row[5] || "", // Column F (index 5) - email
+        emailContent: row[6] || "", // Column G (index 6) - email content
+        startDate: row[7] || "", // Column H (index 7) - start date
+        endDate: row[8] || "", // Column I (index 8) - end date
+        totalDays: row[9] || 0, // Column J (index 9) - total days
       };
     });
   };
 
-// Add this function to handle status updates
-const updatePIPStatus = async (recordId, employeeName, newStatus, buttonType, extendData = null) => {
-  // Set loading state for this specific record and button
-  setPipActionLoading(prev => ({ ...prev, [`${recordId}-${buttonType}`]: true }));
-  
-  try {
-    let success = true;
-    
-    // If it's an extend action and we have extend data, update the dates first
-    if (buttonType === 'extend' && extendData) {
-      const dateFormData = new URLSearchParams();
-      dateFormData.append('action', 'updateCell');
-      dateFormData.append('sheetName', 'PIP');
-      dateFormData.append('rowIndex', recordId + 1);
-      
-      // Update start date (Column H - index 7)
-      dateFormData.append('columnIndex', '8');
-      dateFormData.append('value', extendData.startDate);
-      
-      const dateResponse = await fetch(
-        'https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec',
-        {
-          method: 'POST',
-          body: dateFormData
-        }
-      );
-      
-      const dateResult = await dateResponse.json();
-      if (!dateResult.success) {
-        throw new Error(dateResult.error || 'Failed to update start date');
-      }
-      
-      // Update end date (Column I - index 8)
-      dateFormData.set('columnIndex', '9');
-      dateFormData.set('value', extendData.endDate);
-      
-      const endDateResponse = await fetch(
-        'https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec',
-        {
-          method: 'POST',
-          body: dateFormData
-        }
-      );
-      
-      const endDateResult = await endDateResponse.json();
-      if (!endDateResult.success) {
-        throw new Error(endDateResult.error || 'Failed to update end date');
-      }
-      
-      // Update total days (Column J - index 9)
-      dateFormData.set('columnIndex', '10');
-      dateFormData.set('value', extendData.totalDays.toString());
-      
-      const daysResponse = await fetch(
-        'https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec',
-        {
-          method: 'POST',
-          body: dateFormData
-        }
-      );
-      
-      const daysResult = await daysResponse.json();
-      if (!daysResult.success) {
-        throw new Error(daysResult.error || 'Failed to update total days');
-      }
-    }
-    
-    // Update status (Column E - index 4)
-    const formData = new URLSearchParams();
-formData.append('action', 'updateCell');
-formData.append('sheetName', 'PIP');
-formData.append('rowIndex', recordId + 1);
-formData.append('columnIndex', '5'); // Column E in Sheets (1-based)
-formData.append('value', newStatus);
+  // Add this function to handle status updates
+  const updatePIPStatus = async (
+    recordId,
+    employeeName,
+    newStatus,
+    buttonType,
+    extendData = null
+  ) => {
+    // Set loading state for this specific record and button
+    setPipActionLoading((prev) => ({
+      ...prev,
+      [`${recordId}-${buttonType}`]: true,
+    }));
 
-    const response = await fetch(
-      'https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec',
+    try {
+      let success = true;
+
+      // If it's an extend action and we have extend data, update the dates first
+      if (buttonType === "extend" && extendData) {
+        const dateFormData = new URLSearchParams();
+        dateFormData.append("action", "updateCell");
+        dateFormData.append("sheetName", "PIP");
+        dateFormData.append("rowIndex", recordId + 1);
+
+        // Update start date (Column H - index 7)
+        dateFormData.append("columnIndex", "8");
+        dateFormData.append("value", extendData.startDate);
+
+        const dateResponse = await fetch(
+          "https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec",
+          {
+            method: "POST",
+            body: dateFormData,
+          }
+        );
+
+        const dateResult = await dateResponse.json();
+        if (!dateResult.success) {
+          throw new Error(dateResult.error || "Failed to update start date");
+        }
+
+        // Update end date (Column I - index 8)
+        dateFormData.set("columnIndex", "9");
+        dateFormData.set("value", extendData.endDate);
+
+        const endDateResponse = await fetch(
+          "https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec",
+          {
+            method: "POST",
+            body: dateFormData,
+          }
+        );
+
+        const endDateResult = await endDateResponse.json();
+        if (!endDateResult.success) {
+          throw new Error(endDateResult.error || "Failed to update end date");
+        }
+
+        // Update total days (Column J - index 9)
+        dateFormData.set("columnIndex", "10");
+        dateFormData.set("value", extendData.totalDays.toString());
+
+        const daysResponse = await fetch(
+          "https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec",
+          {
+            method: "POST",
+            body: dateFormData,
+          }
+        );
+
+        const daysResult = await daysResponse.json();
+        if (!daysResult.success) {
+          throw new Error(daysResult.error || "Failed to update total days");
+        }
+      }
+
+      // Update status (Column E - index 4)
+      const formData = new URLSearchParams();
+      formData.append("action", "updateCell");
+      formData.append("sheetName", "PIP");
+      formData.append("rowIndex", recordId + 1);
+      formData.append("columnIndex", "5"); // Column E in Sheets (1-based)
+      formData.append("value", newStatus);
+
+      const response = await fetch(
+        "https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const result = await response.json();
+
+      if (result.success) {
+        await fetchPIPData();
+        return true;
+      } else {
+        throw new Error(result.error || "Failed to update PIP status");
+      }
+    } catch (error) {
+      console.error("Error updating PIP status:", error);
+      return false;
+    } finally {
+      // Clear loading state for this specific record and button
+      setPipActionLoading((prev) => ({
+        ...prev,
+        [`${recordId}-${buttonType}`]: false,
+      }));
+    }
+  };
+
+  // Add this function to handle extend submission
+  const handleExtendSubmit = async () => {
+    if (!extendForm.startDate || !extendForm.endDate) {
+      alert("Please select both start and end dates");
+      return;
+    }
+
+    if (extendForm.totalDays <= 0) {
+      alert("Please select valid dates");
+      return;
+    }
+
+    // Set loading state for the extend submit button
+    setPipActionLoading((prev) => ({ ...prev, "extend-submit": true }));
+
+    const success = await updatePIPStatus(
+      selectedPIPRecord.id,
+      selectedPIPRecord.employeeName,
+      "Extended",
+      "extend",
       {
-        method: 'POST',
-        body: formData
+        startDate: extendForm.startDate,
+        endDate: extendForm.endDate,
+        totalDays: extendForm.totalDays,
       }
     );
 
-    const result = await response.json();
+    // Clear loading state
+    setPipActionLoading((prev) => ({ ...prev, "extend-submit": false }));
 
-    if (result.success) {
-      await fetchPIPData();
-      return true;
-    } else {
-      throw new Error(result.error || 'Failed to update PIP status');
+    if (success) {
+      setShowExtendPopup(false);
+      setSelectedPIPRecord(null);
+      setExtendForm({
+        startDate: "",
+        endDate: "",
+        totalDays: 0,
+      });
     }
-  } catch (error) {
-    console.error('Error updating PIP status:', error);
-    return false;
-  } finally {
-    // Clear loading state for this specific record and button
-    setPipActionLoading(prev => ({ ...prev, [`${recordId}-${buttonType}`]: false }));
-  }
-};
-
-// Add this function to handle extend submission
-const handleExtendSubmit = async () => {
-  if (!extendForm.startDate || !extendForm.endDate) {
-    alert('Please select both start and end dates');
-    return;
-  }
-
-  if (extendForm.totalDays <= 0) {
-    alert('Please select valid dates');
-    return;
-  }
-
-  // Set loading state for the extend submit button
-  setPipActionLoading(prev => ({ ...prev, 'extend-submit': true }));
-
-  const success = await updatePIPStatus(
-    selectedPIPRecord.id,
-    selectedPIPRecord.employeeName,
-    "Extended",
-    "extend",
-    {
-      startDate: extendForm.startDate,
-      endDate: extendForm.endDate,
-      totalDays: extendForm.totalDays
-    }
-  );
-
-  // Clear loading state
-  setPipActionLoading(prev => ({ ...prev, 'extend-submit': false }));
-
-  if (success) {
-    setShowExtendPopup(false);
-    setSelectedPIPRecord(null);
-    setExtendForm({
-      startDate: '',
-      endDate: '',
-      totalDays: 0
-    });
-  }
-};
-
+  };
 
   const parseDate = (dateStr) => {
     if (!dateStr) return new Date(0);
     // Handle various date formats (DD/MM/YYYY, MM/DD/YYYY, etc.)
-    const parts = dateStr.split('/');
+    const parts = dateStr.split("/");
     if (parts.length === 3) {
       // Assuming DD/MM/YYYY format
       return new Date(parts[2], parts[1] - 1, parts[0]);
@@ -437,11 +577,17 @@ const handleExtendSubmit = async () => {
     setFilteredData(peopleData);
   };
 
-const storePIPRecord = async (employeeName, latestScore, monthlyAverage, recipientEmail, emailContent) => {
+  const storePIPRecord = async (
+    employeeName,
+    latestScore,
+    monthlyAverage,
+    recipientEmail,
+    emailContent
+  ) => {
     try {
-      const timestamp = new Date().toLocaleString('en-GB'); // DD/MM/YYYY, HH:MM:SS format
-      const status = 'Pending';
-      
+      const timestamp = new Date().toLocaleString("en-GB"); // DD/MM/YYYY, HH:MM:SS format
+      const status = "Pending";
+
       // Updated row data with additional columns for dates
       const rowData = [
         timestamp,
@@ -449,92 +595,92 @@ const storePIPRecord = async (employeeName, latestScore, monthlyAverage, recipie
         latestScore,
         monthlyAverage,
         status,
-        recipientEmail,           // Column F (index 5) - recipient email
-        emailContent,             // Column G (index 6) - email content
-        emailForm.startDate,      // Column H (index 7) - start date
-        emailForm.endDate,        // Column I (index 8) - end date
-        emailForm.totalDays       // Column J (index 9) - total days
+        recipientEmail, // Column F (index 5) - recipient email
+        emailContent, // Column G (index 6) - email content
+        emailForm.startDate, // Column H (index 7) - start date
+        emailForm.endDate, // Column I (index 8) - end date
+        emailForm.totalDays, // Column J (index 9) - total days
       ];
 
       const formData = new URLSearchParams();
-      formData.append('action', 'insert');
-      formData.append('sheetName', 'PIP');
-      formData.append('rowData', JSON.stringify(rowData));
+      formData.append("action", "insert");
+      formData.append("sheetName", "PIP");
+      formData.append("rowData", JSON.stringify(rowData));
 
       const response = await fetch(
-        'https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec',
+        "https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec",
         {
-          method: 'POST',
-          body: formData
+          method: "POST",
+          body: formData,
         }
       );
 
       const result = await response.json();
 
       if (!result.success) {
-        throw new Error(result.error || 'Failed to store PIP record');
+        throw new Error(result.error || "Failed to store PIP record");
       }
-      
+
       return true;
     } catch (error) {
-      console.error('Error storing PIP record:', error);
+      console.error("Error storing PIP record:", error);
       return false;
     }
   };
 
-const handleSharePIP = async (employeeName) => {
-  if (showEmailPopup) return;
-  
-  // Find employee data to get their performance details
-  const employeeRecords = filteredData.slice(0, 3); // Latest 3 records
-  const latestRecord = employeeRecords[0];
-  const monthlyAverage = calculateMonthlyAverage();
-  
-  // Get email from employeeEmails mapping
-  const employeeEmail = employeeEmails[employeeName] || '';
-  
-  const emailContent = `Dear ${employeeName},
+  const handleSharePIP = async (employeeName) => {
+    if (showEmailPopup) return;
 
-We would like to share your recent performance scorecard for review.
+    // Find employee data to get their performance details
+    const employeeRecords = filteredData.slice(0, 3); // Latest 3 records
+    const latestRecord = employeeRecords[0];
+    const monthlyAverage = calculateMonthlyAverage();
 
-Performance Summary:
-- Latest Overall Score: ${latestRecord?.overallDone || 0}%
-- 3-Month Average: ${monthlyAverage}%
-- Period: ${latestRecord?.dateStart || ''} to ${latestRecord?.dateEnd || ''}
+    // Get email from employeeEmails mapping
+    const employeeEmail = employeeEmails[employeeName] || "";
 
-Your detailed performance metrics are as follows:
-- Target: ${latestRecord?.target || ''}
-- Actual Work Done: ${latestRecord?.actualWeekDone || ''}
-- Work Done On Time: ${latestRecord?.workDoneOnTime || 0}%
-- Overall Completion: ${latestRecord?.overallDone || 0}%
+    const emailContent = `Dear ${employeeName},
 
-Please review these metrics and let us know if you have any questions. We are available to discuss your performance and any support you may need.
+ We would like to share your recent performance scorecard for review.
 
-Best regards,
-Management Team`;
+ Performance Summary:
+ - Latest Overall Score: ${latestRecord?.overallDone || 0}%
+ - 3-Month Average: ${monthlyAverage}%
+ - Period: ${latestRecord?.dateStart || ""} to ${latestRecord?.dateEnd || ""}
 
-  setEmailForm({
-    recipientName: employeeName,
-    recipientEmail: employeeEmail, // Auto-filled with employee's email
-    subject: `Performance Review - ${employeeName}`,
-    message: emailContent,
-    startDate: '',
-    endDate: '',
-    totalDays: 0
-  });
-  
-  // Set flag to indicate this is a new PIP record that should be stored when email is sent
-  setIsNewPIPRecord(true);
-  setShowEmailPopup(true);
-};
+ Your detailed performance metrics are as follows:
+ - Target: ${latestRecord?.target || ""}
+ - Actual Work Done: ${latestRecord?.actualWeekDone || ""}
+ - Work Done On Time: ${latestRecord?.workDoneOnTime || 0}%
+ - Overall Completion: ${latestRecord?.overallDone || 0}%
+
+ Please review these metrics and let us know if you have any questions. We are available to discuss your performance and any support you may need.
+
+ Best regards,
+ Management Team`;
+
+    setEmailForm({
+      recipientName: employeeName,
+      recipientEmail: employeeEmail, // Auto-filled with employee's email
+      subject: `Performance Review - ${employeeName}`,
+      message: emailContent,
+      startDate: "",
+      endDate: "",
+      totalDays: 0,
+    });
+
+    // Set flag to indicate this is a new PIP record that should be stored when email is sent
+    setIsNewPIPRecord(true);
+    setShowEmailPopup(true);
+  };
 
   const handleEmailFormChange = (field, value) => {
-    if (field === 'startDate' || field === 'endDate') {
+    if (field === "startDate" || field === "endDate") {
       const updatedForm = {
         ...emailForm,
-        [field]: value
+        [field]: value,
       };
-      
+
       // Calculate total days if both dates are selected
       if (updatedForm.startDate && updatedForm.endDate) {
         const start = new Date(updatedForm.startDate);
@@ -545,119 +691,136 @@ Management Team`;
       } else {
         updatedForm.totalDays = 0;
       }
-      
+
       setEmailForm(updatedForm);
     } else {
-      setEmailForm(prev => ({ ...prev, [field]: value }));
+      setEmailForm((prev) => ({ ...prev, [field]: value }));
     }
   };
 
-const handleSendEmail = async () => {
-  // Validate email form
-  if (!emailForm.recipientEmail || !emailForm.subject || !emailForm.message) {
-    alert('Please fill in all required fields');
-    return;
-  }
+  const handleSendEmail = async () => {
+    // Validate email form
+    if (!emailForm.recipientEmail || !emailForm.subject || !emailForm.message) {
+      alert("Please fill in all required fields");
+      return;
+    }
 
-  try {
-    setLoading(true);
-    
-    // Store PIP record only when sending email (if it's a new record)
-    if (isNewPIPRecord) {
-      const employeeRecords = filteredData.slice(0, 3);
-      const latestRecord = employeeRecords[0];
-      const monthlyAverage = calculateMonthlyAverage();
-      
-      const storeSuccess = await storePIPRecord(
-        emailForm.recipientName,
-        latestRecord?.overallDone || 0,
-        monthlyAverage,
-        emailForm.recipientEmail,
-        emailForm.message // Use the actual message that was sent
+    try {
+      setLoading(true);
+
+      // Store PIP record only when sending email (if it's a new record)
+      if (isNewPIPRecord) {
+        const employeeRecords = filteredData.slice(0, 3);
+        const latestRecord = employeeRecords[0];
+        const monthlyAverage = calculateMonthlyAverage();
+
+        const storeSuccess = await storePIPRecord(
+          emailForm.recipientName,
+          latestRecord?.overallDone || 0,
+          monthlyAverage,
+          emailForm.recipientEmail,
+          emailForm.message // Use the actual message that was sent
+        );
+
+        if (!storeSuccess) {
+          alert("Failed to store performance record. Email was not sent.");
+          return;
+        }
+
+        // Reset the flag after successful storage
+        setIsNewPIPRecord(false);
+      }
+
+      // Prepare scorecard data
+      const scorecardData = filteredData.slice(0, 3).map((record) => ({
+        dateStart: record.dateStart,
+        dateEnd: record.dateEnd,
+        target: record.target,
+        overallDone: record.overallDone,
+      }));
+
+      const formData = new URLSearchParams();
+      formData.append("action", "shareViaEmail");
+      formData.append("recipientEmail", emailForm.recipientEmail);
+      formData.append("subject", emailForm.subject);
+      formData.append("message", emailForm.message);
+      formData.append("documents", JSON.stringify(scorecardData));
+
+      const response = await fetch(
+        "https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec",
+        {
+          method: "POST",
+          body: formData,
+        }
       );
-      
-      if (!storeSuccess) {
-        alert('Failed to store performance record. Email was not sent.');
-        return;
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert("Email sent successfully!");
+        setShowEmailPopup(false);
+        setEmailForm({
+          recipientName: "",
+          recipientEmail: "",
+          subject: "",
+          message: "",
+          startDate: "",
+          endDate: "",
+          totalDays: 0,
+        });
+      } else {
+        throw new Error(result.error || "Failed to send email");
       }
-      
-      // Reset the flag after successful storage
-      setIsNewPIPRecord(false);
+    } catch (error) {
+      console.error("Error sending email:", error);
+      alert("Failed to send email: " + error.message);
+    } finally {
+      setLoading(false);
     }
-    
-    // Prepare scorecard data
-    const scorecardData = filteredData.slice(0, 3).map(record => ({
-      dateStart: record.dateStart,
-      dateEnd: record.dateEnd,
-      target: record.target,
-      overallDone: record.overallDone
-    }));
-
-    const formData = new URLSearchParams();
-    formData.append('action', 'shareViaEmail');
-    formData.append('recipientEmail', emailForm.recipientEmail);
-    formData.append('subject', emailForm.subject);
-    formData.append('message', emailForm.message);
-    formData.append('documents', JSON.stringify(scorecardData));
-
-    const response = await fetch(
-      'https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec',
-      {
-        method: 'POST',
-        body: formData
-      }
-    );
-
-    const result = await response.json();
-
-    if (result.success) {
-      alert('Email sent successfully!');
-      setShowEmailPopup(false);
-      setEmailForm({
-        recipientName: '',
-        recipientEmail: '',
-        subject: '',
-        message: '',
-        startDate: '',
-        endDate: '',
-        totalDays: 0
-      });
-    } else {
-      throw new Error(result.error || 'Failed to send email');
-    }
-  } catch (error) {
-    console.error('Error sending email:', error);
-    alert('Failed to send email: ' + error.message);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   const calculateMonthlyAverage = () => {
     if (filteredData.length === 0) return 0;
     // Calculate average of latest 3 months (or all if less than 3)
-    const latestRecords = filteredData.slice(0, Math.min(3, filteredData.length));
-    const sum = latestRecords.reduce((acc, curr) => acc + (curr.overallDone || 0), 0);
+    const latestRecords = filteredData.slice(
+      0,
+      Math.min(3, filteredData.length)
+    );
+    const sum = latestRecords.reduce(
+      (acc, curr) => acc + (curr.overallDone || 0),
+      0
+    );
     return (sum / latestRecords.length).toFixed(2);
   };
 
   const getPerformanceStatus = (percentage) => {
-    if (percentage >= 90) return { text: 'Excellent', color: 'text-green-600', bg: 'bg-green-100' };
-    if (percentage >= 75) return { text: 'Good', color: 'text-blue-600', bg: 'bg-blue-100' };
-    if (percentage >= 60) return { text: 'Average', color: 'text-yellow-600', bg: 'bg-yellow-100' };
-    return { text: 'Needs Improvement', color: 'text-red-600', bg: 'bg-red-100' };
+    if (percentage >= 90)
+      return { text: "Excellent", color: "text-green-600", bg: "bg-green-100" };
+    if (percentage >= 75)
+      return { text: "Good", color: "text-blue-600", bg: "bg-blue-100" };
+    if (percentage >= 60)
+      return { text: "Average", color: "text-yellow-600", bg: "bg-yellow-100" };
+    return {
+      text: "Needs Improvement",
+      color: "text-red-600",
+      bg: "bg-red-100",
+    };
   };
 
   const TotalDoneWork = ({ weeks }) => {
     const getColor = (weeks) => {
-      if (weeks === 1) return 'bg-green-100 text-green-800';
-      if (weeks === 2) return 'bg-yellow-100 text-yellow-800';
-      if (weeks === 3) return 'bg-orange-100 text-orange-800';
-      return 'bg-red-100 text-red-800';
+      if (weeks === 1) return "bg-green-100 text-green-800";
+      if (weeks === 2) return "bg-yellow-100 text-yellow-800";
+      if (weeks === 3) return "bg-orange-100 text-orange-800";
+      return "bg-red-100 text-red-800";
     };
 
     return (
-      <span className={`px-2 py-1 rounded-full text-sm font-medium ${getColor(weeks)}`}>
+      <span
+        className={`px-2 py-1 rounded-full text-sm font-medium ${getColor(
+          weeks
+        )}`}
+      >
         {weeks}
       </span>
     );
@@ -680,7 +843,7 @@ const handleSendEmail = async () => {
         <div className="text-center">
           <div className="text-red-500 text-xl mb-4">Error</div>
           <p className="text-gray-600">{error}</p>
-          <button 
+          <button
             onClick={fetchData}
             className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
           >
@@ -719,6 +882,25 @@ const handleSendEmail = async () => {
               </button>
               <h1 className="text-2xl font-bold text-gray-900">PIP Records</h1>
             </div>
+            <button
+              onClick={handleDownloadData}
+              className="space-x-2 px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 flex items-center"
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                />
+              </svg>
+              <span>Download</span>
+            </button>
             {/* <button
               onClick={fetchPIPData}
               className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 flex items-center"
@@ -1063,36 +1245,31 @@ const handleSendEmail = async () => {
           </div>
           <div className="flex space-x-3">
             <button
+              onClick={handleDownloadData}
+              className="space-x-2 px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 flex items-center"
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                />
+              </svg>
+              <span>Download</span>
+            </button>
+            <button
               onClick={handlePIPClick}
               className="space-x-2 px-6 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 flex items-center"
             >
               <Activity size={18} />
               <span>PIP</span>
             </button>
-            {/* <button
-              onClick={
-                selectedEmployee
-                  ? () => fetchHistoryData(selectedEmployee)
-                  : fetchData
-              }
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 flex items-center"
-            >
-              <svg
-                className="w-4 h-4 mr-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                />
-              </svg>
-              Refresh
-            </button> */}
           </div>
         </div>
 

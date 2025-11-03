@@ -32,13 +32,15 @@ const [formData, setFormData] = useState({
   candidateEmail: '',
   previousCompany: '',
   jobExperience: '',
-  department: '', // Add this line
+  department: '', 
   previousPosition: '',
   maritalStatus: '',
   candidatePhoto: null,
   candidateResume: null,
   presentAddress: '',
   aadharNo: '',
+  lastSalaryDrawn: '',
+  reasonForLeaving: '',
   status: 'NeedMore'
 });
 
@@ -179,7 +181,8 @@ const fetchAllData = async () => {
             candidateResume: row[19] || '',
             referenceBy: row[getEnquiryIndex('Reference By')] || '',
             presentAddress: row[getEnquiryIndex('Present Address')] || '',
-            aadharNo: row[getEnquiryIndex('Aadhar No')] || ''
+            aadharNo: row[getEnquiryIndex('Aadhar No')] || '',
+            lastSalaryDrawn : row[getEnquiryIndex('Last Salary Drawn')] || '',
           }));
         
          setEnquiryData(processedEnquiryData);
@@ -298,58 +301,58 @@ const fetchAllData = async () => {
   const historyData = enquiryData;
 
  const handleEnquiryClick = (item = null) => {
-    let indentNo = '';
-    let isNewAAP = false;
+  let indentNo = '';
+  let isNewAAP = false;
+  
+  if (item) {
+    setSelectedItem(item);
+    indentNo = item.indentNo;
+  } else {
+    indentNo = generateNextAAPIndentNumber();
+    isNewAAP = true;
     
-    if (item) {
-      setSelectedItem(item);
-      indentNo = item.indentNo;
-    } else {
-      // Generate a new AAP indent number for new enquiries
-      indentNo = generateNextAAPIndentNumber();
-      isNewAAP = true;
-      
-      // Create a default empty item for new enquiry
-      setSelectedItem({
-        indentNo: indentNo,
-        post: '',
-        gender: '',
-        prefer: '',
-        numberOfPost: '',
-        competitionDate: '',
-        socialSite: '',
-        status: 'NeedMore',
-        plannedDate: '',
-        actual: '',
-        experience: ''
-      });
-    }
-
-    
-    const candidateNo = generateCandidateNumber();
-    setGeneratedCandidateNo(candidateNo);
-    setFormData({
-      candidateName: '',
-      candidateDOB: '',
-      candidatePhone: '',
-      candidateEmail: '',
-      previousCompany: '',
-      jobExperience: '',
-      department: item ? item.department : '',
-      lastSalary: '',
-      previousPosition: '',
-      reasonForLeaving: '',
-      maritalStatus: '',
-      lastEmployerMobile: '',
-      candidatePhoto: null,
-      candidateResume: null,
-      referenceBy: '',
-      presentAddress: '',
-      aadharNo: '',
-      status: 'NeedMore'
+    setSelectedItem({
+      indentNo: indentNo,
+      post: '',
+      gender: '',
+      prefer: '',
+      numberOfPost: '',
+      competitionDate: '',
+      socialSite: '',
+      status: 'NeedMore',
+      plannedDate: '',
+      actual: '',
+      experience: ''
     });
-    setShowModal(true);
-  };
+  }
+
+  const candidateNo = generateCandidateNumber();
+  setGeneratedCandidateNo(candidateNo);
+  
+  // Ensure all fields are properly initialized with empty strings, not undefined
+  setFormData({
+    candidateName: '',
+    candidateDOB: '',
+    candidatePhone: '',
+    candidateEmail: '',
+    previousCompany: '',
+    jobExperience: '',
+    department: item ? item.department : '',
+    lastSalary: '',
+    previousPosition: '',
+    reasonForLeaving: '',
+    lastSalaryDrawn: '',
+    maritalStatus: '',
+    lastEmployerMobile: '',
+    candidatePhoto: null,
+    candidateResume: null,
+    referenceBy: '',
+    presentAddress: '',
+    aadharNo: '',
+    status: 'NeedMore'
+  });
+  setShowModal(true);
+};
 
   const formatDOB = (dateString) => {
     if (!dateString) return '';
@@ -442,98 +445,107 @@ const handleSubmit = async (e) => {
   setSubmitting(true);
 
   try {
-    let photoUrl = '';
-    let resumeUrl = '';
+    let photoUrl = "";
+    let resumeUrl = "";
 
     // Upload photo if exists
     if (formData.candidatePhoto) {
       setUploadingPhoto(true);
-      photoUrl = await uploadFileToGoogleDrive(formData.candidatePhoto, 'photo');
+      photoUrl = await uploadFileToGoogleDrive(
+        formData.candidatePhoto,
+        "photo"
+      );
       setUploadingPhoto(false);
-      toast.success('Photo uploaded successfully!');
+      toast.success("Photo uploaded successfully!");
     }
 
     // Upload resume if exists
     if (formData.candidateResume) {
       setUploadingResume(true);
-      resumeUrl = await uploadFileToGoogleDrive(formData.candidateResume, 'resume');
+      resumeUrl = await uploadFileToGoogleDrive(
+        formData.candidateResume,
+        "resume"
+      );
       setUploadingResume(false);
-      toast.success('Resume uploaded successfully!');
+      toast.success("Resume uploaded successfully!");
     }
 
     // Create timestamp in dd/mm/yyyy hh:mm:ss format
     const now = new Date();
-    const day = String(now.getDate()).padStart(2, '0');
-    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, "0");
+    const month = String(now.getMonth() + 1).padStart(2, "0");
     const year = now.getFullYear();
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    const seconds = String(now.getSeconds()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    const seconds = String(now.getSeconds()).padStart(2, "0");
 
     const formattedTimestamp = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
 
     const rowData = [
-      formattedTimestamp,                           // Column A: Timestamp
-      selectedItem.indentNo,                        // Column B: Indent Number
-      generatedCandidateNo,                         // Column C: Candidate Enquiry Number
-      selectedItem.post,                            // Column D: Applying For the Post
-      formData.candidateName,                       // Column E: Candidate Name
-      formatDOB(formData.candidateDOB),            // Column F: DCB (DOB)
-      formData.candidatePhone,                      // Column G: Candidate Phone Number
-      formData.candidateEmail,                      // Column H: Candidate Email
-      formData.previousCompany || '',               // Column I: Previous Company Name
-      formData.jobExperience || '',                 // Column J: Job Experience
-      formData.department || '',                    // Column K: Department (FIXED)
-      formData.previousPosition || '',              // Column L: Previous Position
-      '',              // Column M: Reason For Leaving
-      formData.maritalStatus || '',                 // Column N: Marital Status
-      '',            // Column O: Last Employer Mobile
-      photoUrl,                                     // Column P: Candidate Photo (URL)
-      '',                   // Column Q: Reference By
-      formData.presentAddress || '',                // Column R: Present Address
-      formData.aadharNo || '',                      // Column S: Aadhar No
-      resumeUrl,                                    // Column T: Candidate Resume (URL)
+      formattedTimestamp, // Column A: Timestamp
+      selectedItem.indentNo, // Column B: Indent Number
+      generatedCandidateNo, // Column C: Candidate Enquiry Number
+      selectedItem.post, // Column D: Applying For the Post
+      formData.candidateName, // Column E: Candidate Name
+      formatDOB(formData.candidateDOB), // Column F: DCB (DOB)
+      formData.candidatePhone, // Column G: Candidate Phone Number
+      formData.candidateEmail, // Column H: Candidate Email
+      formData.previousCompany || "", // Column I: Previous Company Name
+      formData.jobExperience || "", // Column J: Job Experience
+      formData.department || "", // Column K: Department (FIXED)
+      formData.previousPosition || "", // Column L: Previous Position
+      formData.reasonForLeaving || "", // Column M: Reason For Leaving (NEW)
+      formData.maritalStatus || "", // Column N: Marital Status
+      formData.lastSalaryDrawn || "", // Column O: Last Salary Drawn (NEW)
+      photoUrl, // Column P: Candidate Photo (URL)
+      "", // Column Q: Reference By
+      formData.presentAddress || "", // Column R: Present Address
+      formData.aadharNo || "", // Column S: Aadhar No
+      resumeUrl, // Column T: Candidate Resume (URL)
     ];
 
-    console.log('Submitting to ENQUIRY sheet:', rowData);
+    console.log("Submitting to ENQUIRY sheet:", rowData);
 
     // Submit to ENQUIRY sheet
     const enquiryResponse = await fetch(
-      'https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec',
+      "https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec",
       {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          "Content-Type": "application/x-www-form-urlencoded",
         },
         body: new URLSearchParams({
-          sheetName: 'ENQUIRY',
-          action: 'insert',
-          rowData: JSON.stringify(rowData)
+          sheetName: "ENQUIRY",
+          action: "insert",
+          rowData: JSON.stringify(rowData),
         }),
       }
     );
 
     const enquiryResult = await enquiryResponse.json();
-    console.log('ENQUIRY response:', enquiryResult);
+    console.log("ENQUIRY response:", enquiryResult);
 
     if (!enquiryResult.success) {
-      throw new Error(enquiryResult.error || 'ENQUIRY submission failed');
+      throw new Error(enquiryResult.error || "ENQUIRY submission failed");
     }
 
     // Only update INDENT sheet if status is Complete
-    if (formData.status === 'Complete') {
-      console.log('Updating INDENT sheet for status Complete');
-      
+    if (formData.status === "Complete") {
+      console.log("Updating INDENT sheet for status Complete");
+
       // Fetch INDENT data
       const indentFetchResponse = await fetch(
-        'https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec?sheet=INDENT&action=fetch'
+        "https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec?sheet=INDENT&action=fetch"
       );
-      
+
       const indentData = await indentFetchResponse.json();
-      console.log('INDENT data fetched:', indentData);
+      console.log("INDENT data fetched:", indentData);
 
       if (!indentData.success) {
-        throw new Error('Failed to fetch INDENT data: ' + (indentData.error || 'Unknown error'));
+        throw new Error(
+          "Failed to fetch INDENT data: " +
+            (indentData.error || "Unknown error")
+        );
       }
 
       // Find the row index
@@ -546,92 +558,95 @@ const handleSubmit = async (e) => {
       }
 
       if (rowIndex === -1) {
-        throw new Error(`Could not find indentNo: ${selectedItem.indentNo} in INDENT sheet`);
+        throw new Error(
+          `Could not find indentNo: ${selectedItem.indentNo} in INDENT sheet`
+        );
       }
 
-      console.log('Found row index:', rowIndex);
+      console.log("Found row index:", rowIndex);
 
       // Get headers
       const headers = indentData.data[5];
-      console.log('Headers:', headers);
+      console.log("Headers:", headers);
 
       // Find column indices
       const getColumnIndex = (columnName) => {
-        return headers.findIndex(h => h && h.toString().trim() === columnName);
+        return headers.findIndex(
+          (h) => h && h.toString().trim() === columnName
+        );
       };
 
-      const statusIndex = getColumnIndex('Status');
-      const actual2Index = getColumnIndex('Actual 2');
+      const statusIndex = getColumnIndex("Status");
+      const actual2Index = getColumnIndex("Actual 2");
 
-      console.log('Status column index:', statusIndex);
-      console.log('Actual 2 column index:', actual2Index);
+      console.log("Status column index:", statusIndex);
+      console.log("Actual 2 column index:", actual2Index);
 
       // Update Status column
       if (statusIndex !== -1) {
-        console.log('Updating Status column...');
+        console.log("Updating Status column...");
         const statusResponse = await fetch(
-          'https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec',
+          "https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec",
           {
-            method: 'POST',
+            method: "POST",
             headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
+              "Content-Type": "application/x-www-form-urlencoded",
             },
             body: new URLSearchParams({
-              sheetName: 'INDENT',
-              action: 'updateCell',
+              sheetName: "INDENT",
+              action: "updateCell",
               rowIndex: rowIndex.toString(),
               columnIndex: (statusIndex + 1).toString(), // Convert to string
-              value: 'Complete'
+              value: "Complete",
             }),
           }
         );
 
         const statusResult = await statusResponse.json();
-        console.log('Status update result:', statusResult);
+        console.log("Status update result:", statusResult);
 
         if (!statusResult.success) {
-          console.error('Status update failed:', statusResult.error);
+          console.error("Status update failed:", statusResult.error);
         }
       }
 
       // Update Actual 2 column
       if (actual2Index !== -1) {
-        console.log('Updating Actual 2 column...');
+        console.log("Updating Actual 2 column...");
         const actual2Response = await fetch(
-          'https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec',
+          "https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec",
           {
-            method: 'POST',
+            method: "POST",
             headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
+              "Content-Type": "application/x-www-form-urlencoded",
             },
             body: new URLSearchParams({
-              sheetName: 'INDENT',
-              action: 'updateCell',
+              sheetName: "INDENT",
+              action: "updateCell",
               rowIndex: rowIndex.toString(),
               columnIndex: (actual2Index + 1).toString(), // Convert to string
-              value: new Date().toISOString()
+              value: new Date().toISOString(),
             }),
           }
         );
 
         const actual2Result = await actual2Response.json();
-        console.log('Actual 2 update result:', actual2Result);
+        console.log("Actual 2 update result:", actual2Result);
 
         if (!actual2Result.success) {
-          console.error('Actual 2 update failed:', actual2Result.error);
+          console.error("Actual 2 update failed:", actual2Result.error);
         }
       }
-      
-      toast.success('Enquiry submitted and INDENT marked as Complete!');
+
+      toast.success("Enquiry submitted and INDENT marked as Complete!");
     } else {
-      toast.success('Enquiry submitted successfully!');
+      toast.success("Enquiry submitted successfully!");
     }
 
     setShowModal(false);
     fetchAllData();
-
   } catch (error) {
-    console.error('Submission error:', error);
+    console.error("Submission error:", error);
     toast.error(`Error: ${error.message}`);
   } finally {
     setSubmitting(false);
@@ -1140,6 +1155,30 @@ const handleSubmit = async (e) => {
                     onChange={handleInputChange}
                     className="w-full border border-gray-300 border-opacity-30 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-white bg-white bg-opacity-10 text-gray-500 placeholder-white placeholder-opacity-60"
                     required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-500 mb-1">
+                    Last Salary Drawn
+                  </label>
+                  <input
+                    type="text"
+                    name="lastSalaryDrawn"
+                    value={formData.lastSalaryDrawn}
+                    onChange={handleInputChange}
+                    className="w-full border border-gray-300 border-opacity-30 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-white bg-white bg-opacity-10 text-gray-500 placeholder-white placeholder-opacity-60"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-500 mb-1">
+                    Reason For Leaving
+                  </label>
+                  <input
+                    type="text"
+                    name="reasonForLeaving"
+                    value={formData.reasonForLeaving}
+                    onChange={handleInputChange}
+                    className="w-full border border-gray-300 border-opacity-30 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-white bg-white bg-opacity-10 text-gray-500 placeholder-white placeholder-opacity-60"
                   />
                 </div>
               </div>

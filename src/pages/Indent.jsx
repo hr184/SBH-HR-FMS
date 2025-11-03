@@ -634,9 +634,10 @@ const fetchLastIndentNumber = async () => {
                   onChange={handleInputChange}
                   className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 >
-                  <option value="">Any</option>
+                  <option value="">Select Experience</option>
                   <option value="Experience">Experience</option>
                   <option value="Fresher">Fresher</option>
+                  <option value="Any">Any</option>
                 </select>
               </div>
 

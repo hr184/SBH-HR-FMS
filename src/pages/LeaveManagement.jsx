@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Search, X, Check, Clock, Calendar, Plus, CheckCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
+import LeaveApproval from './LeaveApproval';
 
 const LeaveManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -16,6 +17,7 @@ const LeaveManagement = () => {
   const [editableDates, setEditableDates] = useState({ from: "", to: "" });
   const [hodNames, setHodNames] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState("all");
+  const [showLeaveApproval, setShowLeaveApproval] = useState(false);
 
   // New state for leave request modal
   const [showModal, setShowModal] = useState(false);
@@ -33,11 +35,11 @@ const LeaveManagement = () => {
   reason: "",
 });
 
-  // Replace the calculateLeaveStats function with this updated version
+// Replace the calculateLeaveStats function with this updated version
 const calculateLeaveStats = () => {
   const currentYear = new Date().getFullYear();
 
-  // Filter leaves based on selected employee
+  // Filter leaves based on selected employee and approved status
   const relevantLeaves =
     selectedEmployee === "all"
       ? approvedLeaves
@@ -328,33 +330,26 @@ const handleEmployeeChange = (selectedName) => {
 const formatDOB = (dateString) => {
   if (!dateString) return "";
 
-  // If it's already in MM/DD/YYYY format, return as-is
-  if (dateString.includes("/") && dateString.split("/")[0].length <= 2) {
+  // If already in MM/DD/YYYY format with slashes, return as-is
+  if (dateString.includes("/")) {
     const parts = dateString.split("/");
     if (parts.length === 3) {
-      const [first, second, third] = parts;
-      // Check if it's already in MM/DD/YYYY format (first part <= 12)
-      if (first <= 12 && second <= 31) {
-        return dateString;
-      }
-      // If it's in DD/MM/YYYY format, convert to MM/DD/YYYY
-      if (second <= 12 && first <= 31) {
-        return `${second.padStart(2, "0")}/${first.padStart(2, "0")}/${third}`;
+      // Check if it's already in MM/DD/YYYY format (month first)
+      const month = parseInt(parts[0]);
+      const day = parseInt(parts[1]);
+      if (month <= 12 && day <= 31) {
+        return dateString; // Already in correct format
       }
     }
   }
 
-  // Convert from YYYY-MM-DD to MM/DD/YYYY
-  const date = new Date(dateString);
-  if (isNaN(date.getTime())) {
-    return dateString; // Return as-is if not a valid date
+  // Convert from YYYY-MM-DD (date input format) to MM/DD/YYYY
+  if (dateString.includes("-")) {
+    const [year, month, day] = dateString.split("-");
+    return `${month}/${day}/${year}`;
   }
 
-  const month = (date.getMonth() + 1).toString().padStart(2, "0");
-  const day = date.getDate().toString().padStart(2, "0");
-  const year = date.getFullYear();
-
-  return `${month}/${day}/${year}`;
+  return dateString;
 };
 
 const handleSubmit = async (e) => {
@@ -366,8 +361,8 @@ const handleSubmit = async (e) => {
     !formData.fromDate ||
     !formData.toDate ||
     !formData.reason ||
-    !formData.hodName ||
-    !formData.substitute
+    !formData.hodName 
+    // !formData.substitute
   ) {
     toast.error("Please fill all required fields");
     return;
@@ -389,13 +384,13 @@ const handleSubmit = async (e) => {
     const rowData = [
       formattedTimestamp, // Timestamp with time for Date object creation
       "", // Serial number (empty for auto-increment)
-      formData.employeeId, // Employee ID - moved to index 2
-      formData.employeeName, // Employee Name - moved to index 3
-      formatDOB(formData.fromDate), // Leave Date Start (convert to DD/MM/YYYY)
-      formatDOB(formData.toDate), // Leave Date End (convert to DD/MM/YYYY)
-      formData.reason, // Reason
-      "Pending", // Status (Column H)
-      formData.leaveType, // Leave Type
+      formData.employeeId, // Employee ID - index 2
+      formData.employeeName, // Employee Name - index 3
+      formatDOB(formData.fromDate), // Leave Date Start (Column E, index 4)
+      formatDOB(formData.toDate), // Leave Date End (Column F, index 5)
+      formData.reason, // Reason (Column G, index 6)
+      "Pending", // Status (Column H, index 7)
+      formData.leaveType, // Leave Type (Column I, index 8)
       formData.hodName, // HOD Name (Column J, index 9)
       formData.department, // Department (Column K, index 10)
       formData.substitute, // Substitute (Column L, index 11)
@@ -629,7 +624,6 @@ const fetchLeaveData = async () => {
     }
 
     const rawData = result.data || result;
-    console.log(rawData);
 
     if (!Array.isArray(rawData)) {
       throw new Error("Expected array data not received");
@@ -639,21 +633,21 @@ const fetchLeaveData = async () => {
 
     const processedData = dataRows.map((row, index) => ({
       timestamp: row[0] || "",
-      serialNo: row[1] || "",
-      employeeId: row[2] || "",
-      employeeName: row[3] || "",
+      serialNo: row[1] || "", // Column B (index 1) - Serial No
+      employeeId: row[2] || "", // Column C (index 2) - Employee ID
+      employeeName: row[3] || "", // Column D (index 3) - Employee Name
       startDate: row[4] || "",
       endDate: row[5] || "",
       remark: row[6] || "",
       status: row[7] || "", // Column H (index 7) - Status
-      leaveType: row[8] || "",
+      leaveType: row[8] || "", // Column I (index 8) - Leave Type
       hodName: row[9] || "",
       columnMStatus: row[12] || "", // Column M (index 12)
       days: row[13] || 0, // Column N (index 13) - Days
       rowIndex: index + 2, // Store the actual row index for updates
     }));
 
-    // Filter based on both Column H and Column M
+    // Filter based on both Column H (status) and Column M (HOD approval)
     setPendingLeaves(
       processedData.filter(
         (leave) => 
@@ -664,15 +658,15 @@ const fetchLeaveData = async () => {
     setApprovedLeaves(
       processedData.filter(
         (leave) => 
-          leave.status?.toString().toLowerCase() === "approved" &&
-          leave.columnMStatus?.toString().toLowerCase() === "approved"
+          leave.status?.toString().toLowerCase() === "approved" && // Column H = approved
+          leave.columnMStatus?.toString().toLowerCase() === "approved" // Column M = approved
       )
     );
     setRejectedLeaves(
       processedData.filter(
         (leave) => 
-          leave.status?.toString().toLowerCase() === "rejected" &&
-          leave.columnMStatus?.toString().toLowerCase() === "approved"
+          leave.status?.toString().toLowerCase() === "rejected" && // Column H = rejected
+          leave.columnMStatus?.toString().toLowerCase() === "approved" // Column M = approved
       )
     );
   } catch (error) {
@@ -693,12 +687,12 @@ const fetchLeaveData = async () => {
 const formatDate = (dateString) => {
   if (!dateString) return "-";
   
-  // Handle MM/DD/YYYY format and convert to DD/MM/YYYY
+  // Handle MM/DD/YYYY format - just return as is
   if (dateString.includes("/")) {
     const parts = dateString.split("/");
-    if (parts.length === 3) {
-      const [month, day, year] = parts;
-      return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
+    if (parts.length === 3 && parts[0] <= 12) {
+      // It's already in MM/DD/YYYY format, return as-is
+      return dateString;
     }
   }
   
@@ -1099,144 +1093,170 @@ const filteredRejectedLeaves = rejectedLeaves.filter((item) => {
 
   return (
     <div className="space-y-6">
+      {showLeaveApproval && (
+        <div className="fixed top-0 right-0 bottom-0 left-0 lg:left-64 bg-white z-50 p-6 overflow-auto">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-bold">Leave Approval</h2>
+            <button
+              onClick={() => setShowLeaveApproval(false)}
+              className="px-3 py-1 bg-gray-200 rounded-md"
+            >
+              Close
+            </button>
+          </div>
+          <LeaveApproval />
+        </div>
+      )}
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Leave Management</h1>
-        <button
-          onClick={() => setShowModal(true)}
-          className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
-        >
-          <Plus size={16} className="mr-2" />
-          New Leave Request
-        </button>
+        <div className="flex space-x-2">
+          <button
+            onClick={() => setShowLeaveApproval(true)}
+            className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
+          >
+            <CheckCircle size={16} className="mr-2" />
+            Leave Approval
+          </button>
+          <button
+            onClick={() => setShowModal(true)}
+            className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-indigo-700"
+          >
+            <Plus size={16} className="mr-2" />
+            New Leave Request
+          </button>
+        </div>
       </div>
 
       {/* Search and Filter Section */}
       <div className="bg-white p-4 rounded-lg shadow flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0 md:space-x-4">
-  <div className="flex flex-1 max-w-md">
-    <div className="relative w-full">
-      <input
-        type="text"
-        placeholder="Search by name or employee ID..."
-        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-500"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-      <Search
-        size={20}
-        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"
-      />
-    </div>
-  </div>
-  
-  {/* Employee Filter for All Tabs */}
-  <div className="flex items-center gap-4">
-    <label htmlFor="employeeFilter" className="text-sm font-medium text-gray-700">
-      Filter by Employee:
-    </label>
-    <select
-      id="employeeFilter"
-      value={selectedEmployee}
-      onChange={(e) => setSelectedEmployee(e.target.value)}
-      className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-    >
-      <option value="all">All Employees</option>
-      {uniqueEmployeeNames.map((name, index) => (
-        <option key={index} value={name}>
-          {name}
-        </option>
-      ))}
-    </select>
-  </div>
-</div>
+        <div className="flex flex-1 max-w-md">
+          <div className="relative w-full">
+            <input
+              type="text"
+              placeholder="Search by name or employee ID..."
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-500"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <Search
+              size={20}
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+            />
+          </div>
+        </div>
+
+        {/* Employee Filter for All Tabs */}
+        <div className="flex items-center gap-4">
+          <label
+            htmlFor="employeeFilter"
+            className="text-sm font-medium text-gray-700"
+          >
+            Filter by Employee:
+          </label>
+          <select
+            id="employeeFilter"
+            value={selectedEmployee}
+            onChange={(e) => setSelectedEmployee(e.target.value)}
+            className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          >
+            <option value="all">All Employees</option>
+            {uniqueEmployeeNames.map((name, index) => (
+              <option key={index} value={name}>
+                {name}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
 
       {/* Leave Statistics Cards */}
-<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-  <div className="bg-white rounded-xl shadow-lg border p-6">
-    <div className="flex items-center justify-between">
-      <div>
-        <p className="text-sm text-gray-600 font-bold">Casual Leave</p>
-        <h3 className="text-2xl font-bold text-gray-800">
-          {leaveStats.casualLeave}
-        </h3>
-        {selectedEmployee !== "all" && (
-          <p className="text-xs text-gray-500">
-            Total Leave : <b>6</b> | Remaining :{" "}
-            <b> {6 - leaveStats.casualLeave}</b>
-          </p>
-        )}
-      </div>
-    </div>
-  </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+        <div className="bg-white rounded-xl shadow-lg border p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600 font-bold">Casual Leave</p>
+              <h3 className="text-2xl font-bold text-gray-800">
+                {leaveStats.casualLeave}
+              </h3>
+              {selectedEmployee !== "all" && (
+                <p className="text-xs text-gray-500">
+                  Total Leave : <b>6</b> | Remaining :{" "}
+                  <b> {6 - leaveStats.casualLeave}</b>
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
 
-  <div className="bg-white rounded-xl shadow-lg border p-6">
-    <div className="flex items-center justify-between">
-      <div>
-        <p className="text-sm text-gray-600 font-bold">Earned Leave</p>
-        <h3 className="text-2xl font-bold text-gray-800">
-          {leaveStats.earnedLeave}
-        </h3>
-        {selectedEmployee !== "all" && (
-          <p className="text-xs text-gray-500">
-            Total Leave : <b>12</b> | Remaining :{" "}
-            <b> {12 - leaveStats.earnedLeave}</b>
-          </p>
-        )}
-      </div>
-    </div>
-  </div>
+        <div className="bg-white rounded-xl shadow-lg border p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600 font-bold">Earned Leave</p>
+              <h3 className="text-2xl font-bold text-gray-800">
+                {leaveStats.earnedLeave}
+              </h3>
+              {selectedEmployee !== "all" && (
+                <p className="text-xs text-gray-500">
+                  Total Leave : <b>12</b> | Remaining :{" "}
+                  <b> {12 - leaveStats.earnedLeave}</b>
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
 
-  <div className="bg-white rounded-xl shadow-lg border p-6">
-    <div className="flex items-center justify-between">
-      <div>
-        <p className="text-sm text-gray-600 font-bold">Sick Leave</p>
-        <h3 className="text-2xl font-bold text-gray-800">
-          {leaveStats.sickLeave}
-        </h3>
-        {selectedEmployee !== "all" && (
-          <p className="text-xs text-gray-500">
-            Total Leave : <b>6</b> | Remaining :{" "}
-            <b> {6 - leaveStats.sickLeave}</b>
-          </p>
-        )}
-      </div>
-    </div>
-  </div>
+        <div className="bg-white rounded-xl shadow-lg border p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600 font-bold">Sick Leave</p>
+              <h3 className="text-2xl font-bold text-gray-800">
+                {leaveStats.sickLeave}
+              </h3>
+              {selectedEmployee !== "all" && (
+                <p className="text-xs text-gray-500">
+                  Total Leave : <b>6</b> | Remaining :{" "}
+                  <b> {6 - leaveStats.sickLeave}</b>
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
 
-  <div className="bg-white rounded-xl shadow-lg border p-6">
-    <div className="flex items-center justify-between">
-      <div>
-        <p className="text-sm text-gray-600 font-bold">
-          Restricted Holiday
-        </p>
-        <h3 className="text-2xl font-bold text-gray-800">
-          {leaveStats.restrictedHoliday}
-        </h3>
-        {selectedEmployee !== "all" && (
-          <p className="text-xs text-gray-500">
-            Total Leave : <b>2</b> | Remaining :{" "}
-            <b> {2 - leaveStats.restrictedHoliday}</b>
-          </p>
-        )}
-      </div>
-    </div>
-  </div>
+        <div className="bg-white rounded-xl shadow-lg border p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600 font-bold">
+                Restricted Holiday
+              </p>
+              <h3 className="text-2xl font-bold text-gray-800">
+                {leaveStats.restrictedHoliday}
+              </h3>
+              {selectedEmployee !== "all" && (
+                <p className="text-xs text-gray-500">
+                  Total Leave : <b>2</b> | Remaining :{" "}
+                  <b> {2 - leaveStats.restrictedHoliday}</b>
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
 
-  <div className="bg-white rounded-xl shadow-lg border p-6">
-    <div className="flex items-center justify-between">
-      <div>
-        <p className="text-sm text-gray-600 font-bold">Total Leave</p>
-        <h3 className="text-2xl font-bold text-gray-800">
-          {leaveStats.totalLeave}
-        </h3>
-        {selectedEmployee !== "all" && (
-          <p className="text-xs text-gray-500">
-            All approved days (Current Year)
-          </p>
-        )}
+        <div className="bg-white rounded-xl shadow-lg border p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600 font-bold">Total Leave</p>
+              <h3 className="text-2xl font-bold text-gray-800">
+                {leaveStats.totalLeave}
+              </h3>
+              {selectedEmployee !== "all" && (
+                <p className="text-xs text-gray-500">
+                  All approved days (Current Year)
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</div>
 
       <div className="bg-white rounded-lg shadow">
         <div className="border-b border-gray-200">
@@ -1318,215 +1338,219 @@ const filteredRejectedLeaves = rejectedLeaves.filter((item) => {
               </button>
             </div>
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
-  {/* Employee ID first */}
-  <div>
-    <label className="block text-sm font-medium text-gray-700 mb-1">
-      Employee ID
-    </label>
-    <input
-      type="text"
-      name="employeeId"
-      value={formData.employeeId}
-      className="w-full border border-gray-300 rounded-md px-3 py-2 bg-gray-100 focus:outline-none"
-      readOnly
-    />
-  </div>
+              {/* Employee ID first */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Employee ID
+                </label>
+                <input
+                  type="text"
+                  name="employeeId"
+                  value={formData.employeeId}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 bg-gray-100 focus:outline-none"
+                  readOnly
+                />
+              </div>
 
-  {/* Employee Name second */}
-  <select
-    name="employeeName"
-    value={formData.employeeName}
-    onChange={handleInputChange}
-    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-    required
-  >
-    <option value="">Select Employee</option>
-    {employees.map((employee) => (
-      <option key={employee.id} value={employee.name}>
-        {employee.name}
-      </option>
-    ))}
-  </select>
+              {/* Employee Name second */}
+              <select
+                name="employeeName"
+                value={formData.employeeName}
+                onChange={handleInputChange}
+                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                required
+              >
+                <option value="">Select Employee</option>
+                {employees.map((employee) => (
+                  <option key={employee.id} value={employee.name}>
+                    {employee.name}
+                  </option>
+                ))}
+              </select>
 
-  {/* Department field */}
-  <div>
-    <label className="block text-sm font-medium text-gray-700 mb-1">
-      Department
-    </label>
-    <input
-      type="text"
-      name="department"
-      value={formData.department}
-      className="w-full border border-gray-300 rounded-md px-3 py-2 bg-gray-100 focus:outline-none"
-      readOnly
-    />
-  </div>
+              {/* Department field */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Department
+                </label>
+                <input
+                  type="text"
+                  name="department"
+                  value={formData.department}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 bg-gray-100 focus:outline-none"
+                  readOnly
+                />
+              </div>
 
-  {/* HOD Name dropdown */}
-<div>
-  <label className="block text-sm font-medium text-gray-700 mb-1">
-    HOD Name *
-  </label>
-  <select
-    name="hodName"
-    value={formData.hodName}
-    onChange={handleInputChange}
-    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-    required
-  >
-    <option value="">Select HOD</option>
-    {hodNames.map((name, index) => (
-      <option key={index} value={name}>
-        {name}
-      </option>
-    ))}
-  </select>
-</div>
+              {/* HOD Name dropdown */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  HOD Name *
+                </label>
+                <select
+                  name="hodName"
+                  value={formData.hodName}
+                  onChange={handleInputChange}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  required
+                >
+                  <option value="">Select HOD</option>
+                  {hodNames.map((name, index) => (
+                    <option key={index} value={name}>
+                      {name}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-  {/* New Substitute dropdown */}
-  <div>
-    <label className="block text-sm font-medium text-gray-700 mb-1">
-      Substitute
-    </label>
-    <select
-      name="substitute"
-      value={formData.substitute}
-      onChange={handleInputChange}
-      className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-    >
-      <option value="">Select Substitute</option>
-      {employees
-        .filter(emp => emp.department === formData.department && emp.name !== formData.employeeName)
-        .map((employee) => (
-          <option key={employee.id} value={employee.name}>
-            {employee.name}
-          </option>
-        ))}
-    </select>
-  </div>
+              {/* New Substitute dropdown */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Substitute
+                </label>
+                <select
+                  name="substitute"
+                  value={formData.substitute}
+                  onChange={handleInputChange}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                >
+                  <option value="">Select Substitute</option>
+                  {employees
+                    .filter(
+                      (emp) =>
+                        emp.department === formData.department &&
+                        emp.name !== formData.employeeName
+                    )
+                    .map((employee) => (
+                      <option key={employee.id} value={employee.name}>
+                        {employee.name}
+                      </option>
+                    ))}
+                </select>
+              </div>
 
-  {/* Leave Type */}
-  <div>
-    <label className="block text-sm font-medium text-gray-700 mb-1">
-      Leave Type*
-    </label>
-    <select
-      name="leaveType"
-      value={formData.leaveType}
-      onChange={handleInputChange}
-      className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-      required
-    >
-      <option value="">Select Leave Type</option>
-      {leaveTypes.map((type) => (
-        <option key={type} value={type}>
-          {type}
-        </option>
-      ))}
-    </select>
-  </div>
+              {/* Leave Type */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Leave Type*
+                </label>
+                <select
+                  name="leaveType"
+                  value={formData.leaveType}
+                  onChange={handleInputChange}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  required
+                >
+                  <option value="">Select Leave Type</option>
+                  {leaveTypes.map((type) => (
+                    <option key={type} value={type}>
+                      {type}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-  {/* Date fields and other existing fields remain the same */}
-  <div className="grid grid-cols-2 gap-4">
-    <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">
-        From Date*
-      </label>
-      <input
-        type="date"
-        name="fromDate"
-        value={formData.fromDate}
-        onChange={handleInputChange}
-        className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-        required
-      />
-    </div>
-    <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">
-        To Date*
-      </label>
-      <input
-        type="date"
-        name="toDate"
-        value={formData.toDate}
-        onChange={handleInputChange}
-        className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-        required
-      />
-    </div>
-  </div>
+              {/* Date fields and other existing fields remain the same */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    From Date*
+                  </label>
+                  <input
+                    type="date"
+                    name="fromDate"
+                    value={formData.fromDate}
+                    onChange={handleInputChange}
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    To Date*
+                  </label>
+                  <input
+                    type="date"
+                    name="toDate"
+                    value={formData.toDate}
+                    onChange={handleInputChange}
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    required
+                  />
+                </div>
+              </div>
 
-  {formData.fromDate && formData.toDate && (
-    <div className="bg-blue-50 p-3 rounded-lg">
-      <p className="text-sm text-blue-800">
-        Total Days :{" "}
-        <span className="font-semibold">
-          {calculateDays(formData.fromDate, formData.toDate)}
-        </span>
-      </p>
-    </div>
-  )}
+              {formData.fromDate && formData.toDate && (
+                <div className="bg-blue-50 p-3 rounded-lg">
+                  <p className="text-sm text-blue-800">
+                    Total Days :{" "}
+                    <span className="font-semibold">
+                      {calculateDays(formData.fromDate, formData.toDate)}
+                    </span>
+                  </p>
+                </div>
+              )}
 
-  <div>
-    <label className="block text-sm font-medium text-gray-700 mb-1">
-      Reason*
-    </label>
-    <textarea
-      name="reason"
-      value={formData.reason}
-      onChange={handleInputChange}
-      rows={3}
-      className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-      placeholder="Please provide reason for leave..."
-      required
-    />
-  </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Reason*
+                </label>
+                <textarea
+                  name="reason"
+                  value={formData.reason}
+                  onChange={handleInputChange}
+                  rows={3}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  placeholder="Please provide reason for leave..."
+                  required
+                />
+              </div>
 
-  <div className="flex justify-end space-x-2 pt-4">
-    <button
-      type="button"
-      onClick={() => setShowModal(false)}
-      className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
-    >
-      Cancel
-    </button>
-    <button
-      type="submit"
-      className={`px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700 min-h-[42px] flex items-center justify-center ${
-        submitting ? "opacity-75 cursor-not-allowed" : ""
-      }`}
-      disabled={submitting}
-    >
-      {submitting ? (
-        <div className="flex items-center">
-          <svg
-            className="animate-spin h-4 w-4 text-white mr-2"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            ></circle>
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-            ></path>
-          </svg>
-          <span>Submitting...</span>
-        </div>
-      ) : (
-        "Submit Request"
-      )}
-    </button>
-  </div>
-</form>
+              <div className="flex justify-end space-x-2 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowModal(false)}
+                  className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className={`px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700 min-h-[42px] flex items-center justify-center ${
+                    submitting ? "opacity-75 cursor-not-allowed" : ""
+                  }`}
+                  disabled={submitting}
+                >
+                  {submitting ? (
+                    <div className="flex items-center">
+                      <svg
+                        className="animate-spin h-4 w-4 text-white mr-2"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      <span>Submitting...</span>
+                    </div>
+                  ) : (
+                    "Submit Request"
+                  )}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

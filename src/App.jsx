@@ -29,6 +29,7 @@ import License from './pages/License';
 import JobPoster from './pages/JobPoster';
 import LeaveApproval from './pages/LeaveApproval';
 import HrPolicy from './pages/HrPolicy';
+import { BalanceScoreCard } from './pages/BalanceScoreCard/BalanceScoreCard';
 // import GatePass from './pages/GatePass';
 // import GatePassRequest from './pages/GatePassRequest';
 
@@ -68,6 +69,7 @@ function App() {
               {/* <Route path="report" element={<Report />} /> */}
               {/* <Route path="payroll" element={<Payroll />} /> */}
               <Route path="misreport" element={<MisReport />} />
+              <Route path='balanceScoreCard' element={<BalanceScoreCard />} />
               <Route path="license" element={<License/>} />
               <Route path="jobPoster" element={<JobPoster/>} />
               <Route path='leaveApproval' element={<LeaveApproval/>} />
