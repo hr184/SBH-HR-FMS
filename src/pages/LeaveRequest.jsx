@@ -33,7 +33,7 @@ const LeaveRequest = () => {
  const fetchHodNames = async () => {
     try {
       const response = await fetch(
-        'https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec?sheet=Master&action=fetch'
+        'https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec?sheet=Master&action=fetch'
       );
       
       if (!response.ok) {
@@ -66,7 +66,7 @@ const LeaveRequest = () => {
   const fetchEmployeeData = async () => {
     try {
       const response = await fetch(
-        'https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec?sheet=JOINING&action=fetch'
+        'https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec?sheet=JOINING&action=fetch'
       );
       
       if (!response.ok) {
@@ -109,7 +109,7 @@ const LeaveRequest = () => {
  const fetchEmployees = async () => {
     try {
       const response = await fetch(
-        'https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec?sheet=JOINING&action=fetch'
+        'https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec?sheet=JOINING&action=fetch'
       );
       
       if (!response.ok) {
@@ -308,7 +308,7 @@ const fetchLeaveData = async () => {
 
   try {
     const response = await fetch(
-      'https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec?sheet=Leave Management&action=fetch'
+      'https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec?sheet=Leave Management&action=fetch'
     );
     
     if (!response.ok) {
@@ -420,7 +420,7 @@ const handleSubmit = async (e) => {
         "Pending",                   // Column M (index 12) - Add Pending status here
       ];
 
-      const response = await fetch('https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec', {
+      const response = await fetch('https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec', {
         method: 'POST',
         body: new URLSearchParams({
           sheetName: 'Leave Management',

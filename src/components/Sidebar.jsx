@@ -52,7 +52,7 @@ const Sidebar = ({ onClose }) => {
 
     try {
       // Fetch employee data to check Column G
-      const response = await fetch(`https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec?sheet=USER&action=fetch`);
+      const response = await fetch(`https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec?sheet=USER&action=fetch`);
       const result = await response.json();
       
       if (result.success && result.data) {

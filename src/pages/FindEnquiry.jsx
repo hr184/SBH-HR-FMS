@@ -56,7 +56,7 @@ const fetchAllData = async () => {
   try {
     // Fetch INDENT data
     const indentResponse = await fetch(
-      'https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec?sheet=INDENT&action=fetch'
+      'https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec?sheet=INDENT&action=fetch'
     );
     
     if (!indentResponse.ok) {
@@ -99,7 +99,7 @@ const fetchAllData = async () => {
       
       // Fetch ENQUIRY data to check for completed recruitments
       const enquiryResponse = await fetch(
-        'https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec?sheet=ENQUIRY&action=fetch'
+        'https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec?sheet=ENQUIRY&action=fetch'
       );
       
       if (!enquiryResponse.ok) {
@@ -265,7 +265,7 @@ const fetchAllData = async () => {
       const base64Data = await fileToBase64(file);
       
       const response = await fetch(
-        'https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec',
+        'https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec',
         {
           method: 'POST',
           headers: {
@@ -372,7 +372,7 @@ const fetchAllData = async () => {
 const handleShareClick = (item) => {
   setSelectedItem(item);
   // Create the share link with indent number as a query parameter
-  const shareLink = `https://hr-enquiry-form.vercel.app/?indent=${encodeURIComponent(item.indentNo)}`;
+  const shareLink = `https://sbh-find-enquiry.vercel.app/?indent=${encodeURIComponent(item.indentNo)}`;
   
   setShareFormData({
     message: `Dear Recipient,\n\nPlease fill the enquiry details for candidate who is applying for the position of ${item.post}.\n\nEnquiry Form Link: ${shareLink}\n\nBest regards,\nHR Team SBH Hospital Raipur (C.G.)`,
@@ -395,7 +395,7 @@ const handleShareSubmit = async (e) => {
       imageUrl: selectedItem.candidatePhoto || ''
     }];
     
-    const URL = 'https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec';
+    const URL = 'https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec';
     
     const params = new URLSearchParams();
     params.append('action', 'shareViaEmail');
@@ -508,7 +508,7 @@ const handleSubmit = async (e) => {
 
     // Submit to ENQUIRY sheet
     const enquiryResponse = await fetch(
-      "https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec",
+      "https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec",
       {
         method: "POST",
         headers: {
@@ -535,7 +535,7 @@ const handleSubmit = async (e) => {
 
       // Fetch INDENT data
       const indentFetchResponse = await fetch(
-        "https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec?sheet=INDENT&action=fetch"
+        "https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec?sheet=INDENT&action=fetch"
       );
 
       const indentData = await indentFetchResponse.json();
@@ -586,7 +586,7 @@ const handleSubmit = async (e) => {
       if (statusIndex !== -1) {
         console.log("Updating Status column...");
         const statusResponse = await fetch(
-          "https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec",
+          "https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec",
           {
             method: "POST",
             headers: {
@@ -614,7 +614,7 @@ const handleSubmit = async (e) => {
       if (actual2Index !== -1) {
         console.log("Updating Actual 2 column...");
         const actual2Response = await fetch(
-          "https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec",
+          "https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec",
           {
             method: "POST",
             headers: {
@@ -1416,7 +1416,7 @@ const handleSubmit = async (e) => {
                 <div className="text-sm text-gray-600 space-y-1">
                   <div className="flex items-center">
                     <a
-                      href="https://hr-enquiry-form.vercel.app/"
+                      href="https://sbh-find-enquiry.vercel.app/"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-indigo-600 hover:text-indigo-800"

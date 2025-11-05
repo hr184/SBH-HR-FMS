@@ -32,7 +32,7 @@ const GatePass = () => {
     gatePassImage: null, 
   });
 
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec";
 
   useEffect(() => {
     fetchGatePassData();

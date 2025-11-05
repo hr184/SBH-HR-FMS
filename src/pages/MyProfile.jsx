@@ -52,7 +52,7 @@ const MyProfile = () => {
 
       // Upload to Google Drive
       const uploadResponse = await fetch(
-        "https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec",
+        "https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec",
         {
           method: "POST",
           headers: {
@@ -78,7 +78,7 @@ const MyProfile = () => {
 
       // Find the row with matching Joining No and update Column H
       const fullDataResponse = await fetch(
-        'https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec?sheet=JOINING&action=fetch'
+        'https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec?sheet=JOINING&action=fetch'
       );
       
       if (!fullDataResponse.ok) {
@@ -130,7 +130,7 @@ const MyProfile = () => {
 
       // Update the JOINING sheet with the new image URL
        const updateResponse = await fetch(
-        "https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec",
+        "https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec",
         {
           method: "POST",
           headers: {
@@ -218,7 +218,7 @@ const fetchLeaveData = async () => {
 
     // Fetch data from the Leave Management sheet
     const response = await fetch(
-      'https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec?sheet=Leave Management&action=fetch'
+      'https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec?sheet=Leave Management&action=fetch'
     );
     
     if (!response.ok) {
@@ -304,7 +304,7 @@ const fetchLeaveData = async () => {
 const fetchGatePassData = async () => {
   try {
     const response = await fetch(
-      'https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec?sheet=Gate Pass&action=fetch'
+      'https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec?sheet=Gate Pass&action=fetch'
     );
 
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -361,7 +361,7 @@ useEffect(() => {
       const userName = currentUser.Name;
 
       const response = await fetch(
-        'https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec?sheet=JOINING&action=fetch'
+        'https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec?sheet=JOINING&action=fetch'
       );
       
       if (!response.ok) {
@@ -451,7 +451,7 @@ useEffect(() => {
         // Fetch profile image from ENQUIRY sheet
         try {
           const enquiryResponse = await fetch(
-            'https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec?sheet=ENQUIRY&action=fetch'
+            'https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec?sheet=ENQUIRY&action=fetch'
           );
           
           if (enquiryResponse.ok) {
@@ -538,7 +538,7 @@ useEffect(() => {
       
       // 1. Fetch current data from JOINING sheet
       const fullDataResponse = await fetch(
-        'https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec?sheet=JOINING&action=fetch'
+        'https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec?sheet=JOINING&action=fetch'
       );
       
       if (!fullDataResponse.ok) {
@@ -626,7 +626,7 @@ useEffect(() => {
 
       // 8. Send update request
       const response = await fetch(
-        "https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec",
+        "https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec",
         {
           method: "POST",
           headers: {

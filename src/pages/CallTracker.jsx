@@ -29,10 +29,10 @@ const fetchEnquiryData = async () => {
   try {
     const [enquiryResponse, followUpResponse] = await Promise.all([
       fetch(
-        "https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec?sheet=ENQUIRY&action=fetch"
+        "https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec?sheet=ENQUIRY&action=fetch"
       ),
       fetch(
-        "https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec?sheet=Follow - Up&action=fetch"
+        "https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec?sheet=Follow - Up&action=fetch"
       ),
     ]);
 
@@ -131,7 +131,7 @@ const fetchFollowUpData = async () => {
 
   try {
     const response = await fetch(
-      'https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec?sheet=Follow - Up&action=fetch'
+      'https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec?sheet=Follow - Up&action=fetch'
     );
 
     if (!response.ok) {
@@ -209,7 +209,7 @@ const fetchFollowUpData = async () => {
 
 
 const postToSheet = async (rowData) => {
-  const URL = 'https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec';
+  const URL = 'https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec';
 
   try {
     console.log('Attempting to post:', {
@@ -255,7 +255,7 @@ const postToSheet = async (rowData) => {
 };
 
 const updateEnquirySheet = async (enquiryNo) => {
-  const URL = 'https://script.google.com/macros/s/AKfycbxmXLxCqjFY9yRDLoYEjqU9LTcpfV7r9ueBuOsDsREkdGknbdE_CZBW7ZHTdP3n0NzOfQ/exec';
+  const URL = 'https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec';
 
   try {
     console.log('Attempting to update ENQUIRY sheet for:', enquiryNo);
