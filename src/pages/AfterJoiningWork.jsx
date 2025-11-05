@@ -91,7 +91,7 @@ const [formData, setFormData] = useState({
         indentNo: row[getIndex("Indent No")] || "",
         enquiryNo: row[getIndex("Enquiry No")] || "",
         candidateName: row[getIndex("Name As Per Aadhar")] || "",
-        fatherName: row[getIndex("Father Name")] || "",
+        fatherName: row[getIndex("Father / Husband name")] || "",
         dateOfJoining: row[getIndex("Date Of Joining")] || "",
         joiningPlace: row[getIndex("Joining Place")] || "",
         designation: row[getIndex("Designation")] || "",
