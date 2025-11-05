@@ -89,13 +89,13 @@ const formatMonth = (monthString) => {
                   const formatNumber = (value) => {
                     if (value === null || value === undefined || value === '') return '-';
                     const num = parseFloat(value);
-                    return isNaN(num) ? value : num.toFixed(2);
+                    return isNaN(num) ? value : num;
                   };
                 
                   const formatPercentage = (value) => {
                     if (value === null || value === undefined || value === '') return '-';
                     const num = parseFloat(value);
-                    return isNaN(num) ? value : `${num.toFixed(2)}%`;
+                    return isNaN(num) ? value : `${num}%`;
                   };
                 
                   if (loading) {

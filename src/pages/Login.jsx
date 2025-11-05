@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Lock, FileText } from 'lucide-react';
+import { User, Lock, FileText, Eye, EyeOff } from 'lucide-react'; // Added Eye and EyeOff icons
 import toast from 'react-hot-toast';
 import useAuthStore from '../store/authStore';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -14,6 +14,7 @@ localStorage.removeItem('hasSeenLanguageHint');
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false); // Added state for password visibility
   const [submitting, setSubmitting] = useState(false);
   const login = useAuthStore((state) => state.login);
   const navigate = useNavigate();
@@ -96,6 +97,10 @@ const Login = () => {
     }
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-blue-100 via-purple-100 to-white">
       <div className="max-w-md w-full p-8 rounded-2xl shadow-xl border border-white/20 bg-white/60 backdrop-blur-lg space-y-8 transition-transform hover:scale-[1.01] duration-200">
@@ -104,23 +109,21 @@ const Login = () => {
         <div className="text-center">
           <div className="flex justify-center mb-6">
             <div className="h-16 w-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
-              {/* <FileText className="h-8 w-8 text-white" /> */}
               <FontAwesomeIcon icon={faUsers} className="text-white h-8 w-8" />
             </div>
           </div>
           <h2 
-  className="text-3xl font-extrabold text-gray-900 mb-2 tracking-tight" 
-  style={{ fontFamily: 'Poppins, sans-serif' }}
->
-  HR FMS
-</h2>
-<p 
-  className="text-sm text-black" 
-  style={{ fontFamily: 'Poppins, sans-serif' }}
->
-  Human Resource & File Management System
-</p>
-
+            className="text-3xl font-extrabold text-gray-900 mb-2 tracking-tight" 
+            style={{ fontFamily: 'Poppins, sans-serif' }}
+          >
+            HR FMS
+          </h2>
+          <p 
+            className="text-sm text-black" 
+            style={{ fontFamily: 'Poppins, sans-serif' }}
+          >
+            Human Resource & File Management System
+          </p>
         </div>
         
         {/* Form */}
@@ -161,13 +164,25 @@ const Login = () => {
                 <input
                   id="password"
                   name="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"} // Toggle between text and password
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="appearance-none w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm bg-white/70 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all sm:text-sm"
+                  className="appearance-none w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg shadow-sm bg-white/70 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all sm:text-sm"
                   placeholder="Enter your password"
                 />
+                {/* Eye icon button */}
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none"
+                  onClick={togglePasswordVisibility}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
+                </button>
               </div>
             </div>
           </div>

@@ -23,7 +23,8 @@ import {
   NotebookPen,
   BookPlus,
   Brain,
-  NotepadText
+  NotepadText,
+  CalendarSync
 } from 'lucide-react';
 import useAuthStore from '../store/authStore';
 
@@ -129,8 +130,9 @@ const Sidebar = ({ onClose }) => {
     { path: '/after-leaving-work', icon: UserMinus, label: 'After Leaving Work' },
     { path: '/employee', icon: Users, label: 'Employee' },
     { path: '/leave-management', icon: BookPlus, label: 'Leave Management' },
-    { path: '/balanceScoreCard', icon: BookPlus, label: 'Balance Score Card' },
+    { path: '/balanceScoreCard', icon: CalendarSync, label: 'Balance Scorecard' },
     { path: '/misreport', icon: AlarmClockCheck, label: 'Delegation Score Card' },
+    { path: '/company-calendar', icon: Calendar, label: 'Company Calendar' },
     { path: '/jobPoster', icon: Brain, label: 'Creative' },
     { path: '/hrPolicy', icon: NotepadText, label: 'HR Policy' },
     { path: '/license', icon: AlarmClockCheck, label: 'License' },
@@ -252,7 +254,7 @@ const Sidebar = ({ onClose }) => {
             {/* Show user info in mobile view regardless of collapsed state */}
             <div className={`${isCollapsed ? 'hidden' : 'block'} md:block`}>
               <p className="text-sm font-medium text-white">{user?.Name || user?.Username || 'Guest'}</p>
-              <p className="text-xs text-white">{user?.Admin === 'Yes' ? 'Administrator' : 'Employee'}</p>
+              <p className="text-xs text-white">{user?.Admin === 'Yes' ? 'Admin' : 'User'}</p>
             </div>
           </div>
         </div>

@@ -420,7 +420,7 @@ useEffect(() => {
         joiningNo: row[getIndex('SKA-Joining ID')] || '',
         candidateName: row[getIndex('Name As Per Aadhar')] || '',
         candidatePhoto: row[getIndex("Candidate's Photo")] || '',
-        fatherName: row[getIndex('Father Name')] || '',
+        fatherName: row[getIndex('Father / Husband name')] || '',
         dateOfJoining: row[getIndex('Date Of Joining')] || '',
         joiningPlace: '',
         designation: row[getIndex('Designation')] || '',

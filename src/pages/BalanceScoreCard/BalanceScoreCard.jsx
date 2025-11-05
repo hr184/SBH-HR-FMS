@@ -96,7 +96,7 @@ export const BalanceScoreCard = () => {
                       ? "Score Card"
                       : "Score Card History"
                   }`
-                : "Balanced Score Card"}
+                : "Balanced Scorecard"}
             </h1>
             {selectedEmployee && (
               <span className="ml-4 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
@@ -250,7 +250,7 @@ export const BalanceScoreCard = () => {
                       Department
                     </th>
                     <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50 sticky top-0 text-center">
-                      Balance Score Card
+                      Balance Scorecard
                     </th>
                   </tr>
                 </thead>
