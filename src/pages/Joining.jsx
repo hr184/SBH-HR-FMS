@@ -620,7 +620,7 @@ const formatDateForStorage = (dateString) => {
     }
   };
 
-  const uploadFileToDrive = async (file, folderId = '1zYLVLGQfuCUyEzLfyJWM7o67kN3JBQMs') => {
+  const uploadFileToDrive = async (file, folderId = '1gaY4NC7C1tK7vOoL2VKV90Cc8cks1EQ3') => {
     try {
       const reader = new FileReader();
       const base64Data = await new Promise((resolve, reject) => {

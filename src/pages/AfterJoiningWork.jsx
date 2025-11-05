@@ -43,7 +43,7 @@ const [formData, setFormData] = useState({
 });
 
   // Google Drive folder ID for storing images
-  const DRIVE_FOLDER_ID = "1CJTfgIO9KaF1mVlivkoIpWj4oYmnhIG3";
+  const DRIVE_FOLDER_ID = "1SEpx7Z3wuI3-jQHovPfTc8svpbcOBpuA";
 
   const fetchJoiningData = async () => {
     setLoading(true);
