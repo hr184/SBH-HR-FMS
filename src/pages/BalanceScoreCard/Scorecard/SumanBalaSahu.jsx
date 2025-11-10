@@ -1,5 +1,7 @@
 import React from 'react'
 import { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const SumanBalaSahu = () => {
   const [scores, setScores] = useState({
@@ -153,105 +155,111 @@ export const SumanBalaSahu = () => {
       formData.append('payload', JSON.stringify(rowData));
 
       const response = await fetch(scriptURL, {
-        method: 'POST',
-        body: formData,
-        mode: 'no-cors' // Use no-cors mode to avoid CORS issues
-      });
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: `sheetId=${encodeURIComponent(sheetId)}&sheetName=${encodeURIComponent(sheetName)}&payload=${encodeURIComponent(JSON.stringify(rowData))}`
+    });
 
-      // Since we're using no-cors, we can't read the response, but the data should be submitted
+    // Check if the response is successful
+    if (response.ok) {
       console.log('Submitted Scores:', scores);
       console.log('Row Data sent to sheet:', rowData);
-      console.log('Response status:', response.status);
-
-      // Show success message (the data should be submitted even if we can't read the response)
-      alert('Scores submitted successfully! Data has been stored.');
+      
+      // Show success message
+      toast.success('Scores submitted successfully!');
       
       // Optional: You can also open the sheet URL to verify data was stored
       const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/edit#gid=0`;
       console.log('Check your Google Sheet here:', sheetUrl);
-
-    } catch (error) {
-      console.error('Error submitting scores:', error);
-      alert('Error submitting scores: ' + error.message);
-    } finally {
-      setIsSubmitting(false);
+    } else {
+      throw new Error(`Server responded with status: ${response.status}`);
     }
-  };
+
+  } catch (error) {
+    console.error('Error submitting scores:', error);
+    toast.error('Failed to submit scores. Please try again.');
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>      
-      <div style={{ marginBottom: '30px' }}>
-        <h2>JOB ASSESSMENT</h2>
-        <table border="1" cellPadding="8" cellSpacing="0" style={{ width: '100%', borderCollapse: 'collapse' }}>
+    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', minHeight: '100vh' }}>      
+    <ToastContainer />
+      <div style={{ marginBottom: '30px', backgroundColor: 'white', borderRadius: '10px', padding: '20px', boxShadow: '0 6px 10px rgba(0, 0, 0, 0.1)' }}>
+        <h2 style={{ color: '#1e3a8a', borderBottom: '3px solid #1e3a8a', paddingBottom: '10px', marginBottom: '20px' }}>JOB ASSESSMENT</h2>
+        <table style={{ width: '100%', borderCollapse: 'collapse', borderRadius: '8px', overflow: 'hidden' }}>
           <thead>
-            <tr style={{ backgroundColor: '#f0f0f0' }}>
-              <th>KRA</th>
-              <th>KPI</th>
-              <th>Out of</th>
-              <th>Score</th>
+            <tr style={{ backgroundColor: '#1e3a8a', color: 'white' }}>
+              <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #1e40af' }}>KRA</th>
+              <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #1e40af' }}>KPI</th>
+              <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '100px' }}>Out of</th>
+              <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '120px' }}>Score</th>
             </tr>
           </thead>
           <tbody>
             {/* Allocation & Follow ups KRA */}
-            <tr style={{ border: '2px solid #000' }}>
-              <td rowSpan="4" style={{ borderRight: '2px solid #000' }}><strong>Allocation & Follow ups</strong></td>
-              <td>How timely and accurately handles correspondence and e-mails</td>
-              <td>3</td>
-              <td>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td rowSpan="4" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Allocation & Follow ups</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>How timely and accurately handles correspondence and e-mails</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.correspondenceEmails}
                   onChange={(e) => handleScoreChange('correspondenceEmails', e.target.value)}
-                  style={{ width: '80px' }}
-                  placeholder="Enter No."
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-3"
                   min="0"
                   max="3"
                   step="0.1"
                 />
               </td>
             </tr>
-            <tr style={{ border: '2px solid #000' }}>
-              <td>Getting things done on time (Deadline)</td>
-              <td>4</td>
-              <td>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Getting things done on time (Deadline)</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.deadlineManagement}
                   onChange={(e) => handleScoreChange('deadlineManagement', e.target.value)}
-                  style={{ width: '80px' }}
-                  placeholder="Enter No."
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-4"
                   min="0"
                   max="4"
                   step="0.1"
                 />
               </td>
             </tr>
-            <tr style={{ border: '2px solid #000' }}>
-              <td>Take minutes of meetings and circulate meeting schedule</td>
-              <td>7</td>
-              <td>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Take minutes of meetings and circulate meeting schedule</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>7</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.meetingMinutes}
                   onChange={(e) => handleScoreChange('meetingMinutes', e.target.value)}
-                  style={{ width: '80px' }}
-                  placeholder="Enter No."
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-7"
                   min="0"
                   max="7"
                   step="0.1"
                 />
               </td>
             </tr>
-            <tr style={{ border: '2px solid #000' }}>
-              <td>Provide brief updates/reports on assigned work, as required i.e. Promptness in Follow ups</td>
-              <td>8</td>
-              <td>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Provide brief updates/reports on assigned work, as required i.e. Promptness in Follow ups</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>8</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.followUpsReports}
                   onChange={(e) => handleScoreChange('followUpsReports', e.target.value)}
-                  style={{ width: '80px' }}
-                  placeholder="Enter No."
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-8"
                   min="0"
                   max="8"
                   step="0.1"
@@ -260,49 +268,49 @@ export const SumanBalaSahu = () => {
             </tr>
 
             {/* Scheduling of CEO & Directors KRA */}
-            <tr style={{ border: '2px solid #000' }}>
-              <td rowSpan="3" style={{ borderRight: '2px solid #000' }}><strong>Scheduling of CEO & Directors</strong></td>
-              <td>To maintain the CEO & Directors schedule on a daily, weekly & monthly basis</td>
-              <td>8</td>
-              <td>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td rowSpan="3" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Scheduling of CEO & Directors</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>To maintain the CEO & Directors schedule on a daily, weekly & monthly basis</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>8</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.scheduleManagement}
                   onChange={(e) => handleScoreChange('scheduleManagement', e.target.value)}
-                  style={{ width: '80px' }}
-                  placeholder="Enter No."
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-8"
                   min="0"
                   max="8"
                   step="0.1"
                 />
               </td>
             </tr>
-            <tr style={{ border: '2px solid #000' }}>
-              <td>How smartly and accurately integrates meetings, statutory compliance dates, birthdays, anniversary of leaders on G-calendar</td>
-              <td>5</td>
-              <td>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>How smartly and accurately integrates meetings, statutory compliance dates, birthdays, anniversary of leaders on G-calendar</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.calendarIntegration}
                   onChange={(e) => handleScoreChange('calendarIntegration', e.target.value)}
-                  style={{ width: '80px' }}
-                  placeholder="Enter No."
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-5"
                   min="0"
                   max="5"
                   step="0.1"
                 />
               </td>
             </tr>
-            <tr style={{ border: '2px solid #000' }}>
-              <td>Arrangements of planned meetings (DOM, weekly, monthly meetings etc)</td>
-              <td>3</td>
-              <td>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Arrangements of planned meetings (DOM, weekly, monthly meetings etc)</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.meetingArrangements}
                   onChange={(e) => handleScoreChange('meetingArrangements', e.target.value)}
-                  style={{ width: '80px' }}
-                  placeholder="Enter No."
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-3"
                   min="0"
                   max="3"
                   step="0.1"
@@ -311,33 +319,33 @@ export const SumanBalaSahu = () => {
             </tr>
 
             {/* Coordination KRA */}
-            <tr style={{ border: '2px solid #000' }}>
-            <td rowSpan="2" style={{ borderRight: '2px solid #000' }}><strong>Coordination</strong></td>
-              <td>When scheduling appointments, allows adequate time between appointments (Time buffer)</td>
-              <td>4</td>
-              <td>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td rowSpan="2" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Coordination</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>When scheduling appointments, allows adequate time between appointments (Time buffer)</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.appointmentScheduling}
                   onChange={(e) => handleScoreChange('appointmentScheduling', e.target.value)}
-                  style={{ width: '80px' }}
-                  placeholder="Enter No."
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-4"
                   min="0"
                   max="4"
                   step="0.1"
                 />
               </td>
             </tr>
-            <tr style={{ border: '2px solid #000' }}>
-              <td>Gather necessary information related to appointment (name, contact no, venue & other relevant information)</td>
-              <td>4</td>
-              <td>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Gather necessary information related to appointment (name, contact no, venue & other relevant information)</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.appointmentInformation}
                   onChange={(e) => handleScoreChange('appointmentInformation', e.target.value)}
-                  style={{ width: '80px' }}
-                  placeholder="Enter No."
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-4"
                   min="0"
                   max="4"
                   step="0.1"
@@ -346,65 +354,65 @@ export const SumanBalaSahu = () => {
             </tr>
 
             {/* Documentation KRA */}
-            <tr style={{ border: '2px solid #000' }}>
-            <td rowSpan="4" style={{ borderRight: '2px solid #000' }}><strong>Documentation</strong></td>
-              <td>To track all the books of library and issue as and when required</td>
-              <td>3</td>
-              <td>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td rowSpan="4" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Documentation</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>To track all the books of library and issue as and when required</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.libraryManagement}
                   onChange={(e) => handleScoreChange('libraryManagement', e.target.value)}
-                  style={{ width: '80px' }}
-                  placeholder="Enter No."
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-3"
                   min="0"
                   max="3"
                   step="0.1"
                 />
               </td>
             </tr>
-            <tr style={{ border: '2px solid #000' }}>
-              <td>House SOP implementation & to check the attendance of all didis, cook, driver, gardener etc</td>
-              <td>6</td>
-              <td>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>House SOP implementation & to check the attendance of all didis, cook, driver, gardener etc</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>6</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.houseSopImplementation}
                   onChange={(e) => handleScoreChange('houseSopImplementation', e.target.value)}
-                  style={{ width: '80px' }}
-                  placeholder="Enter No."
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-6"
                   min="0"
                   max="6"
                   step="0.1"
                 />
               </td>
             </tr>
-            <tr style={{ border: '2px solid #000' }}>
-              <td>Support leaders in documentation work</td>
-              <td>3</td>
-              <td>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Support leaders in documentation work</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.documentationSupport}
                   onChange={(e) => handleScoreChange('documentationSupport', e.target.value)}
-                  style={{ width: '80px' }}
-                  placeholder="Enter No."
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-3"
                   min="0"
                   max="3"
                   step="0.1"
                 />
               </td>
             </tr>
-            <tr style={{ border: '2px solid #000' }}>
-              <td>To keep & organize license/AMC sheets in a folder & on Google drive</td>
-              <td>5</td>
-              <td>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>To keep & organize license/AMC sheets in a folder & on Google drive</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.licenseOrganization}
                   onChange={(e) => handleScoreChange('licenseOrganization', e.target.value)}
-                  style={{ width: '80px' }}
-                  placeholder="Enter No."
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-5"
                   min="0"
                   max="5"
                   step="0.1"
@@ -413,33 +421,33 @@ export const SumanBalaSahu = () => {
             </tr>
 
             {/* Inventory Management KRA */}
-            <tr style={{ border: '2px solid #000' }}>
-              <td rowSpan="2" style={{ borderRight: '2px solid #000' }}><strong>Inventory Management</strong></td>
-              <td>To assist store head on a daily basis. Prepare GRN, MRN, PO & entry on EHMS</td>
-              <td>3</td>
-              <td>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td rowSpan="2" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Inventory Management</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>To assist store head on a daily basis. Prepare GRN, MRN, PO & entry on EHMS</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.storeAssistance}
                   onChange={(e) => handleScoreChange('storeAssistance', e.target.value)}
-                  style={{ width: '80px' }}
-                  placeholder="Enter No."
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-3"
                   min="0"
                   max="3"
                   step="0.1"
                 />
               </td>
             </tr>
-            <tr style={{ border: '2px solid #000' }}>
-              <td>Receive indent & issue material to departments as per the TAT</td>
-              <td>2</td>
-              <td>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Receive indent & issue material to departments as per the TAT</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.materialIssuance}
                   onChange={(e) => handleScoreChange('materialIssuance', e.target.value)}
-                  style={{ width: '80px' }}
-                  placeholder="Enter No."
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-2"
                   min="0"
                   max="2"
                   step="0.1"
@@ -448,17 +456,17 @@ export const SumanBalaSahu = () => {
             </tr>
 
             {/* Confidentiality & Discretion KRA */}
-            <tr style={{ border: '2px solid #000' }}>
-              <td style={{ borderRight: '2px solid #000' }}><strong>Confidentiality & Discretion</strong></td>
-              <td>To handle confidential information appropriately and minimize data breaches</td>
-              <td>3</td>
-              <td>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Confidentiality & Discretion</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>To handle confidential information appropriately and minimize data breaches</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.confidentiality}
                   onChange={(e) => handleScoreChange('confidentiality', e.target.value)}
-                  style={{ width: '80px' }}
-                  placeholder="Enter No."
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-3"
                   min="0"
                   max="3"
                   step="0.1"
@@ -467,17 +475,17 @@ export const SumanBalaSahu = () => {
             </tr>
 
             {/* Professional Development KRA */}
-            <tr style={{ border: '2px solid #000' }}>
-              <td style={{ borderRight: '2px solid #000' }}><strong>Professional Development</strong></td>
-              <td>Coordinate relevant workshops, webinars, or training sessions</td>
-              <td>2</td>
-              <td>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Professional Development</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Coordinate relevant workshops, webinars, or training sessions</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.trainingCoordination}
                   onChange={(e) => handleScoreChange('trainingCoordination', e.target.value)}
-                  style={{ width: '80px' }}
-                  placeholder="Enter No."
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-2"
                   min="0"
                   max="2"
                   step="0.1"
@@ -486,17 +494,17 @@ export const SumanBalaSahu = () => {
             </tr>
 
             {/* Travel Management KRA */}
-            <tr style={{ border: '2px solid #000' }}>
-              <td style={{ borderRight: '2px solid #000' }}><strong>Travel Management</strong></td>
-              <td>Evaluating the efficiency and accuracy of travel planning and coordination, including flights, accommodations, transportation, and itineraries</td>
-              <td>2</td>
-              <td>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Travel Management</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Evaluating the efficiency and accuracy of travel planning and coordination, including flights, accommodations, transportation, and itineraries</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.travelManagement}
                   onChange={(e) => handleScoreChange('travelManagement', e.target.value)}
-                  style={{ width: '80px' }}
-                  placeholder="Enter No."
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-2"
                   min="0"
                   max="2"
                   step="0.1"
@@ -505,33 +513,33 @@ export const SumanBalaSahu = () => {
             </tr>
 
             {/* Training & Development KRA */}
-            <tr style={{ border: '2px solid #000' }}>
-              <td rowSpan="2" style={{ borderRight: '2px solid #000' }}><strong>Training & Development</strong></td>
-              <td>To give the training to house employees on a monthly basis</td>
-              <td>3</td>
-              <td>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td rowSpan="2" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Training & Development</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>To give the training to house employees on a monthly basis</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.staffTraining}
                   onChange={(e) => handleScoreChange('staffTraining', e.target.value)}
-                  style={{ width: '80px' }}
-                  placeholder="Enter No."
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-3"
                   min="0"
                   max="3"
                   step="0.1"
                 />
               </td>
             </tr>
-            <tr style={{ border: '2px solid #000' }}>
-              <td>Attend the training session organised by management</td>
-              <td>2</td>
-              <td>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Attend the training session organised by management</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.managementTraining}
                   onChange={(e) => handleScoreChange('managementTraining', e.target.value)}
-                  style={{ width: '80px' }}
-                  placeholder="Enter No."
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-2"
                   min="0"
                   max="2"
                   step="0.1"
@@ -540,178 +548,179 @@ export const SumanBalaSahu = () => {
             </tr>
           </tbody>
         </table>
-        <div style={{ marginTop: '10px', fontWeight: 'bold' }}>
+        <div style={{ marginTop: '15px', fontWeight: 'bold', padding: '12px', backgroundColor: '#eff6ff', borderRadius: '6px', borderLeft: '4px solid #1e3a8a' }}>
           Job Assessment Total: {totals.jobAssessmentTotal.toFixed(1)} / {totals.jobAssessmentTargetTotal.toFixed(1)}
         </div>
       </div>
 
-      <div style={{ marginBottom: '30px' }}>
-        <h2>BEHAVIORAL ASSESSMENT</h2>
-        <table border="1" cellPadding="8" cellSpacing="0" style={{ width: '100%', borderCollapse: 'collapse' }}>
+      {/* Behavioral Assessment Section */}
+      <div style={{ marginBottom: '30px', backgroundColor: 'white', borderRadius: '10px', padding: '20px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
+        <h2 style={{ color: '#1e3a8a', borderBottom: '3px solid #1e3a8a', paddingBottom: '10px', marginBottom: '20px' }}>BEHAVIORAL ASSESSMENT</h2>
+        <table style={{ width: '100%', borderCollapse: 'collapse', borderRadius: '8px', overflow: 'hidden' }}>
           <thead>
-            <tr style={{ backgroundColor: '#f0f0f0' }}>
-              <th>Behavioral Factor</th>
-              <th>Description</th>
-              <th>Out of</th>
-              <th>Score</th>
+            <tr style={{ backgroundColor: '#1e3a8a', color: 'white' }}>
+              <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #1e40af' }}>Behavioral Factor</th>
+              <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #1e40af' }}>Description</th>
+              <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '100px' }}>Out of</th>
+              <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '120px' }}>Score</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Quality Of Work Performed</td>
-              <td>Effectively and efficiently performs job</td>
-              <td>1</td>
-              <td>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontWeight: '500' }}>Quality Of Work Performed</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Effectively and efficiently performs job</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.qualityOfWork}
                   onChange={(e) => handleScoreChange('qualityOfWork', e.target.value)}
-                  style={{ width: '80px' }}
-                  placeholder="Enter No."
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-1"
                   min="0"
                   max="1"
                 />
               </td>
             </tr>
-            <tr>
-              <td>Planning & Execution Of Assignments</td>
-              <td>Do Plan in advance and execute without deviation</td>
-              <td>2</td>
-              <td>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontWeight: '500' }}>Planning & Execution Of Assignments</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Do Plan in advance and execute without deviation</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.planningExecution}
                   onChange={(e) => handleScoreChange('planningExecution', e.target.value)}
-                  style={{ width: '80px' }}
-                  placeholder="Enter No."
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-2"
                   min="0"
                   max="2"
                 />
               </td>
             </tr>
-            <tr>
-              <td>Use Of Time & Resources</td>
-              <td>Conserve Company resources and meet deadlines</td>
-              <td>2</td>
-              <td>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontWeight: '500' }}>Use Of Time & Resources</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Conserve Company resources and meet deadlines</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.timeResources}
                   onChange={(e) => handleScoreChange('timeResources', e.target.value)}
-                  style={{ width: '80px' }}
-                  placeholder="Enter No."
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-2"
                   min="0"
                   max="2"
                 />
               </td>
             </tr>
-            <tr>
-              <td>Interpersonal Relations</td>
-              <td>Have healthy work relation with peers and superiors</td>
-              <td>2</td>
-              <td>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontWeight: '500' }}>Interpersonal Relations</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Have healthy work relation with peers and superiors</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.interpersonalRelations}
                   onChange={(e) => handleScoreChange('interpersonalRelations', e.target.value)}
-                  style={{ width: '80px' }}
-                  placeholder="Enter No."
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-2"
                   min="0"
                   max="2"
                 />
               </td>
             </tr>
-            <tr>
-              <td>Flexibility & Adaptability</td>
-              <td>Flexible in taking additional tasks and adaptable to change</td>
-              <td>2</td>
-              <td>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontWeight: '500' }}>Flexibility & Adaptability</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Flexible in taking additional tasks and adaptable to change</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.flexibilityAdaptability}
                   onChange={(e) => handleScoreChange('flexibilityAdaptability', e.target.value)}
-                  style={{ width: '80px' }}
-                  placeholder="Enter No."
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-2"
                   min="0"
                   max="2"
                 />
               </td>
             </tr>
-            <tr>
-              <td>Communication</td>
-              <td>Exchange of information desired through effective means</td>
-              <td>2</td>
-              <td>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontWeight: '500' }}>Communication</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Exchange of information desired through effective means</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.communication}
                   onChange={(e) => handleScoreChange('communication', e.target.value)}
-                  style={{ width: '80px' }}
-                  placeholder="Enter No."
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-2"
                   min="0"
                   max="2"
                 />
               </td>
             </tr>
-            <tr>
-              <td>Integrity</td>
-              <td>High integrity towards company</td>
-              <td>2</td>
-              <td>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontWeight: '500' }}>Integrity</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>High integrity towards company</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.integrity}
                   onChange={(e) => handleScoreChange('integrity', e.target.value)}
-                  style={{ width: '80px' }}
-                  placeholder="Enter No."
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-2"
                   min="0"
                   max="2"
                 />
               </td>
             </tr>
-            <tr>
-              <td>Leadership</td>
-              <td>Ability to Inspire and take initiatives</td>
-              <td>2</td>
-              <td>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontWeight: '500' }}>Leadership</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Ability to Inspire and take initiatives</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.leadership}
                   onChange={(e) => handleScoreChange('leadership', e.target.value)}
-                  style={{ width: '80px' }}
-                  placeholder="Enter No."
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-2"
                   min="0"
                   max="2"
                 />
               </td>
             </tr>
-            <tr>
-              <td>Discipline</td>
-              <td>Follow rules and code of conduct</td>
-              <td>2</td>
-              <td>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontWeight: '500' }}>Discipline</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Follow rules and code of conduct</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.discipline}
                   onChange={(e) => handleScoreChange('discipline', e.target.value)}
-                  style={{ width: '80px' }}
-                  placeholder="Enter No."
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-2"
                   min="0"
                   max="2"
                 />
               </td>
             </tr>
-            <tr>
-              <td>Punctuality</td>
-              <td>Adherence to time and attendance</td>
-              <td>3</td>
-              <td>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontWeight: '500' }}>Punctuality</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Adherence to time and attendance</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.punctuality}
                   onChange={(e) => handleScoreChange('punctuality', e.target.value)}
-                  style={{ width: '80px' }}
-                  placeholder="Enter No."
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-3"
                   min="0"
                   max="3"
                 />
@@ -719,25 +728,29 @@ export const SumanBalaSahu = () => {
             </tr>
           </tbody>
         </table>
-        <div style={{ marginTop: '10px', fontWeight: 'bold' }}>
+        <div style={{ marginTop: '15px', fontWeight: 'bold', padding: '12px', backgroundColor: '#eff6ff', borderRadius: '6px', borderLeft: '4px solid #1e3a8a' }}>
           Behavioral Assessment Total: {totals.behavioralTotal.toFixed(1)} / {totals.behavioralTargetTotal.toFixed(1)}
         </div>
       </div>
 
-      <div style={{ textAlign: 'center', marginTop: '20px', padding: '20px', backgroundColor: '#f8f9fa', borderRadius: '5px' }}>
-        <h3>Overall Summary</h3>
-        <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: '10px' }}>
-          <div>
-            <strong>Job Assessment:</strong> {totals.jobAssessmentTotal.toFixed(1)} / {totals.jobAssessmentTargetTotal.toFixed(1)}
+      <div style={{ textAlign: 'center', marginTop: '20px', padding: '20px', backgroundColor: 'white', borderRadius: '10px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
+        <h3 style={{ color: '#1e3a8a', marginBottom: '15px' }}>Overall Summary</h3>
+        <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: '10px', flexWrap: 'wrap', gap: '15px' }}>
+          <div style={{ padding: '12px', backgroundColor: '#eff6ff', borderRadius: '6px', minWidth: '200px', border: '1px solid #bfdbfe' }}>
+            <strong style={{ color: '#1e3a8a' }}>Job Assessment:</strong><br />
+            {totals.jobAssessmentTotal.toFixed(1)} / {totals.jobAssessmentTargetTotal.toFixed(1)}
           </div>
-          <div>
-            <strong>Behavioral Assessment:</strong> {totals.behavioralTotal.toFixed(1)} / {totals.behavioralTargetTotal.toFixed(1)}
+          <div style={{ padding: '12px', backgroundColor: '#eff6ff', borderRadius: '6px', minWidth: '200px', border: '1px solid #bfdbfe' }}>
+            <strong style={{ color: '#1e3a8a' }}>Behavioral Assessment:</strong><br />
+            {totals.behavioralTotal.toFixed(1)} / {totals.behavioralTargetTotal.toFixed(1)}
           </div>
-          <div>
-            <strong>Overall Total:</strong> {totals.overallTotal.toFixed(1)} / {totals.overallTargetTotal.toFixed(1)}
+          <div style={{ padding: '12px', backgroundColor: '#eff6ff', borderRadius: '6px', minWidth: '200px', border: '1px solid #bfdbfe' }}>
+            <strong style={{ color: '#1e3a8a' }}>Overall Total:</strong><br />
+            {totals.overallTotal.toFixed(1)} / {totals.overallTargetTotal.toFixed(1)}
           </div>
-          <div>
-            <strong>Overall Percentage:</strong> {totals.overallPercentage.toFixed(1)}%
+          <div style={{ padding: '12px', backgroundColor: '#eff6ff', borderRadius: '6px', minWidth: '200px', border: '1px solid #bfdbfe' }}>
+            <strong style={{ color: '#1e3a8a' }}>Overall Percentage:</strong><br />
+            {totals.overallPercentage.toFixed(1)}%
           </div>
         </div>
       </div>
@@ -747,13 +760,15 @@ export const SumanBalaSahu = () => {
           onClick={handleSubmit}
           disabled={isSubmitting}
           style={{
-            padding: '10px 30px',
+            padding: '12px 40px',
             fontSize: '16px',
-            backgroundColor: isSubmitting ? '#6c757d' : '#007bff',
+            backgroundColor: isSubmitting ? '#9ca3af' : '#1e3a8a',
             color: 'white',
             border: 'none',
-            borderRadius: '5px',
-            cursor: isSubmitting ? 'not-allowed' : 'pointer'
+            borderRadius: '6px',
+            cursor: isSubmitting ? 'not-allowed' : 'pointer',
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+            fontWeight: '600'
           }}
         >
           {isSubmitting ? 'Submitting...' : 'Submit Scores'}
