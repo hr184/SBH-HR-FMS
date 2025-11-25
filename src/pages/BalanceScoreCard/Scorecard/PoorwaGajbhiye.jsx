@@ -6,25 +6,23 @@ import 'react-toastify/dist/ReactToastify.css';
 export const PoorwaGajbhiye = () => {
   const [scores, setScores] = useState({
     // Job Assessment Scores
-    manpowerPlanning: '',
-    manpowerAvailability: '',
-    recruitmentLeadTime: '',
-    inductionProgram: '',
-    ehmsUpdate: '',
-    hrPolicyImplementation: '',
-    exitInterviewAnalysis: '',
-    payrollRecordMaintenance: '',
-    ehmsUpdation: '',
-    fileUploading: '',
-    physicalStockVerification: '',
-    gatePassPreparation: '',
-    dailyRounds: '',
-    employeeFileUpdation: '',
-    monthlyReports: '',
-    trainingDashboard: '',
-    trainingCompletion: '',
-    trainingFeedback: '',
-    engagementActivities: '',
+    newJoinings: '',
+    planningExecution1: '',
+    planningExecution2: '',
+    planningExecution3: '',
+    planningExecution4: '',
+    planningExecution5: '',
+    planningExecution6: '',
+    planningExecution7: '',
+    inductionTraining1: '',
+    inductionTraining2: '',
+    auditingAndProcess1: '',
+    auditingAndProcess2: '',
+    auditingAndProcess3: '',
+    auditingAndProcess4: '',
+    auditingAndProcess5: '',
+    employeeEngagement1: '',
+    employeeEngagement2: '',
     
     // Behavioral Assessment Scores
     qualityOfWork: '',
@@ -53,12 +51,12 @@ export const PoorwaGajbhiye = () => {
   };
 
   const calculateTotals = () => {
-    const jobAssessmentTotal = Object.values(scores).slice(0, 19).reduce((a, b) => a + (parseFloat(b) || 0), 0);
-    const behavioralTotal = Object.values(scores).slice(19).reduce((a, b) => a + (parseFloat(b) || 0), 0);
+    const jobAssessmentTotal = Object.values(scores).slice(0, 17).reduce((a, b) => a + (parseFloat(b) || 0), 0);
+    const behavioralTotal = Object.values(scores).slice(17).reduce((a, b) => a + (parseFloat(b) || 0), 0);
     const overallTotal = jobAssessmentTotal + behavioralTotal;
     
     // Calculate target totals (out of values)
-    const jobAssessmentTargets = [2, 5, 5, 5, 2.7, 4.7, 4.7, 4.7, 2, 3, 5, 5, 3, 5, 3.2, 5, 5, 5, 5];
+    const jobAssessmentTargets = [6, 4, 7, 5, 3, 4, 6, 5, 4, 3, 7, 4, 5, 4, 3, 4, 6];
     const behavioralTargets = [1, 2, 2, 2, 2, 2, 2, 2, 2, 3];
     
     const jobAssessmentTargetTotal = jobAssessmentTargets.reduce((a, b) => a + b, 0);
@@ -111,35 +109,33 @@ export const PoorwaGajbhiye = () => {
         currentMonth, // Column B (index-1) - Current Month
         employeeName, // Column C (index-2) - Employee Name
         "", // Column D (index-3) - Empty column
-        scores.manpowerPlanning || 0, // Column E (index-4) - Assist manpower planning with HR Head & CH
-        scores.manpowerAvailability || 0, // Column F (index-5) - Matching of man power availability of each department by 90% anytime
-        scores.recruitmentLeadTime || 0, // Column G (index-6) - 100% adherence to Recruitment lead time (30 days) as per policy
-        scores.inductionProgram || 0, // Column H (index-7) - Conduct induction program for new joinees within 2 days of their joining
-        scores.ehmsUpdate || 0, // Column I (index-8) - Update new joinees information in EHMS
-        scores.hrPolicyImplementation || 0, // Column J (index-9) - 100% implementation of HR policy
-        scores.exitInterviewAnalysis || 0, // Column K (index-10) - Analysis of exit interview and present half yearly reports with action plan to control attrition
-        scores.payrollRecordMaintenance || 0, // Column L (index-11) - 100% Record maintenance of payroll related activities
-        scores.ehmsUpdation || 0, // Column M (index-12) - Updation in EHMS
-        scores.fileUploading || 0, // Column N (index-13) - File uploading in cloud & Software
-        scores.physicalStockVerification || 0, // Column O (index-14) - Adhere to timeline for Monthly Physical stock verification & Indent
-        scores.gatePassPreparation || 0, // Column P (index-15) - Preparation of Gate pass (for those who are going outside of hospital during working hours)
-        scores.dailyRounds || 0, // Column Q (index-16) - Daily round on all floors to check staff grooming & follow SOP
-        scores.employeeFileUpdation || 0, // Column R (index-17) - Employee personal file updation on timely basis
-        scores.monthlyReports || 0, // Column S (index-18) - 100% adherence to timeline for submission of monthly reports
-        scores.trainingDashboard || 0, // Column T (index-19) - To share training dashboard of next month on 25th of every month
-        scores.trainingCompletion || 0, // Column U (index-20) - Completion of Training Programs for departments w.r.t quarterly Training Calendar
-        scores.trainingFeedback || 0, // Column V (index-21) - Training feedback & evaluation
-        scores.engagementActivities || 0, // Column W (index-22) - Engagement activities as per Event Calendar
-        scores.qualityOfWork || 0, // Column X (index-23) - Effectively and efficiently performs job
-        scores.planningExecution || 0, // Column Y (index-24) - Do Plan in advance and execute without deviation
-        scores.timeResources || 0, // Column Z (index-25) - Conserve Company resources and meet deadlines
-        scores.interpersonalRelations || 0, // Column AA (index-26) - Have healthy work relation with peers and superiors
-        scores.flexibilityAdaptability || 0, // Column AB (index-27) - Flexible in taking additional tasks and adaptable to change
-        scores.communication || 0, // Column AC (index-28) - Exchange of information desired through effective means
-        scores.integrity || 0, // Column AD (index-29) - High integrity towards company
-        scores.leadership || 0, // Column AE (index-30) - Ability to Inspire and take initiatives
-        scores.discipline || 0, // Column AF (index-31) - Follow rules and code of conduct
-        scores.punctuality || 0 // Column AG (index-32) - Adherence to time and attendance
+        scores.newJoinings || 0, // Column E (index-4)
+        scores.planningExecution1 || 0, // Column F (index-5)
+        scores.planningExecution2 || 0, // Column G (index-6)
+        scores.planningExecution3 || 0, // Column H (index-7)
+        scores.planningExecution4 || 0, // Column I (index-8)
+        scores.planningExecution5 || 0, // Column J (index-9)
+        scores.planningExecution6 || 0, // Column K (index-10)
+        scores.planningExecution7 || 0, // Column L (index-11)
+        scores.inductionTraining1 || 0, // Column M (index-12)
+        scores.inductionTraining2 || 0, // Column N (index-13)
+        scores.auditingAndProcess1 || 0, // Column O (index-14)
+        scores.auditingAndProcess2 || 0, // Column P (index-15)
+        scores.auditingAndProcess3 || 0, // Column Q (index-16)
+        scores.auditingAndProcess4 || 0, // Column R (index-17)
+        scores.auditingAndProcess5 || 0, // Column S (index-18)
+        scores.employeeEngagement1 || 0, // Column T (index-19)
+        scores.employeeEngagement2 || 0, // Column U (index-20)
+        scores.qualityOfWork || 0, // Column V (index-21)
+        scores.planningExecution || 0, // Column W (index-22)
+        scores.timeResources || 0, // Column X (index-23)
+        scores.interpersonalRelations || 0, // Column Y (index-24)
+        scores.flexibilityAdaptability || 0, // Column Z (index-25)
+        scores.communication || 0, // Column AA (index-26)
+        scores.integrity || 0, // Column AB (index-27)
+        scores.leadership || 0, // Column AC (index-28)
+        scores.discipline || 0, // Column AD (index-29)
+        scores.punctuality || 0 // Column AE (index-30)
       ];
 
       const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
@@ -198,226 +194,83 @@ export const PoorwaGajbhiye = () => {
             </tr>
           </thead>
           <tbody>
-            {/* Recruitment/Selection KRA */}
+            {/* New Joining & File Upadation KRA */}
             <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td rowSpan="3" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Recruitment/Selection</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Assist manpower planning with HR Head & CH</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>New Joinings & File Updations</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>New Joinings Cycle and File Updations</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>6</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.manpowerPlanning}
-                  onChange={(e) => handleScoreChange('manpowerPlanning', e.target.value)}
+                  value={scores.newJoinings}
+                  onChange={(e) => handleScoreChange('newJoinings', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-2"
+                  placeholder="0-6"
                   min="0"
-                  max="2"
-                  step="0.1"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Matching of man power availability of each department by 90% anytime</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.manpowerAvailability}
-                  onChange={(e) => handleScoreChange('manpowerAvailability', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-5"
-                  min="0"
-                  max="5"
-                  step="0.1"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>100% adherence to Recruitment lead time (30 days) as per policy</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.recruitmentLeadTime}
-                  onChange={(e) => handleScoreChange('recruitmentLeadTime', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-5"
-                  min="0"
-                  max="5"
-                  step="0.1"
-                />
-              </td>
-            </tr>
-            
-            {/* Induction & Documentation KRA */}
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td rowSpan="2" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Induction & Documentation</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Conduct induction program for new joinees within 2 days of their joining</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.inductionProgram}
-                  onChange={(e) => handleScoreChange('inductionProgram', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-5"
-                  min="0"
-                  max="5"
-                  step="0.1"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Update new joinees information in EHMS</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2.7</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.ehmsUpdate}
-                  onChange={(e) => handleScoreChange('ehmsUpdate', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-2.7"
-                  min="0"
-                  max="2.7"
-                  step="0.1"
-                />
-              </td>
-            </tr>
-            
-            {/* Workforce Management KRA */}
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td rowSpan="2" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Workforce Management</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>100% implementation of HR policy</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4.7</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.hrPolicyImplementation}
-                  onChange={(e) => handleScoreChange('hrPolicyImplementation', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-4.7"
-                  min="0"
-                  max="4.7"
-                  step="0.1"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Analysis of exit interview and present half yearly reports with action plan to control attrition</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4.7</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.exitInterviewAnalysis}
-                  onChange={(e) => handleScoreChange('exitInterviewAnalysis', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-4.7"
-                  min="0"
-                  max="4.7"
-                  step="0.1"
-                />
-              </td>
-            </tr>
-            
-            {/* Payroll and Salary Administration KRA */}
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Payroll and Salary Administration</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>100% Record maintenance of payroll related activities</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4.7</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.payrollRecordMaintenance}
-                  onChange={(e) => handleScoreChange('payrollRecordMaintenance', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-4.7"
-                  min="0"
-                  max="4.7"
-                  step="0.1"
-                />
-              </td>
-            </tr>
-            
-            {/* HR EHMS KRA */}
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td rowSpan="2" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>HR EHMS</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Updation in EHMS</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.ehmsUpdation}
-                  onChange={(e) => handleScoreChange('ehmsUpdation', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-2"
-                  min="0"
-                  max="2"
-                  step="0.1"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>File uploading in cloud & Software</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.fileUploading}
-                  onChange={(e) => handleScoreChange('fileUploading', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-3"
-                  min="0"
-                  max="3"
-                  step="0.1"
-                />
-              </td>
-            </tr>
-            
-            {/* Operational excellence KRA */}
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td rowSpan="2" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Operational excellence</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Adhere to timeline for Monthly Physical stock verification & Indent</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.physicalStockVerification}
-                  onChange={(e) => handleScoreChange('physicalStockVerification', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-5"
-                  min="0"
-                  max="5"
-                  step="0.1"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Preparation of Gate pass (for those who are going outside of hospital during working hours)</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.gatePassPreparation}
-                  onChange={(e) => handleScoreChange('gatePassPreparation', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-5"
-                  min="0"
-                  max="5"
+                  max="6"
                   step="0.1"
                 />
               </td>
             </tr>
 
-            {/* Physical Lifecycle KRA */}
+              {/* Planning & Execution L & D (Plain vs Done) KRA */}
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td rowSpan="7" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Induction & Documentation</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Manage stakeholders in the region to understand and generate training needs </td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.planningExecution1}
+                  onChange={(e) => handleScoreChange('planningExecution1', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-4"
+                  min="0"
+                  max="4"
+                  step="0.1"
+                />
+              </td>
+            </tr>
             <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td rowSpan="2" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Physical Lifecycle</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Daily round on all floors to check staff grooming & follow SOP</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Maintenance of Learning SOPs </td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>7</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.planningExecution2}
+                  onChange={(e) => handleScoreChange('planningExecution2', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-7"
+                  min="0"
+                  max="7"
+                  step="0.1"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Piloting new learning Interventions or program deliveries based on evolving needs </td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.planningExecution3}
+                  onChange={(e) => handleScoreChange('planningExecution3', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-5"
+                  min="0"
+                  max="5"
+                  step="0.1"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Capability development of the process/SBU trainer’s/Channel partners </td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.dailyRounds}
-                  onChange={(e) => handleScoreChange('dailyRounds', e.target.value)}
+                  value={scores.planningExecution4}
+                  onChange={(e) => handleScoreChange('planningExecution4', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
                   placeholder="0-3"
                   min="0"
@@ -427,83 +280,45 @@ export const PoorwaGajbhiye = () => {
               </td>
             </tr>
             <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Employee personal file updation on timely basis</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Maintain MIS & reports as per defined SOP</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.employeeFileUpdation}
-                  onChange={(e) => handleScoreChange('employeeFileUpdation', e.target.value)}
+                  value={scores.planningExecution5}
+                  onChange={(e) => handleScoreChange('planningExecution5', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-5"
+                  placeholder="0-4"
                   min="0"
-                  max="5"
-                  step="0.1"
-                />
-              </td>
-            </tr>
-
-            {/* MIS KRA */}
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>MIS</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>100% adherence to timeline for submission of monthly reports</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3.2</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.monthlyReports}
-                  onChange={(e) => handleScoreChange('monthlyReports', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-3.2"
-                  min="0"
-                  max="3.2"
-                  step="0.1"
-                />
-              </td>
-            </tr>
-
-            {/* Training and development KRA */}
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td rowSpan="4" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Training and development</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>To share training dashboard of next month on 25th of every month</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.trainingDashboard}
-                  onChange={(e) => handleScoreChange('trainingDashboard', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-5"
-                  min="0"
-                  max="5"
+                  max="4"
                   step="0.1"
                 />
               </td>
             </tr>
             <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Completion of Training Programs for departments w.r.t quarterly Training Calendar</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Develop self-expertise in at least one domain of products </td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>6</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.trainingCompletion}
-                  onChange={(e) => handleScoreChange('trainingCompletion', e.target.value)}
+                  value={scores.planningExecution6}
+                  onChange={(e) => handleScoreChange('planningExecution6', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-5"
+                  placeholder="0-6"
                   min="0"
-                  max="5"
+                  max="6"
                   step="0.1"
                 />
               </td>
             </tr>
             <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Training feedback & evaluation</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Contribute to the People Function agenda through HO organized drives and initiatives</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.trainingFeedback}
-                  onChange={(e) => handleScoreChange('trainingFeedback', e.target.value)}
+                  value={scores.planningExecution7}
+                  onChange={(e) => handleScoreChange('planningExecution7', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
                   placeholder="0-5"
                   min="0"
@@ -512,18 +327,156 @@ export const PoorwaGajbhiye = () => {
                 />
               </td>
             </tr>
+            
+            {/* Induction Training KRA */}
             <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Engagement activities as per Event Calendar</td>
+              <td rowSpan="2" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Induction Training</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Batch training for the new employees in the contact center</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.inductionTraining1}
+                  onChange={(e) => handleScoreChange('inductionTraining1', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-4"
+                  min="0"
+                  max="4"
+                  step="0.1"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Conduct refresher sessions for the sales & service calling team</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.inductionTraining2}
+                  onChange={(e) => handleScoreChange('inductionTraining2', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-3"
+                  min="0"
+                  max="3"
+                  step="0.1"
+                />
+              </td>
+            </tr>
+            
+            {/* Auditing & Process Improvement KRA */}
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td rowSpan="5" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Auditing & Process Improvement</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Calls audit & do the analysis to check the quality of the contact center</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>7</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.auditingAndProcess1}
+                  onChange={(e) => handleScoreChange('auditingAndProcess1', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-7"
+                  min="0"
+                  max="7"
+                  step="0.1"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Weekly monthly dashboard published for various campaigns to gaze the performance</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.auditingAndProcess2}
+                  onChange={(e) => handleScoreChange('auditingAndProcess2', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-4"
+                  min="0"
+                  max="4"
+                  step="0.1"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Develop content for the training as per the latest trend of the market</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.engagementActivities}
-                  onChange={(e) => handleScoreChange('engagementActivities', e.target.value)}
+                  value={scores.auditingAndProcess3}
+                  onChange={(e) => handleScoreChange('auditingAndProcess3', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
                   placeholder="0-5"
                   min="0"
                   max="5"
+                  step="0.1"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Feedback sessions on audits for the contact center agents for the performance improvement</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.auditingAndProcess4}
+                  onChange={(e) => handleScoreChange('auditingAndProcess4', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-4"
+                  min="0"
+                  max="4"
+                  step="0.1"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Sharing process gaps for the process improvement and standardization</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.auditingAndProcess5}
+                  onChange={(e) => handleScoreChange('auditingAndProcess5', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-3"
+                  min="0"
+                  max="3"
+                  step="0.1"
+                />
+              </td>
+            </tr>
+
+
+            {/* Employee Engagement	 KRA */}
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td rowSpan="2" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Employee Engagement	</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Attend meetings with the various departments on the assigned tasks</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.employeeEngagement1}
+                  onChange={(e) => handleScoreChange('employeeEngagement1', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-4"
+                  min="0"
+                  max="4"
+                  step="0.1"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Assist in employee engagement activities</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>6</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.employeeEngagement2}
+                  onChange={(e) => handleScoreChange('employeeEngagement2', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-6"
+                  min="0"
+                  max="6"
                   step="0.1"
                 />
               </td>

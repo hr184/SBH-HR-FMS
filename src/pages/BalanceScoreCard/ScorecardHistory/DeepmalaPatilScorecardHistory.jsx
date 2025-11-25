@@ -197,34 +197,34 @@ const formatMonth = (monthString) => {
                         {row[2] || '-'}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-900 border text-right">
-                        {formatNumber(row[36])}
+                        {formatNumber(row[26])}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-900 border text-right">
-                        {formatNumber(row[37])}
+                        {formatNumber(row[27])}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-900 border text-right">
-                        {formatNumber(row[38])}
+                        {formatNumber(row[28])}
                       </td>
                       {/* <td className="px-4 py-3 text-sm text-gray-900 border text-right">
-                        {formatNumber(row[39])}
+                        {formatNumber(row[29])}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-900 border text-right">
-                        {formatNumber(row[40])}
+                        {formatNumber(row[30])}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-900 border text-right">
-                        {formatNumber(row[41])}
+                        {formatNumber(row[31])}
                       </td> */}
                       <td className="px-4 py-3 text-sm text-gray-900 border text-right">
-                        {formatNumber(row[42])}
+                        {formatNumber(row[32])}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-900 border text-right">
-                        {formatNumber(row[43])}
+                        {formatNumber(row[33])}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-900 border text-right">
-                        {formatNumber(row[44])}
+                        {formatNumber(row[34])}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-900 border text-right">
-                        {formatPercentage(row[45])}
+                        {formatPercentage(row[35])}
                       </td>
                     </tr>
                   ))}

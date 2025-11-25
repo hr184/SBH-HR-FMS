@@ -6,18 +6,20 @@ import 'react-toastify/dist/ReactToastify.css';
 export const AlokPandey = () => {
   const [scores, setScores] = useState({
     // Job Assessment Scores
-    targetAchievement: '',
-    btlBusinessTracking: '',
-    associateSatisfaction: '',
-    sopScore: '',
-    newAssociateTarget: '',
-    dbcsRsbyStrategy: '',
-    visitTarget: '',
-    bestPractices: '',
-    marketingCampaigns: '',
-    referralConversion: '',
-    reportSubmission: '',
-    managementTraining: '',
+    digitalStrategy: '',
+    contenMarketing: '',
+    socialMediaManament: '',
+    analyticsAndReport: '',
+    collaboration: '',
+    developingCampaigns: '',
+    partnerManagement: '',
+    reputationManagement: '',
+    budgetManagement: '',
+    brandGuidelines: '',
+    seoAndSem: '',
+    websiteManagement: '',
+    performanceMarketing: '',
+
     
     // Behavioral Assessment Scores
     qualityOfWork: '',
@@ -46,12 +48,12 @@ export const AlokPandey = () => {
   };
 
   const calculateTotals = () => {
-    const jobAssessmentTotal = Object.values(scores).slice(0, 12).reduce((a, b) => a + (parseFloat(b) || 0), 0);
-    const behavioralTotal = Object.values(scores).slice(12).reduce((a, b) => a + (parseFloat(b) || 0), 0);
+    const jobAssessmentTotal = Object.values(scores).slice(0, 13).reduce((a, b) => a + (parseFloat(b) || 0), 0);
+    const behavioralTotal = Object.values(scores).slice(13).reduce((a, b) => a + (parseFloat(b) || 0), 0);
     const overallTotal = jobAssessmentTotal + behavioralTotal;
     
-    // Calculate target totals (out of values)
-    const jobAssessmentTargets = [15, 6, 5, 6, 8, 6, 5, 5, 6, 8, 5, 5];
+    // Updated target values to match the new KPIs
+    const jobAssessmentTargets = [5, 7, 6, 4, 8, 3, 9, 4, 5, 6, 7, 8, 8];
     const behavioralTargets = [1, 2, 2, 2, 2, 2, 2, 2, 2, 3];
     
     const jobAssessmentTargetTotal = jobAssessmentTargets.reduce((a, b) => a + b, 0);
@@ -104,28 +106,29 @@ export const AlokPandey = () => {
         currentMonth, // Column B (index-1) - Current Month
         employeeName, // Column C (index-2) - Employee Name
         "", // Column D (index-3) - Empty column
-        scores.targetAchievement || 0, // Column E (index-4) - Target Achievement
-        scores.btlBusinessTracking || 0, // Column F (index-5) - To track & achieve BTL business & ratings
-        scores.associateSatisfaction || 0, // Column G (index-6) - Satisfaction rate of Associates
-        scores.sopScore || 0, // Column H (index-7) - SOP score should be >70%
-        scores.newAssociateTarget || 0, // Column I (index-8) - Achieve the target of new associated
-        scores.dbcsRsbyStrategy || 0, // Column J (index-9) - Strategy to increase the DBCS & RSBY
-        scores.visitTarget || 0, // Column K (index-10) - Achieve targeted numbers of visit
-        scores.bestPractices || 0, // Column L (index-11) - Implementation of 2 best practices in a quarter
-        scores.marketingCampaigns || 0, // Column M (index-12) - Conduct Marketing campaign/event
-        scores.referralConversion || 0, // Column N (index-13) - 80% conversion of referral patients for surgery
-        scores.reportSubmission || 0, // Column O (index-14) - 100% adherence to timeline for submission of monthly reports
-        scores.managementTraining || 0, // Column P (index-15) - Attend Monthly training
-        scores.qualityOfWork || 0, // Column Q (index-16) - Effectively and efficiently performs job
-        scores.planningExecution || 0, // Column R (index-17) - Do Plan in advance and execute without deviation
-        scores.timeResources || 0, // Column S (index-18) - Conserve Company resources and meet deadlines
-        scores.interpersonalRelations || 0, // Column T (index-19) - Have healthy work relation with peers and superiors
-        scores.flexibilityAdaptability || 0, // Column U (index-20) - Flexible in taking additional tasks and adaptable to change
-        scores.communication || 0, // Column V (index-21) - Exchange of information desired through effective means
-        scores.integrity || 0, // Column W (index-22) - High integrity towards company
-        scores.leadership || 0, // Column X (index-23) - Ability to Inspire and take initiatives
-        scores.discipline || 0, // Column Y (index-24) - Follow rules and code of conduct
-        scores.punctuality || 0 // Column Z (index-25) - Adherence to time and attendance
+        scores.digitalStrategy || 0, // Column E (index-4) - Target Achievement
+        scores.contenMarketing || 0, // Column F (index-5) - To track & achieve BTL business & ratings
+        scores.socialMediaManament || 0, // Column G (index-6) - Satisfaction rate of Associates
+        scores.analyticsAndReport || 0, // Column H (index-7) - SOP score should be >70%
+        scores.collaboration || 0, // Column I (index-8) - Achieve the target of new associated
+        scores.developingCampaigns || 0, // Column J (index-9) - Strategy to increase the DBCS & RSBY
+        scores.partnerManagement || 0, // Column K (index-10) - Achieve targeted numbers of visit
+        scores.reputationManagement || 0, // Column L (index-11) - Implementation of 2 best practices in a quarter
+        scores.budgetManagement || 0, // Column M (index-12) - Conduct Marketing campaign/event
+        scores.brandGuidelines || 0, // Column N (index-13) - 80% conversion of referral patients for surgery
+        scores.seoAndSem || 0, // Column O (index-14) - 100% adherence to timeline for submission of monthly reports
+        scores.websiteManagement || 0, // Column P (index-15) - Attend Monthly training
+        scores.performanceMarketing || 0, // Column Q (index-16)
+        scores.qualityOfWork || 0, // Column R (index-17) - Effectively and efficiently performs job
+        scores.planningExecution || 0, // Column S (index-18) - Do Plan in advance and execute without deviation
+        scores.timeResources || 0, // Column T (index-19) - Conserve Company resources and meet deadlines
+        scores.interpersonalRelations || 0, // Column U (index-20) - Have healthy work relation with peers and superiors
+        scores.flexibilityAdaptability || 0, // Column V (index-21) - Flexible in taking additional tasks and adaptable to change
+        scores.communication || 0, // Column W (index-22) - Exchange of information desired through effective means
+        scores.integrity || 0, // Column X (index-23) - High integrity towards company
+        scores.leadership || 0, // Column Y (index-24) - Ability to Inspire and take initiatives
+        scores.discipline || 0, // Column Z (index-25) - Follow rules and code of conduct
+        scores.punctuality || 0 // Column AA (index-26) - Adherence to time and attendance
       ];
 
       const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
@@ -139,39 +142,39 @@ export const AlokPandey = () => {
       formData.append('payload', JSON.stringify(rowData));
 
       const response = await fetch(scriptURL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: `sheetId=${encodeURIComponent(sheetId)}&sheetName=${encodeURIComponent(sheetName)}&payload=${encodeURIComponent(JSON.stringify(rowData))}`
-    });
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `sheetId=${encodeURIComponent(sheetId)}&sheetName=${encodeURIComponent(sheetName)}&payload=${encodeURIComponent(JSON.stringify(rowData))}`
+      });
 
-    // Check if the response is successful
-    if (response.ok) {
-      console.log('Submitted Scores:', scores);
-      console.log('Row Data sent to sheet:', rowData);
-      
-      // Show success message
-      toast.success('Scores submitted successfully!');
-      
-      // Optional: You can also open the sheet URL to verify data was stored
-      const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/edit#gid=0`;
-      console.log('Check your Google Sheet here:', sheetUrl);
-    } else {
-      throw new Error(`Server responded with status: ${response.status}`);
+      // Check if the response is successful
+      if (response.ok) {
+        console.log('Submitted Scores:', scores);
+        console.log('Row Data sent to sheet:', rowData);
+        
+        // Show success message
+        toast.success('Scores submitted successfully!');
+        
+        // Optional: You can also open the sheet URL to verify data was stored
+        const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/edit#gid=0`;
+        console.log('Check your Google Sheet here:', sheetUrl);
+      } else {
+        throw new Error(`Server responded with status: ${response.status}`);
+      }
+
+    } catch (error) {
+      console.error('Error submitting scores:', error);
+      toast.error('Failed to submit scores. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
-
-  } catch (error) {
-    console.error('Error submitting scores:', error);
-    toast.error('Failed to submit scores. Please try again.');
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+  };
 
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', minHeight: '100vh' }}>      
-    <ToastContainer />
+      <ToastContainer />
       <div style={{ marginBottom: '30px', backgroundColor: 'white', borderRadius: '10px', padding: '20px', boxShadow: '0 6px 10px rgba(0, 0, 0, 0.1)' }}>
         <h2 style={{ color: '#1e3a8a', borderBottom: '3px solid #1e3a8a', paddingBottom: '10px', marginBottom: '20px' }}>JOB ASSESSMENT</h2>
         <table style={{ width: '100%', borderCollapse: 'collapse', borderRadius: '8px', overflow: 'hidden' }}>
@@ -184,49 +187,16 @@ export const AlokPandey = () => {
             </tr>
           </thead>
           <tbody>
-            {/* Financial KRA */}
+            {/* Digital Strategy KRA */}
             <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td rowSpan="2" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Financial</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Target Achievement</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>15</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.targetAchievement}
-                  onChange={(e) => handleScoreChange('targetAchievement', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-15"
-                  min="0"
-                  max="15"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>To track & achieve BTL business & ratings</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>6</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.btlBusinessTracking}
-                  onChange={(e) => handleScoreChange('btlBusinessTracking', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-6"
-                  min="0"
-                  max="6"
-                />
-              </td>
-            </tr>
-
-            {/* Customer Satisfaction KRA */}
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Customer Satisfaction</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Satisfaction rate of Associates should be more than 80% monthly 10 associates</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Digital Strategy</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Develop and implement comprehensive digital marketing strategies to promote the hospital services, specialities, and brand, with a focus on patient acquisition, engagement, and retention.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.associateSatisfaction}
-                  onChange={(e) => handleScoreChange('associateSatisfaction', e.target.value)}
+                  value={scores.digitalStrategy}
+                  onChange={(e) => handleScoreChange('digitalStrategy', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
                   placeholder="0-5"
                   min="0"
@@ -235,16 +205,34 @@ export const AlokPandey = () => {
               </td>
             </tr>
 
-            {/* SOP KRA */}
+            {/* Content Marketing KRA */}
             <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>SOP</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>SOP score should be {'>'}70%</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Content Marketing</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Oversee the creation of high-quality content, including blogs, social media posts, videos, and newsletters, that highlight the hospital s specialties, patient success stories, and health tips.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>7</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.contenMarketing}
+                  onChange={(e) => handleScoreChange('contenMarketing', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-7"
+                  min="0"
+                  max="7"
+                />
+              </td>
+            </tr>
+
+            {/* Social Media Management KRA */}
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Social Media Management</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}> Manage and grow the hospital s presence on social media platforms such as Facebook, Instagram, LinkedIn, and YouTube through engaging and informative posts and campaigns.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>6</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.sopScore}
-                  onChange={(e) => handleScoreChange('sopScore', e.target.value)}
+                  value={scores.socialMediaManament}
+                  onChange={(e) => handleScoreChange('socialMediaManament', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
                   placeholder="0-6"
                   min="0"
@@ -253,97 +241,34 @@ export const AlokPandey = () => {
               </td>
             </tr>
 
-            {/* Marketing strategy KRA */}
+            {/* Analytics & Reporting KRA */}
             <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td rowSpan="3" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Marketing strategy</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Achieve the target of new associated (Ophthalmic assistants, GPs)</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Analytics & Reporting</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Use tools like Google Analytics and other performance tracking tools to measure the effectiveness of digital marketing campaigns. Provide actionable insights to optimize future campaigns.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.analyticsAndReport}
+                  onChange={(e) => handleScoreChange('analyticsAndReport', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-4"
+                  min="0"
+                  max="4"
+                />
+              </td>
+            </tr>
+
+            {/* Collaboration KRA */}
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Collaboration</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Work closely with doctors and external agencies to ensure alignment on all marketing initiatives.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>8</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.newAssociateTarget}
-                  onChange={(e) => handleScoreChange('newAssociateTarget', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-8"
-                  min="0"
-                  max="8"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Strategy to increase the DBCS & RSBY</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>6</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.dbcsRsbyStrategy}
-                  onChange={(e) => handleScoreChange('dbcsRsbyStrategy', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-6"
-                  min="0"
-                  max="6"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Achieve targeted numbers of visit</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.visitTarget}
-                  onChange={(e) => handleScoreChange('visitTarget', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-5"
-                  min="0"
-                  max="5"
-                />
-              </td>
-            </tr>
-
-            {/* Best practice KRA */}
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Best practice</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Implementation of 2 best practices in a quarter</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.bestPractices}
-                  onChange={(e) => handleScoreChange('bestPractices', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-5"
-                  min="0"
-                  max="5"
-                />
-              </td>
-            </tr>
-
-            {/* Operational KRA */}
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td rowSpan="2" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Operational</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Conduct Marketing campaign/event as per plan/Calendar</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>6</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.marketingCampaigns}
-                  onChange={(e) => handleScoreChange('marketingCampaigns', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-6"
-                  min="0"
-                  max="6"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>80% conversion of referral patients for surgery</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>8</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.referralConversion}
-                  onChange={(e) => handleScoreChange('referralConversion', e.target.value)}
+                  value={scores.collaboration}
+                  onChange={(e) => handleScoreChange('collaboration', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
                   placeholder="0-8"
                   min="0"
@@ -352,16 +277,70 @@ export const AlokPandey = () => {
               </td>
             </tr>
 
-            {/* MIS KRA */}
+            {/* Developing Campaigns KRA */}
             <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>MIS</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>100% adherence to timeline for submission of monthly reports</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Developing Campaigns</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Design and execute health awareness campaigns related to various specialties such as Women, IVF, EYE , Physicians , etc.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.developingCampaigns}
+                  onChange={(e) => handleScoreChange('developingCampaigns', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-3"
+                  min="0"
+                  max="3"
+                />
+              </td>
+            </tr>
+
+            {/* Partner Management KRA */}
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Partner Management</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Act as the primary liaison between the hospital and external digital marketing partners. Ensure alignment with business goals.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>9</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.partnerManagement}
+                  onChange={(e) => handleScoreChange('partnerManagement', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-9"
+                  min="0"
+                  max="9"
+                />
+              </td>
+            </tr>
+
+            {/* Reputation Management KRA */}
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Reputation Management</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Monitor and manage the hospital s online reputation on platforms such as Google Reviews, Practo, Just-dial, etc. Respond to reviews and inquiries in a professional manner</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.reputationManagement}
+                  onChange={(e) => handleScoreChange('reputationManagement', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-4"
+                  min="0"
+                  max="4"
+                />
+              </td>
+            </tr>
+
+            {/* Budget Management KRA */}
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Budget Management</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Allocate and manage digital marketing budgets effectively to maximize ROI across paid advertising and other digital initiatives.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.reportSubmission}
-                  onChange={(e) => handleScoreChange('reportSubmission', e.target.value)}
+                  value={scores.budgetManagement}
+                  onChange={(e) => handleScoreChange('budgetManagement', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
                   placeholder="0-5"
                   min="0"
@@ -370,20 +349,74 @@ export const AlokPandey = () => {
               </td>
             </tr>
 
-            {/* Training & Development KRA */}
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Training & Development</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Attend Monthly training (Departmental / Cross functional)</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
+            {/* Brand Guidelines KRA */}
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Brand Guidelines</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Ensuring that all internal and external communications are consistent with the hospital s brand guidelines, and provide guidance to internal stakeholders on maintaining brand integrity.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>6</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.managementTraining}
-                  onChange={(e) => handleScoreChange('managementTraining', e.target.value)}
+                  value={scores.brandGuidelines}
+                  onChange={(e) => handleScoreChange('brandGuidelines', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-5"
+                  placeholder="0-6"
                   min="0"
-                  max="5"
+                  max="6"
+                />
+              </td>
+            </tr>
+
+            {/* SEO & SEM KRA */}
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>SEO & SEM</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Collaborate with external agencies and partners to develop and execute SEO and SEM strategies. Monitor performance to increase organic search visibility and optimize SEM campaigns (Google Ads, Facebook Ads) for patient acquisition.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>7</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.seoAndSem}
+                  onChange={(e) => handleScoreChange('seoAndSem', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-7"
+                  min="0"
+                  max="7"
+                />
+              </td>
+            </tr>
+
+            {/* Website Management KRA */}
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Website Management</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Work with website management partners to ensure the hospital s website is up-to-date, user-friendly, and optimized for conversions (appointments, inquiries). Ensure regular updates and performance tracking</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>8</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.websiteManagement}
+                  onChange={(e) => handleScoreChange('websiteManagement', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-8"
+                  min="0"
+                  max="8"
+                />
+              </td>
+            </tr>
+
+            {/* Performance Marketing KRA */}
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Performance Marketing</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Manage external partners to run performance marketing campaigns, including display ads, re-marketing, and paid search, ensuring they meet predefined KPIs and maximize ROI . </td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>8</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.performanceMarketing}
+                  onChange={(e) => handleScoreChange('performanceMarketing', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-8"
+                  min="0"
+                  max="8"
                 />
               </td>
             </tr>

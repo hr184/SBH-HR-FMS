@@ -6,28 +6,18 @@ import 'react-toastify/dist/ReactToastify.css';
 export const DeepmalaPatil = () => {
   const [scores, setScores] = useState({
     // Job Assessment Scores - Updated KPIs for Deepmala Patil
-    advancePaymentCollection: '',
-    targetAchievement: '',
-    opdConversion: '',
-    paymentClearance: '',
-    customerSatisfaction: '',
-    complaintClosure: '',
-    callTracking: '',
-    sopAudit: '',
-    managementMeetings: '',
-    reminderCalls: '',
-    patchPendencies: '',
-    riskIdentification: '',
-    consentForms: '',
-    goggleDistribution: '',
-    dutyRoster: '',
-    waitingTime: '',
-    doctorCoordination: '',
-    discountClearance: '',
-    consumablesAvailability: '',
-    reportTimeline: '',
-    subordinateTraining: '',
-    trainingAttendance: '',
+    patientsExperience1: '',
+    patientsExperience2: '',
+    patientsExperience3: '',
+    patientsExperience4: '',
+    patientsExperience5: '',
+    patientsExperience6: '',
+    NPS1: '',
+    NPS2: '',
+    NPS3: '',
+    NPS4: '',
+    other1: '',
+    other2: '',
     
     // Behavioral Assessment Scores (unchanged)
     qualityOfWork: '',
@@ -56,12 +46,12 @@ export const DeepmalaPatil = () => {
   };
 
   const calculateTotals = () => {
-    const jobAssessmentTotal = Object.values(scores).slice(0, 22).reduce((a, b) => a + (parseFloat(b) || 0), 0);
-    const behavioralTotal = Object.values(scores).slice(22).reduce((a, b) => a + (parseFloat(b) || 0), 0);
+    const jobAssessmentTotal = Object.values(scores).slice(0, 12).reduce((a, b) => a + (parseFloat(b) || 0), 0);
+    const behavioralTotal = Object.values(scores).slice(12).reduce((a, b) => a + (parseFloat(b) || 0), 0);
     const overallTotal = jobAssessmentTotal + behavioralTotal;
     
     // Calculate target totals (out of values) - Updated targets for Deepmala Patil
-    const jobAssessmentTargets = [6, 7, 5, 3, 5, 4, 3, 5, 5, 3, 3, 3, 3, 3, 3, 2, 2, 3, 3, 3, 3, 3];
+    const jobAssessmentTargets = [7, 5, 6, 4, 9, 8, 5, 7, 6, 8, 7, 8];
     const behavioralTargets = [1, 2, 2, 2, 2, 2, 2, 2, 2, 3];
     
     const jobAssessmentTargetTotal = jobAssessmentTargets.reduce((a, b) => a + b, 0);
@@ -114,38 +104,28 @@ export const DeepmalaPatil = () => {
         currentMonth, // Column B (index-1) - Current Month
         employeeName, // Column C (index-2) - Employee Name
         "", // Column D (index-3) - Empty column
-        scores.advancePaymentCollection || 0, // Column E (index-4) - 100% Advance payment collection from OPD patients
-        scores.targetAchievement || 0, // Column F (index-5) - Periodically Target VS Achievement as per roadmap
-        scores.opdConversion || 0, // Column G (index-6) - To track OPD appointment VS footfall conversion & lost patient
-        scores.paymentClearance || 0, // Column H (index-7) - 100% payment clearance of all the associate consultants on monthly basis
-        scores.customerSatisfaction || 0, // Column I (index-8) - Customer Satisfaction should be >80%
-        scores.complaintClosure || 0, // Column J (index-9) - Closure of customer complaints within 24 hours TAT
-        scores.callTracking || 0, // Column K (index-10) - Track the call details of CRM & Counsellor on a daily basis
-        scores.sopAudit || 0, // Column L (index-11) - Monthly SOP Audit score by HOD >= 75%
-        scores.managementMeetings || 0, // Column M (index-12) - Monthly atleast 2 meeting with management for discussing Internal Audit and obstacles faced during OPD
-        scores.reminderCalls || 0, // Column N (index-13) - 100% Adherence for reminding call regarding pre and post operation
-        scores.patchPendencies || 0, // Column O (index-14) - Zero pendencies in Patch open, follow up and their appointment
-        scores.riskIdentification || 0, // Column P (index-15) - 100% identification of risks or emergencies during surgery
-        scores.consentForms || 0, // Column Q (index-16) - 100% Filling of consent form from patient and relative before surgery and keep them separately and safely
-        scores.goggleDistribution || 0, // Column R (index-17) - 100% distribution of LASIK goggles to the patient after opening temporary/stripe patches
-        scores.dutyRoster || 0, // Column S (index-18) - Prepare Duty roster of all staff including consultants
-        scores.waitingTime || 0, // Column T (index-19) - To monitor and reduce patient waiting time in optom's and doctor's chamber
-        scores.doctorCoordination || 0, // Column U (index-20) - Coordination with visiting doctors & complete arrangements
-        scores.discountClearance || 0, // Column V (index-21) - To check and clear all the discounts/refunds of patients in HMIS within TAT
-        scores.consumablesAvailability || 0, // Column W (index-22) - 100% availability and maintain the consumables in concerned departments
-        scores.reportTimeline || 0, // Column X (index-23) - 100% adherence to timeline for submission of reports to management and ensure timely update reports by subordinates
-        scores.subordinateTraining || 0, // Column Y (index-24) - Impart per month (2hr) Training to subordinates
-        scores.trainingAttendance || 0, // Column Z (index-25) - Attend Training conducted by management (Departmental / Cross functional)
-        scores.qualityOfWork || 0, // Column AA (index-26) - Effectively and efficiently performs job
-        scores.planningExecution || 0, // Column AB (index-27) - Do Plan in advance and execute without deviation
-        scores.timeResources || 0, // Column AC (index-28) - Conserve Company resources and meet deadlines
-        scores.interpersonalRelations || 0, // Column AD (index-29) - Have healthy work relation with peers and superiors
-        scores.flexibilityAdaptability || 0, // Column AE (index-30) - Flexible in taking additional tasks and adaptable to change
-        scores.communication || 0, // Column AF (index-31) - Exchange of information desired through effective means
-        scores.integrity || 0, // Column AG (index-32) - High integrity towards company
-        scores.leadership || 0, // Column AH (index-33) - Ability to Inspire and take initiatives
-        scores.discipline || 0, // Column AI (index-34) - Follow rules and code of conduct
-        scores.punctuality || 0 // Column AJ (index-35) - Adherence to time and attendance
+        scores.patientsExperience1 || 0, // Column E (index-4) - Execute the SOP as per the guidelines
+        scores.patientsExperience2 || 0, // Column F (index-5) - To foster peer support; provide training to others
+        scores.patientsExperience3 || 0, // Column G (index-6) - Responsible for all other principal duties
+        scores.patientsExperience4 || 0, // Column H (index-7) - To constantly interact with respective departments
+        scores.patientsExperience5 || 0, // Column I (index-8) - To extend support and coordinate services
+        scores.patientsExperience6 || 0, // Column J (index-9) - Coordinating with Credit Helpdesk/Billing Team
+        scores.NPS1 || 0, // Column K (index-10) - To achieve 90% and above score in patient satisfaction
+        scores.NPS2 || 0, // Column L (index-11) - Investigate and resolved customer inquiries and complaints
+        scores.NPS3 || 0, // Column M (index-12) - Provide prompt, courteous, efficient and personalized service
+        scores.NPS4 || 0, // Column N (index-13) - Responsible for Daily Cash Tally
+        scores.other1 || 0, // Column O (index-14) - Finally responsible for the Hospitals Business targets
+        scores.other2 || 0, // Column P (index-15) - Responsible for additional tasks assigned
+        scores.qualityOfWork || 0, // Column Q (index-16) - Effectively and efficiently performs job
+        scores.planningExecution || 0, // Column R (index-17) - Do Plan in advance and execute without deviation
+        scores.timeResources || 0, // Column S (index-18) - Conserve Company resources and meet deadlines
+        scores.interpersonalRelations || 0, // Column T (index-19) - Have healthy work relation with peers and superiors
+        scores.flexibilityAdaptability || 0, // Column U (index-20) - Flexible in taking additional tasks and adaptable to change
+        scores.communication || 0, // Column V (index-21) - Exchange of information desired through effective means
+        scores.integrity || 0, // Column W (index-22) - High integrity towards company
+        scores.leadership || 0, // Column X (index-23) - Ability to Inspire and take initiatives
+        scores.discipline || 0, // Column Y (index-24) - Follow rules and code of conduct
+        scores.punctuality || 0 // Column Z (index-25) - Adherence to time and attendance
       ];
 
       const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
@@ -204,16 +184,48 @@ export const DeepmalaPatil = () => {
             </tr>
           </thead>
           <tbody>
-            {/* Profitability KRA */}
+
+
+            {/* Patients Experince /Procedures/Credit Billing Co-ordination KRA */}
             <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td rowSpan="4" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Profitability</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>100% Advance payment collection from OPD patients</td>
+              <td rowSpan="6" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Patients Experince /Procedures/Credit Billing Co-ordination</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Execute the SOP as per the guidelines - Front Office / Opd staff/Billings TAT / Counselling etc...</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>7</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.patientsExperience1}
+                  onChange={(e) => handleScoreChange('patientsExperience1', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-7"
+                  min="0"
+                  max="7"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>To foster peer support; provide training to others regarding the hospital wide policies and processes.  - On job training and monitering the reporting staff</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.patientsExperience2}
+                  onChange={(e) => handleScoreChange('patientsExperience2', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-5"
+                  min="0"
+                  max="5"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Responsible for all other principal duties and key tasks assigned by the management from time to time.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>6</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.advancePaymentCollection}
-                  onChange={(e) => handleScoreChange('advancePaymentCollection', e.target.value)}
+                  value={scores.patientsExperience3}
+                  onChange={(e) => handleScoreChange('patientsExperience3', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
                   placeholder="0-6"
                   min="0"
@@ -222,13 +234,76 @@ export const DeepmalaPatil = () => {
               </td>
             </tr>
             <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Periodically Target VS Achievement as per roadmap</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>To constantly interact with respective departments to negotiate and expedite scheduling and completion of tests, procedures, and consultations. - TAT Monitering of Advise vs Done</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.patientsExperience4}
+                  onChange={(e) => handleScoreChange('patientsExperience4', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-4"
+                  min="0"
+                  max="4"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>To extend support and coordinate services in line with the Clinical Team s & Nursing Team s requirement. </td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>9</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.patientsExperience5}
+                  onChange={(e) => handleScoreChange('patientsExperience5', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-9"
+                  min="0"
+                  max="9"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Coordinating with Credit Helpdesk/Billing Team for credit patients and updating the patients/patient family members regarding their approval status at periodic interval.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>8</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.patientsExperience6}
+                  onChange={(e) => handleScoreChange('patientsExperience6', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-8"
+                  min="0"
+                  max="8"
+                />
+              </td>
+            </tr>
+
+            {/* NPS/IPD Rounds /Cash tally/Task management KRA */}
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td rowSpan="4" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>NPS/IPD Rounds /Cash tally/Task management</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>To achieve 90% and above score in patient satisfaction index on a monthly basis - Daily moniteting on Google Reviews& Feedback forms/Complaints etc…</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.NPS1}
+                  onChange={(e) => handleScoreChange('NPS1', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-5"
+                  min="0"
+                  max="5"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Investigate and resolved customer inquiries and complaints in a timely and empathetic manner - Closure Remarks </td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>7</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.targetAchievement}
-                  onChange={(e) => handleScoreChange('targetAchievement', e.target.value)}
+                  value={scores.NPS2}
+                  onChange={(e) => handleScoreChange('NPS2', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
                   placeholder="0-7"
                   min="0"
@@ -237,317 +312,66 @@ export const DeepmalaPatil = () => {
               </td>
             </tr>
             <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>To track OPD appointment VS footfall conversion & lost patient</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Provide prompt, courteous, efficient and personalized service to all patients.- Ensure Patient Experince delight</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>6</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.opdConversion}
-                  onChange={(e) => handleScoreChange('opdConversion', e.target.value)}
+                  value={scores.NPS3}
+                  onChange={(e) => handleScoreChange('NPS3', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-5"
+                  placeholder="0-6"
                   min="0"
-                  max="5"
+                  max="6"
                 />
               </td>
             </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>100% payment clearance of all the associate consultants on monthly basis</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Responsible for Daily Cash Tally - Cash/Card/wallet </td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>8</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.paymentClearance}
-                  onChange={(e) => handleScoreChange('paymentClearance', e.target.value)}
+                  value={scores.NPS4}
+                  onChange={(e) => handleScoreChange('NPS4', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-3"
+                  placeholder="0-8"
                   min="0"
-                  max="3"
+                  max="8"
                 />
               </td>
             </tr>
 
-            {/* Customer Satisfaction KRA */}
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td rowSpan="3" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Customer Satisfaction</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Customer Satisfaction should be &gt;80%</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.customerSatisfaction}
-                  onChange={(e) => handleScoreChange('customerSatisfaction', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-5"
-                  min="0"
-                  max="5"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Closure of customer complaints within 24 hours TAT</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.complaintClosure}
-                  onChange={(e) => handleScoreChange('complaintClosure', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-4"
-                  min="0"
-                  max="4"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Track the call details of CRM & Counsellor on a daily basis</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.callTracking}
-                  onChange={(e) => handleScoreChange('callTracking', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-3"
-                  min="0"
-                  max="3"
-                />
-              </td>
-            </tr>
 
-            {/* SOP KRA */}
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>SOP</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Monthly SOP Audit score by HOD &gt;= 75%</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.sopAudit}
-                  onChange={(e) => handleScoreChange('sopAudit', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-5"
-                  min="0"
-                  max="5"
-                />
-              </td>
-            </tr>
-
-            {/* Operational Excellence KRA */}
+            {/* Other KRA */}
             <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td rowSpan="11" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Operational Excellence</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Monthly atleast 2 meeting with management for discussing Internal Audit and obstacles faced during OPD</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
+              <td rowSpan="2" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Other</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Finally repsosibile for the Hospitals Business targets - Monthly targets given by management ( Not less than  90% Ach is acceptable).  - NEW FF / REVIEW FF</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>7</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.managementMeetings}
-                  onChange={(e) => handleScoreChange('managementMeetings', e.target.value)}
+                  value={scores.other1}
+                  onChange={(e) => handleScoreChange('other1', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-5"
+                  placeholder="0-7"
                   min="0"
-                  max="5"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>100% Adherence for reminding call regarding pre and post operation</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.reminderCalls}
-                  onChange={(e) => handleScoreChange('reminderCalls', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-3"
-                  min="0"
-                  max="3"
+                  max="7"
                 />
               </td>
             </tr>
             <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Zero pendencies in Patch open, follow up and their appointment</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Responsible for additional tasks assigned by the reporting HOD & Directors - Updation on same through mail or whatsapp to the concern people</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>8</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.patchPendencies}
-                  onChange={(e) => handleScoreChange('patchPendencies', e.target.value)}
+                  value={scores.other2}
+                  onChange={(e) => handleScoreChange('other2', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-3"
+                  placeholder="0-8"
                   min="0"
-                  max="3"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>100% identification of risks or emergencies during surgery</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.riskIdentification}
-                  onChange={(e) => handleScoreChange('riskIdentification', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-3"
-                  min="0"
-                  max="3"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>100% Filling of consent form from patient and relative before surgery and keep them separately and safely</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.consentForms}
-                  onChange={(e) => handleScoreChange('consentForms', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-3"
-                  min="0"
-                  max="3"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>100% distribution of LASIK goggles to the patient after opening temporary/stripe patches</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.goggleDistribution}
-                  onChange={(e) => handleScoreChange('goggleDistribution', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-3"
-                  min="0"
-                  max="3"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Prepare Duty roster of all staff including consultants</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.dutyRoster}
-                  onChange={(e) => handleScoreChange('dutyRoster', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-3"
-                  min="0"
-                  max="3"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>To monitor and reduce patient waiting time in optom's and doctor's chamber</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.waitingTime}
-                  onChange={(e) => handleScoreChange('waitingTime', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-2"
-                  min="0"
-                  max="2"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Coordination with visiting doctors & complete arrangements</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.doctorCoordination}
-                  onChange={(e) => handleScoreChange('doctorCoordination', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-2"
-                  min="0"
-                  max="2"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>To check and clear all the discounts/refunds of patients in HMIS within TAT</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.discountClearance}
-                  onChange={(e) => handleScoreChange('discountClearance', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-3"
-                  min="0"
-                  max="3"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>100% availability and maintain the consumables in concerned departments</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.consumablesAvailability}
-                  onChange={(e) => handleScoreChange('consumablesAvailability', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-3"
-                  min="0"
-                  max="3"
-                />
-              </td>
-            </tr>
-
-            {/* Reports KRA */}
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Reports</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>100% adherence to timeline for submission of reports to management and ensure timely update reports by subordinates</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.reportTimeline}
-                  onChange={(e) => handleScoreChange('reportTimeline', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-3"
-                  min="0"
-                  max="3"
-                />
-              </td>
-            </tr>
-
-            {/* Training & Development KRA */}
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td rowSpan="2" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Training & Development</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Impart per month (2hr) Training to subordinates</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.subordinateTraining}
-                  onChange={(e) => handleScoreChange('subordinateTraining', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-3"
-                  min="0"
-                  max="3"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Attend Training conducted by management (Departmental / Cross functional)</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.trainingAttendance}
-                  onChange={(e) => handleScoreChange('trainingAttendance', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-3"
-                  min="0"
-                  max="3"
+                  max="8"
                 />
               </td>
             </tr>

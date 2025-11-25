@@ -6,22 +6,33 @@ import 'react-toastify/dist/ReactToastify.css';
 export const PraveenGupta = () => {
   const [scores, setScores] = useState({
     // Job Assessment Scores
-    operationalCostReduction: '',
-    budgetCompliance: '',
-    employeeSatisfaction: '',
-    vendorSatisfaction: '',
-    sopScore: '',
-    complaintClosure: '',
-    systemAvailability: '',
-    serverBackup: '',
-    networkPerformance: '',
-    itPolicyImplementation: '',
-    troubleshooting: '',
-    reportSubmission: '',
-    assetCoding: '',
-    technologyImplementation: '',
-    managementTraining: '',
-    staffTraining: '',
+    strategicPlanning: '',
+    technologyRoadmapping: '',
+    innovation: '',
+    changeManagement: '',
+    teamLeadership: '',
+    infrastructureManagement: '',
+    dailyOperations: '',
+    projectManagement: '',
+    budgeting: '',
+    vendorRelationships: '',
+    costOptimization: '',
+    cybersecurity: '',
+    dataProtection: '',
+    disasterRecovery: '',
+    riskAssessment: '',
+    stakeholderLiaison: '',
+    reporting: '',
+    stakeholderCommunication: '',
+    myOperator: '',
+    whatsappAPI: '',
+    whatsappPanel: '',
+    crmSoftware: '',
+    voiceCallingPanel: '',
+    trainingMentoring: '',
+    siteVisits: '',
+    surveillance: '',
+    infrastructureMaintenance: '',
     
     // Behavioral Assessment Scores
     qualityOfWork: '',
@@ -50,12 +61,12 @@ export const PraveenGupta = () => {
   };
 
   const calculateTotals = () => {
-    const jobAssessmentTotal = Object.values(scores).slice(0, 16).reduce((a, b) => a + (parseFloat(b) || 0), 0);
-    const behavioralTotal = Object.values(scores).slice(16).reduce((a, b) => a + (parseFloat(b) || 0), 0);
+    const jobAssessmentTotal = Object.values(scores).slice(0, 27).reduce((a, b) => a + (parseFloat(b) || 0), 0);
+    const behavioralTotal = Object.values(scores).slice(27).reduce((a, b) => a + (parseFloat(b) || 0), 0);
     const overallTotal = jobAssessmentTotal + behavioralTotal;
     
     // Calculate target totals (out of values)
-    const jobAssessmentTargets = [8, 8, 5, 4, 6, 6, 5, 6, 5, 5, 4, 4, 3, 3, 5, 3];
+    const jobAssessmentTargets = [4, 5, 3, 2, 2, 3, 4, 2, 3, 4, 3, 2, 4, 3, 3, 2, 3, 4, 2, 3, 2, 4, 2, 3, 4, 2, 2];
     const behavioralTargets = [1, 2, 2, 2, 2, 2, 2, 2, 2, 3];
     
     const jobAssessmentTargetTotal = jobAssessmentTargets.reduce((a, b) => a + b, 0);
@@ -108,32 +119,43 @@ export const PraveenGupta = () => {
         currentMonth, // Column B (index-1) - Current Month
         employeeName, // Column C (index-2) - Employee Name
         "", // Column D (index-3) - Empty column
-        scores.operationalCostReduction || 0, // Column E (index-4) - Reduced operational cost by atleast 5% of the IT Department
-        scores.budgetCompliance || 0, // Column F (index-5) - 100% compliances of plan vs achievement for annual budget providing monthly reviews as per procurement plan
-        scores.employeeSatisfaction || 0, // Column G (index-6) - Employee satisfaction index should be >80%
-        scores.vendorSatisfaction || 0, // Column H (index-7) - Vendor satisfaction index should be >80%
-        scores.sopScore || 0, // Column I (index-8) - SOP score should Be more than 70%
-        scores.complaintClosure || 0, // Column J (index-9) - 100% closure of all complaints within 72 hrs and to update on IT automation sheet
-        scores.systemAvailability || 0, // Column K (index-10) - 100% availability of system and equipment as per the approved requisition
-        scores.serverBackup || 0, // Column L (index-11) - 100% Uploading of server backup data in Cloud
-        scores.networkPerformance || 0, // Column M (index-12) - Preparation report on Monitors network utilization and performance, implements procedures for network optimization, reliability, and availability
-        scores.itPolicyImplementation || 0, // Column N (index-13) - 100% Implementation of IT policy with all the formats
-        scores.troubleshooting || 0, // Column O (index-14) - 100% RCA of all Troubleshoot and minimize equipment downtime (related to general IT)
-        scores.reportSubmission || 0, // Column P (index-15) - 100% submission of Daily Weekly and Monthly Report to the management
-        scores.assetCoding || 0, // Column Q (index-16) - IT asset coding sheet preparation and updation on monthly basis
-        scores.technologyImplementation || 0, // Column R (index-17) - Advanced Technology implementation
-        scores.managementTraining || 0, // Column S (index-18) - Attend training provided by company and assessment score should be more than 70%
-        scores.staffTraining || 0, // Column T (index-19) - Provide training to subordinates or Employees(monthly 3 hrs)
-        scores.qualityOfWork || 0, // Column U (index-20) - Effectively and efficiently performs job
-        scores.planningExecution || 0, // Column V (index-21) - Do Plan in advance and execute without deviation
-        scores.timeResources || 0, // Column W (index-22) - Conserve Company resources and meet deadlines
-        scores.interpersonalRelations || 0, // Column X (index-23) - Have healthy work relation with peers and superiors
-        scores.flexibilityAdaptability || 0, // Column Y (index-24) - Flexible in taking additional tasks and adaptable to change
-        scores.communication || 0, // Column Z (index-25) - Exchange of information desired through effective means
-        scores.integrity || 0, // Column AA (index-26) - High integrity towards company
-        scores.leadership || 0, // Column AB (index-27) - Ability to Inspire and take initiatives
-        scores.discipline || 0, // Column AC (index-28) - Follow rules and code of conduct
-        scores.punctuality || 0 // Column AD (index-29) - Adherence to time and attendance
+        scores.strategicPlanning || 0, // Column E (index-4) - Strategic Planning and Leadership
+        scores.technologyRoadmapping || 0, // Column F (index-5) - Technology Roadmapping
+        scores.innovation || 0, // Column G (index-6) - Driving Innovation
+        scores.changeManagement || 0, // Column H (index-7) - Change Management
+        scores.teamLeadership || 0, // Column I (index-8) - Team Leadership
+        scores.infrastructureManagement || 0, // Column J (index-9) - Infrastructure Management
+        scores.dailyOperations || 0, // Column K (index-10) - Daily Operations
+        scores.projectManagement || 0, // Column L (index-11) - Project Management
+        scores.budgeting || 0, // Column M (index-12) - Budgeting and Financial Planning
+        scores.vendorRelationships || 0, // Column N (index-13) - Vendor Relationships
+        scores.costOptimization || 0, // Column O (index-14) - Cost Optimization
+        scores.cybersecurity || 0, // Column P (index-15) - Cybersecurity
+        scores.dataProtection || 0, // Column Q (index-16) - Data Protection and Compliance
+        scores.disasterRecovery || 0, // Column R (index-17) - Disaster Recovery and Business Continuity
+        scores.riskAssessment || 0, // Column S (index-18) - Risk Assessment
+        scores.stakeholderLiaison || 0, // Column T (index-19) - Stakeholder Liaison
+        scores.reporting || 0, // Column U (index-20) - Reporting
+        scores.stakeholderCommunication || 0, // Column V (index-21) - Communication
+        scores.myOperator || 0, // Column W (index-22) - My Operator
+        scores.whatsappAPI || 0, // Column X (index-23) - WhatsApp API
+        scores.whatsappPanel || 0, // Column Y (index-24) - WhatsApp Panel
+        scores.crmSoftware || 0, // Column Z (index-25) - CRM Software
+        scores.voiceCallingPanel || 0, // Column AA (index-26) - Voice Calling Marketing Panel
+        scores.trainingMentoring || 0, // Column AB (index-27) - Training and mentoring
+        scores.siteVisits || 0, // Column AC (index-28) - Site visits
+        scores.surveillance || 0, // Column AD (index-29) - Surveillance systems
+        scores.infrastructureMaintenance || 0, // Column AE (index-30) - Infrastructure maintenance
+        scores.qualityOfWork || 0, // Column AF (index-31) - Effectively and efficiently performs job
+        scores.planningExecution || 0, // Column AG (index-32) - Do Plan in advance and execute without deviation
+        scores.timeResources || 0, // Column AH (index-33) - Conserve Company resources and meet deadlines
+        scores.interpersonalRelations || 0, // Column AI (index-34) - Have healthy work relation with peers and superiors
+        scores.flexibilityAdaptability || 0, // Column AJ (index-35) - Flexible in taking additional tasks and adaptable to change
+        scores.communication|| 0, // Column AK (index-36) - Exchange of information desired through effective means
+        scores.integrity || 0, // Column AL (index-37) - High integrity towards company
+        scores.leadership || 0, // Column AM (index-38) - Ability to Inspire and take initiatives
+        scores.discipline || 0, // Column AN (index-39) - Follow rules and code of conduct
+        scores.punctuality || 0 // Column AO (index-40) - Adherence to time and attendance
       ];
 
       const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
@@ -192,185 +214,16 @@ export const PraveenGupta = () => {
             </tr>
           </thead>
           <tbody>
-            {/* Cost Consciousness KRA */}
+            {/* Strategic Planning and Leadership KRA */}
             <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td rowSpan="2" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Cost Consciousness</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Reduced operational cost by atleast 5% of the IT Department</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>8</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.operationalCostReduction}
-                  onChange={(e) => handleScoreChange('operationalCostReduction', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-8"
-                  min="0"
-                  max="8"
-                  step="0.1"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>100% compliances of plan vs achievement for annual budget providing monthly reviews as per procurement plan</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>8</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.budgetCompliance}
-                  onChange={(e) => handleScoreChange('budgetCompliance', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-8"
-                  min="0"
-                  max="8"
-                  step="0.1"
-                />
-              </td>
-            </tr>
-
-            {/* Internal Customer Satisfaction KRA */}
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Internal Customer Satisfaction</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Employee satisfaction index should be {'>'}80%</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.employeeSatisfaction}
-                  onChange={(e) => handleScoreChange('employeeSatisfaction', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-5"
-                  min="0"
-                  max="5"
-                  step="0.1"
-                />
-              </td>
-            </tr>
-
-            {/* Outside Customer Satisfaction KRA */}
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Outside Customer Satisfaction</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Vendor satisfaction index should be {'>'}80%</td>
+              <td rowSpan="4" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Strategic Planning and Leadership</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Aligning IT with Business Goals: Developing and implementing an IT strategy and roadmap that directly supports the company's overall business objectives, such as growth, efficiency, and innovation.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.vendorSatisfaction}
-                  onChange={(e) => handleScoreChange('vendorSatisfaction', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-4"
-                  min="0"
-                  max="4"
-                  step="0.1"
-                />
-              </td>
-            </tr>
-
-            {/* Operational Excellence KRA */}
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td rowSpan="10" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Operational Excellence</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>SOP score should Be more than 70%</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>6</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.sopScore}
-                  onChange={(e) => handleScoreChange('sopScore', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-6"
-                  min="0"
-                  max="6"
-                  step="0.1"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>100% closure of all complaints within 72 hrs and to update on IT automation sheet</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>6</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.complaintClosure}
-                  onChange={(e) => handleScoreChange('complaintClosure', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-6"
-                  min="0"
-                  max="6"
-                  step="0.1"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>100% availability of system and equipment as per the approved requisition</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.systemAvailability}
-                  onChange={(e) => handleScoreChange('systemAvailability', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-5"
-                  min="0"
-                  max="5"
-                  step="0.1"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>100% Uploading of server backup data in Cloud</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>6</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.serverBackup}
-                  onChange={(e) => handleScoreChange('serverBackup', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-6"
-                  min="0"
-                  max="6"
-                  step="0.1"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Preparation report on Monitors network utilization and performance, implements procedures for network optimization, reliability, and availability</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.networkPerformance}
-                  onChange={(e) => handleScoreChange('networkPerformance', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-5"
-                  min="0"
-                  max="5"
-                  step="0.1"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>100% Implementation of IT policy with all the formats</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.itPolicyImplementation}
-                  onChange={(e) => handleScoreChange('itPolicyImplementation', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-5"
-                  min="0"
-                  max="5"
-                  step="0.1"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>100% RCA of all Troubleshoot and minimize equipment downtime (related to general IT)</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.troubleshooting}
-                  onChange={(e) => handleScoreChange('troubleshooting', e.target.value)}
+                  value={scores.strategicPlanning}
+                  onChange={(e) => handleScoreChange('strategicPlanning', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
                   placeholder="0-4"
                   min="0"
@@ -380,13 +233,147 @@ export const PraveenGupta = () => {
               </td>
             </tr>
             <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>100% submission of Daily Weekly and Monthly Report to the management</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Technology Roadmapping: Forecasting future technology needs and creating a long-term plan for the organization's IT infrastructure, systems, and applications.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.technologyRoadmapping}
+                  onChange={(e) => handleScoreChange('technologyRoadmapping', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-5"
+                  min="0"
+                  max="5"
+                  step="0.1"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Driving Innovation: Staying up-to-date with emerging technologies and identifying opportunities to leverage them for a competitive advantage, improved productivity, or new business models.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.innovation}
+                  onChange={(e) => handleScoreChange('innovation', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-3"
+                  min="0"
+                  max="3"
+                  step="0.1"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Change Management: Leading and overseeing major IT projects and digital transformation initiatives.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.changeManagement}
+                  onChange={(e) => handleScoreChange('changeManagement', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-2"
+                  min="0"
+                  max="2"
+                  step="0.1"
+                />
+              </td>
+
+              {/* Management and Operations KRA */}
+            </tr>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td rowSpan="4" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Management and Operations</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Team Leadership: Managing, mentoring, and developing the IT team, which can include technicians, system administrators, security personnel, and other specialists. This includes hiring, training, and performance evaluations.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.teamLeadership}
+                  onChange={(e) => handleScoreChange('teamLeadership', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-2"
+                  min="0"
+                  max="2"
+                  step="0.1"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Infrastructure Management: Overseeing the design, implementation, and maintenance of all IT infrastructure, including networks, servers, operating systems, and hardware.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.infrastructureManagement}
+                  onChange={(e) => handleScoreChange('infrastructureManagement', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-3"
+                  min="0"
+                  max="3"
+                  step="0.1"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Daily Operations: Ensuring the smooth, secure, and efficient day-to-day functioning of all IT systems and services. This includes overseeing helpdesk operations and technical support.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.reportSubmission}
-                  onChange={(e) => handleScoreChange('reportSubmission', e.target.value)}
+                  value={scores.dailyOperations}
+                  onChange={(e) => handleScoreChange('dailyOperations', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-4"
+                  min="0"
+                  max="4"
+                  step="0.1"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Project Management: Directing and managing all IT projects from conception to completion, ensuring they are delivered on time, within budget, and meet defined goals.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.projectManagement}
+                  onChange={(e) => handleScoreChange('projectManagement', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-2"
+                  min="0"
+                  max="2"
+                  step="0.1"
+                />
+              </td>
+            </tr>
+
+            {/* Budget and Vendor Management KRA */}
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td rowSpan="3" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Budget and Vendor Management</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Budgeting and Financial Planning: Preparing and managing the IT department's budget, ensuring cost-effective allocation of resources, and monitoring expenditures.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.budgeting}
+                  onChange={(e) => handleScoreChange('budgeting', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-3"
+                  min="0"
+                  max="3"
+                  step="0.1"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Vendor Relationships: Managing relationships with technology vendors and service providers, which includes negotiating contracts, procuring hardware and software, and ensuring vendors deliver value.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.vendorRelationships}
+                  onChange={(e) => handleScoreChange('vendorRelationships', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
                   placeholder="0-4"
                   min="0"
@@ -396,29 +383,13 @@ export const PraveenGupta = () => {
               </td>
             </tr>
             <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>IT asset coding sheet preparation and updation on monthly basis</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Cost Optimization: Constantly analyzing and optimizing IT spending to ensure the best return on investment.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.assetCoding}
-                  onChange={(e) => handleScoreChange('assetCoding', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-3"
-                  min="0"
-                  max="3"
-                  step="0.1"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Advanced Technology implementation</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.technologyImplementation}
-                  onChange={(e) => handleScoreChange('technologyImplementation', e.target.value)}
+                  value={scores.costOptimization}
+                  onChange={(e) => handleScoreChange('costOptimization', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
                   placeholder="0-3"
                   min="0"
@@ -428,36 +399,266 @@ export const PraveenGupta = () => {
               </td>
             </tr>
 
-            {/* Training & Development KRA */}
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td rowSpan="2" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Training & Development</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Attend training provided by company and assessment score should be more than 70%</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
+            {/* Security, Governance, and Risk Management KRA */}
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td rowSpan="4" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Security, Governance, and Risk Management</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Cybersecurity: Making cybersecurity a top priority by developing and implementing robust security protocols, conducting regular audits, and staying informed about the latest threats.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.managementTraining}
-                  onChange={(e) => handleScoreChange('managementTraining', e.target.value)}
+                  value={scores.cybersecurity}
+                  onChange={(e) => handleScoreChange('cybersecurity', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-5"
+                  placeholder="0-2"
                   min="0"
-                  max="5"
+                  max="2"
+                  step="0.1"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Data Protection and Compliance: Ensuring that the organization's IT operations comply with all relevant legal, regulatory, and security standards.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.dataProtection}
+                  onChange={(e) => handleScoreChange('dataProtection', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-4"
+                  min="0"
+                  max="4"
                   step="0.1"
                 />
               </td>
             </tr>
             <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Provide training to subordinates or Employees(monthly 3 hrs)</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Disaster Recovery and Business Continuity: Developing and maintaining plans to ensure that IT systems can quickly recover from disruptions, such as natural disasters, cyberattacks, or other emergencies.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.staffTraining}
-                  onChange={(e) => handleScoreChange('staffTraining', e.target.value)}
+                  value={scores.disasterRecovery}
+                  onChange={(e) => handleScoreChange('disasterRecovery', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
                   placeholder="0-3"
                   min="0"
                   max="3"
+                  step="0.1"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Risk Assessment: Identifying and mitigating IT-related risks, including data privacy, system vulnerabilities, and operational failures.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.riskAssessment}
+                  onChange={(e) => handleScoreChange('riskAssessment', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-3"
+                  min="0"
+                  max="3"
+                  step="0.1"
+                />
+              </td>
+            </tr>
+
+            {/* Stakeholder Communication KRA */}
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td rowSpan="3" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Stakeholder Communication</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Liaison: Serving as the primary link between the IT department and other business units, executive leadership, and external partners.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.stakeholderLiaison}
+                  onChange={(e) => handleScoreChange('stakeholderLiaison', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-2"
+                  min="0"
+                  max="2"
+                  step="0.1"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Reporting: Preparing and presenting reports on IT metrics, project progress, and financial performance to the executive team and board.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.reporting}
+                  onChange={(e) => handleScoreChange('reporting', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-3"
+                  min="0"
+                  max="3"
+                  step="0.1"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Communication: Translating complex technical concepts into clear, non-technical terms for business leaders and stakeholders.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.stakeholderCommunication}
+                  onChange={(e) => handleScoreChange('stakeholderCommunication', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-4"
+                  min="0"
+                  max="4"
+                  step="0.1"
+                />
+              </td>
+            </tr>
+
+            {/* ADDITIONAL RESPONSIBILITIES KRA */}
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td rowSpan="10" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>ADDITIONAL RESPONSIBILITIES</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>My Operator (IVR) – Troubleshooting, team coordination, and system issue resolution.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.myOperator}
+                  onChange={(e) => handleScoreChange('myOperator', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-2"
+                  min="0"
+                  max="2"
+                  step="0.1"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Whatsapp API (Green Tick) – Managing & monitoring API with HMIS integration.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.whatsappAPI}
+                  onChange={(e) => handleScoreChange('whatsappAPI', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-3"
+                  min="0"
+                  max="3"
+                  step="0.1"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Whatsaap Panel (ceoitbox) – Monitoring automated reminders, troubleshooting issues.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.whatsappPanel}
+                  onChange={(e) => handleScoreChange('whatsappPanel', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-2"
+                  min="0"
+                  max="2"
+                  step="0.1"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>CRM Software (CRATIO) – Overseeing CRM Software maintenance, coordinating with CRATIO support for bugs/errors, ensuring smooth operation, reporting issues, following resolution timelines, and managing system upgrades or feature rollouts.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.crmSoftware}
+                  onChange={(e) => handleScoreChange('crmSoftware', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-4"
+                  min="0"
+                  max="4"
+                  step="0.1"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Voice Calling Marketing Panel (MIT Services) – Monitoring performance & campaign readiness.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.voiceCallingPanel}
+                  onChange={(e) => handleScoreChange('voiceCallingPanel', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-2"
+                  min="0"
+                  max="2"
+                  step="0.1"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Training and mentoring one to two junior team members on both hardware and software operations.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.trainingMentoring}
+                  onChange={(e) => handleScoreChange('trainingMentoring', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-3"
+                  min="0"
+                  max="3"
+                  step="0.1"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Undertaking weekly and SOS visits to our Fafadih office, as well as monthly visits to Bhilai for ensure smooth IT operations</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.siteVisits}
+                  onChange={(e) => handleScoreChange('siteVisits', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-4"
+                  min="0"
+                  max="4"
+                  step="0.1"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Overseeing and providing timely updates regarding the company's security camera (surveillance) systems, also checking the maintenance equipment's all over the company premises</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.surveillance}
+                  onChange={(e) => handleScoreChange('surveillance', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-2"
+                  min="0"
+                  max="2"
+                  step="0.1"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Ensuring that all computer systems and IT infrastructure remain in proper working condition</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.infrastructureMaintenance}
+                  onChange={(e) => handleScoreChange('infrastructureMaintenance', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-2"
+                  min="0"
+                  max="2"
                   step="0.1"
                 />
               </td>

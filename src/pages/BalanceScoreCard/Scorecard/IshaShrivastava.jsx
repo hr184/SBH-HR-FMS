@@ -3,28 +3,16 @@ import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-export const JharnaAmbulkar = () => {
+export function IshaShrivastava() {
   const [scores, setScores] = useState({
-    // Job Assessment Scores - Updated based on provided data
-    dataCleansingValidation: '',
-    misMaintenance: '',
-    dataQualityIssues: '',
-    misRequirements: '',
-    monthlyMISPreparation: '',
-    revenueReview: '',
-    debtorsAnalysis: '',
-    statisticalDataPreparation: '',
-    misCollaboration: '',
-    statisticalDataReview: '',
-    misActivities: '',
-    sapEntries: '',
-    overheadsReview: '',
-    provisionsAnalysis: '',
-    plBalanceSheet: '',
-    headcountReview: '',
-    financialPlanning: '',
-    monthlyConsolidation: '',
-    globalCollaboration: '',
+    // Job Assessment Scores
+    visitTarget1: '',
+    revenueBusinessTarget1: '',
+    coordinatingCamps1: '',
+    coordinatingCamps2: '',
+    coordinatingCamps3: '',
+    conductingCamps1: '',
+    conductingCamps2: '',
     
     // Behavioral Assessment Scores
     qualityOfWork: '',
@@ -53,12 +41,12 @@ export const JharnaAmbulkar = () => {
   };
 
   const calculateTotals = () => {
-    const jobAssessmentTotal = Object.values(scores).slice(0, 19).reduce((a, b) => a + (parseFloat(b) || 0), 0);
-    const behavioralTotal = Object.values(scores).slice(19).reduce((a, b) => a + (parseFloat(b) || 0), 0);
+    const jobAssessmentTotal = Object.values(scores).slice(0, 7).reduce((a, b) => a + (parseFloat(b) || 0), 0);
+    const behavioralTotal = Object.values(scores).slice(7).reduce((a, b) => a + (parseFloat(b) || 0), 0);
     const overallTotal = jobAssessmentTotal + behavioralTotal;
     
-    // Calculate target totals (out of values) - Updated based on provided data
-    const jobAssessmentTargets = [6, 4, 3, 6, 4, 5, 3, 4, 5, 4, 3, 5, 4, 4, 5, 3, 4, 5, 3];
+    // Calculate target totals (out of values)
+    const jobAssessmentTargets = [12, 12, 11, 11, 12, 11, 11];
     const behavioralTargets = [1, 2, 2, 2, 2, 2, 2, 2, 2, 3];
     
     const jobAssessmentTargetTotal = jobAssessmentTargets.reduce((a, b) => a + b, 0);
@@ -104,49 +92,35 @@ export const JharnaAmbulkar = () => {
       
       const timestamp = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
       const currentMonth = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
-      const employeeName = "Jharna Ambulkar";
+      const employeeName = "Isha Shrivastava";
 
       const rowData = [
-        timestamp,
-        currentMonth, 
-        employeeName, 
-        "", 
-        // Job Assessment Scores
-        scores.dataCleansingValidation || 0,
-        scores.misMaintenance || 0,
-        scores.dataQualityIssues || 0,
-        scores.misRequirements || 0,
-        scores.monthlyMISPreparation || 0,
-        scores.revenueReview || 0,
-        scores.debtorsAnalysis || 0,
-        scores.statisticalDataPreparation || 0,
-        scores.misCollaboration || 0,
-        scores.statisticalDataReview || 0,
-        scores.misActivities || 0,
-        scores.sapEntries || 0,
-        scores.overheadsReview || 0,
-        scores.provisionsAnalysis || 0,
-        scores.plBalanceSheet || 0,
-        scores.headcountReview || 0,
-        scores.financialPlanning || 0,
-        scores.monthlyConsolidation || 0,
-        scores.globalCollaboration || 0,
-        // Behavioral Assessment Scores
-        scores.qualityOfWork || 0,
-        scores.planningExecution || 0,
-        scores.timeResources || 0,
-        scores.interpersonalRelations || 0, 
-        scores.flexibilityAdaptability || 0, 
-        scores.communication || 0, 
-        scores.integrity || 0, 
-        scores.leadership || 0, 
-        scores.discipline || 0, 
-        scores.punctuality || 0
+        timestamp,                    // Column A (index 0)
+        currentMonth,                 // Column B (index 1)
+        employeeName,                 // Column C (index 2)
+        "",                           // Column D (index 3)
+        scores.visitTarget1 || 0,     // Column E (index 4)
+        scores.revenueBusinessTarget1 || 0, // Column F (index 5)
+        scores.coordinatingCamps1 || 0,     // Column G (index 6)
+        scores.coordinatingCamps2 || 0,     // Column H (index 7)
+        scores.coordinatingCamps3 || 0,     // Column I (index 8)
+        scores.conductingCamps1 || 0,       // Column J (index 9)
+        scores.conductingCamps2 || 0,       // Column K (index 10)
+        scores.qualityOfWork || 0,          // Column L (index 11)
+        scores.planningExecution || 0,      // Column M (index 12)
+        scores.timeResources || 0,          // Column N (index 13)
+        scores.interpersonalRelations || 0, // Column O (index 14)
+        scores.flexibilityAdaptability || 0,// Column P (index 15)
+        scores.communication || 0,          // Column Q (index 16)
+        scores.integrity || 0,              // Column R (index 17)
+        scores.leadership || 0,             // Column S (index 18)
+        scores.discipline || 0,             // Column T (index 19)
+        scores.punctuality || 0             // Column U (index 20)
       ];
 
       const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
       const sheetId = "162o34BXqnJvmJjjtIoQpcBGo8orn2ZO5Jf0p8MgoUCs";
-      const sheetName = "Jharna Ambulkar";
+      const sheetName = "Isha Shrivastava";
 
       const response = await fetch(scriptURL, {
         method: 'POST',
@@ -194,299 +168,120 @@ export const JharnaAmbulkar = () => {
             </tr>
           </thead>
           <tbody>
-            {/* Validation and Maintaining data Accuracy KRA */}
+          
+            {/* Visit Target KRA */}
             <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td rowSpan="4" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Validation and Maintaining data Accuracy			</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Support data cleansing and validation activities using Excel to ensure data accuracy and consistency.</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>6</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Visit Target</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Ensuring 50 new patients a month to the unit</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>12</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.dataCleansingValidation}
-                  onChange={(e) => handleScoreChange('dataCleansingValidation', e.target.value)}
+                  value={scores.visitTarget1}
+                  onChange={(e) => handleScoreChange('visitTarget1', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-6"
+                  placeholder="0-12"
                   min="0"
-                  max="6"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Maintain the organization's MIS using Excel, ensuring accurate and timely reporting of data.</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.misMaintenance}
-                  onChange={(e) => handleScoreChange('misMaintenance', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-4"
-                  min="0"
-                  max="4"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Identifying and resolving data quality issues, collaborating with team members to maintain data integrity.</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.dataQualityIssues}
-                  onChange={(e) => handleScoreChange('dataQualityIssues', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-3"
-                  min="0"
-                  max="3"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Collaborate with team members to gather data requirements and implement Excel-based solutions to meet their MIS needs.</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>6</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.misRequirements}
-                  onChange={(e) => handleScoreChange('misRequirements', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-6"
-                  min="0"
-                  max="6"
+                  max="12"
                 />
               </td>
             </tr>
 
-            {/* MIS KRA */}
+            {/* Revenue & Business Target KRA */}
             <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td rowSpan="7" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>MIS</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Monthly MIS preparation and various activities related to MIS.</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Revenue & Generating Business Target Achieved</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Achieve a target of min 5 Lacs a month (For Cosmetic Gyneac)</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>12</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.monthlyMISPreparation}
-                  onChange={(e) => handleScoreChange('monthlyMISPreparation', e.target.value)}
+                  value={scores.revenueBusinessTarget1}
+                  onChange={(e) => handleScoreChange('revenueBusinessTarget1', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-4"
+                  placeholder="0-12"
                   min="0"
-                  max="4"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Monthly review of revenue, salaries, and overheads actuals v/s plan and previous year</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.revenueReview}
-                  onChange={(e) => handleScoreChange('revenueReview', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-5"
-                  min="0"
-                  max="5"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Analyse and prepare reports on debtors, WIP, provisions, and prepaid entries.</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.debtorsAnalysis}
-                  onChange={(e) => handleScoreChange('debtorsAnalysis', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-3"
-                  min="0"
-                  max="3"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Preparation and review of statistical data such as headcount FTE, utilization, missing time etc.</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.statisticalDataPreparation}
-                  onChange={(e) => handleScoreChange('statisticalDataPreparation', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-4"
-                  min="0"
-                  max="4"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Collaborate with seniors, business and enabling area teams for MIS-related tasks.</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.misCollaboration}
-                  onChange={(e) => handleScoreChange('misCollaboration', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-5"
-                  min="0"
-                  max="5"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Preparation and review of statistical data</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.statisticalDataReview}
-                  onChange={(e) => handleScoreChange('statisticalDataReview', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-4"
-                  min="0"
-                  max="4"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Monthly MIS preparation and various activities related to MIS.</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.misActivities}
-                  onChange={(e) => handleScoreChange('misActivities', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-3"
-                  min="0"
-                  max="3"
+                  max="12"
                 />
               </td>
             </tr>
 
-            {/* Preparations and analizing the Prepare on reports KRA */}
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td rowSpan="5" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Preparations and analizing the Prepare on reports</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>SAP entries for Revenue & expense, allocation, accruals etc.</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.sapEntries}
-                  onChange={(e) => handleScoreChange('sapEntries', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-5"
-                  min="0"
-                  max="5"
-                />
-              </td>
-            </tr>
+            {/* Coordination & Reporting KRA */}
             <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Monthly review of revenue, salaries, and overheads actuals v/s plan and previous year</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
+              <td rowSpan="3" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Cordinating Camps and Submission of Reports</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Daily updation of Patinets leads in official whats up Groups & to manager</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>11</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.overheadsReview}
-                  onChange={(e) => handleScoreChange('overheadsReview', e.target.value)}
+                  value={scores.coordinatingCamps1}
+                  onChange={(e) => handleScoreChange('coordinatingCamps1', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-4"
+                  placeholder="0-11"
                   min="0"
-                  max="4"
+                  max="11"
                 />
               </td>
             </tr>
             <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Analyze and prepare reports on debtors, WIP, provisions, and prepaid entries.</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Co ordinating with Unit team for business support and to get involved in camps</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>11</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.provisionsAnalysis}
-                  onChange={(e) => handleScoreChange('provisionsAnalysis', e.target.value)}
+                  value={scores.coordinatingCamps2}
+                  onChange={(e) => handleScoreChange('coordinatingCamps2', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-4"
+                  placeholder="0-11"
                   min="0"
-                  max="4"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Manage P&L and balance sheet reconciliation.</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.plBalanceSheet}
-                  onChange={(e) => handleScoreChange('plBalanceSheet', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-5"
-                  min="0"
-                  max="5"
+                  max="11"
                 />
               </td>
             </tr>
             <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Preparation and review of statistical data such as headcount FTE, utilization, missing time etc.</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Submission of rating sheets to manager and team on weekly basis</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>12</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.headcountReview}
-                  onChange={(e) => handleScoreChange('headcountReview', e.target.value)}
+                  value={scores.coordinatingCamps3}
+                  onChange={(e) => handleScoreChange('coordinatingCamps3', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-3"
+                  placeholder="0-12"
                   min="0"
-                  max="3"
+                  max="12"
                 />
               </td>
             </tr>
 
-            {/* Preparation and consolidation of monthly reports KRA */}
+            {/* Camp Management KRA */}
             <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td rowSpan="3" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Preparation and consolidation of monthly reports</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Assist in various process related to financial planning, analysis, and forecasting.</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
+              <td rowSpan="2" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Conducting Camps and Generating business</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Conducting min 4 Large Camps in a month</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>11</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.financialPlanning}
-                  onChange={(e) => handleScoreChange('financialPlanning', e.target.value)}
+                  value={scores.conductingCamps1}
+                  onChange={(e) => handleScoreChange('conductingCamps1', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-4"
+                  placeholder="0-11"
                   min="0"
-                  max="4"
+                  max="11"
                 />
               </td>
             </tr>
             <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>The preparation and consolidation of reports for monthly global submission, including cash flow statements, forecast reports, and financial condition assessments.</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Min 2 Inhouse camps on Sunday's or Public Holidays to drive more Newer Footfalls and generate business.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>11</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.monthlyConsolidation}
-                  onChange={(e) => handleScoreChange('monthlyConsolidation', e.target.value)}
+                  value={scores.conductingCamps2}
+                  onChange={(e) => handleScoreChange('conductingCamps2', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-5"
+                  placeholder="0-11"
                   min="0"
-                  max="5"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Collaborate with seniors, business and enabling area teams for MIS-related tasks.</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.globalCollaboration}
-                  onChange={(e) => handleScoreChange('globalCollaboration', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-3"
-                  min="0"
-                  max="3"
+                  max="11"
                 />
               </td>
             </tr>
@@ -719,4 +514,4 @@ export const JharnaAmbulkar = () => {
       </div>
     </div>
   );
-};
+}

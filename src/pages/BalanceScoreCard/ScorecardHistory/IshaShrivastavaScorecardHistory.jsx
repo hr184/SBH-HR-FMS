@@ -1,13 +1,13 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
 
-export const HansrajSinghScorecardHistory = () => {
+export const IshaShrivastavaScorecardHistory = () => {
    const [data, setData] = useState([]);
             const [loading, setLoading] = useState(true);
             const [error, setError] = useState(null);
           
             const sheetId = '162o34BXqnJvmJjjtIoQpcBGo8orn2ZO5Jf0p8MgoUCs';
-            const sheetName = 'Hansraj Singh';
+            const sheetName = 'Isha Shrivastava';
             const appScriptUrl = 'https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec';
           
             useEffect(() => {
@@ -102,7 +102,7 @@ const formatMonth = (monthString) => {
               return (
                 <div className="p-4">
                   <div className="text-center">
-                    <div className="text-lg font-semibold mb-4">Hansraj Singh Scorecard History</div>
+                    <div className="text-lg font-semibold mb-4">Isha Shrivastava Scorecard History</div>
                     <div className="text-gray-600">Loading data...</div>
                   </div>
                 </div>
@@ -113,7 +113,7 @@ const formatMonth = (monthString) => {
               return (
                 <div className="p-4">
                   <div className="text-center">
-                    <div className="text-lg font-semibold mb-4">Hansraj Singh Scorecard History</div>
+                    <div className="text-lg font-semibold mb-4">Isha Shrivastava Scorecard History</div>
                     <div className="text-red-600 bg-red-100 p-3 rounded-md">
                       Error: {error}
                     </div>
@@ -197,34 +197,34 @@ const formatMonth = (monthString) => {
                               {row[2] || '-'}
                             </td>
                             <td className="px-4 py-3 text-sm text-gray-900 border text-right">
-                              {formatNumber(row[35])}
+                              {formatNumber(row[21])}
                             </td>
                             <td className="px-4 py-3 text-sm text-gray-900 border text-right">
-                              {formatNumber(row[36])}
+                              {formatNumber(row[22])}
                             </td>
                             <td className="px-4 py-3 text-sm text-gray-900 border text-right">
-                              {formatNumber(row[37])}
+                              {formatNumber(row[23])}
                             </td>
                             {/* <td className="px-4 py-3 text-sm text-gray-900 border text-right">
+                              {formatNumber(row[24])}
+                            </td>
+                            <td className="px-4 py-3 text-sm text-gray-900 border text-right">
+                              {formatNumber(row[25])}
+                            </td>
+                            <td className="px-4 py-3 text-sm text-gray-900 border text-right">
+                              {formatNumber(row[26])}
+                            </td> */}
+                            <td className="px-4 py-3 text-sm text-gray-900 border text-right">
+                              {formatNumber(row[27])}
+                            </td>
+                            <td className="px-4 py-3 text-sm text-gray-900 border text-right">
                               {formatNumber(row[38])}
                             </td>
                             <td className="px-4 py-3 text-sm text-gray-900 border text-right">
-                              {formatNumber(row[39])}
+                              {formatNumber(row[29])}
                             </td>
                             <td className="px-4 py-3 text-sm text-gray-900 border text-right">
-                              {formatNumber(row[40])}
-                            </td> */}
-                            <td className="px-4 py-3 text-sm text-gray-900 border text-right">
-                              {formatNumber(row[41])}
-                            </td>
-                            <td className="px-4 py-3 text-sm text-gray-900 border text-right">
-                              {formatNumber(row[42])}
-                            </td>
-                            <td className="px-4 py-3 text-sm text-gray-900 border text-right">
-                              {formatNumber(row[43])}
-                            </td>
-                            <td className="px-4 py-3 text-sm text-gray-900 border text-right">
-                              {formatPercentage(row[44])}
+                              {formatPercentage(row[30])}
                             </td>
                           </tr>
                         ))}

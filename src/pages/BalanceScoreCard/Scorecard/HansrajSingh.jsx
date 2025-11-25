@@ -26,6 +26,7 @@ export const HansrajSingh = () => {
     reportSubmission: '',
     staffTraining: '',
     managementTraining: '',
+    additionalWorks: '',
     
     // Behavioral Assessment Scores
     qualityOfWork: '',
@@ -54,12 +55,12 @@ export const HansrajSingh = () => {
   };
 
   const calculateTotals = () => {
-    const jobAssessmentTotal = Object.values(scores).slice(0, 20).reduce((a, b) => a + (parseFloat(b) || 0), 0);
-    const behavioralTotal = Object.values(scores).slice(20).reduce((a, b) => a + (parseFloat(b) || 0), 0);
+    const jobAssessmentTotal = Object.values(scores).slice(0, 21).reduce((a, b) => a + (parseFloat(b) || 0), 0);
+    const behavioralTotal = Object.values(scores).slice(21).reduce((a, b) => a + (parseFloat(b) || 0), 0);
     const overallTotal = jobAssessmentTotal + behavioralTotal;
     
     // Calculate target totals (out of values)
-    const jobAssessmentTargets = [3, 3, 3, 6, 5, 5, 2, 3, 6, 4, 4, 3, 5, 3, 5, 2, 3, 5, 8, 2];
+    const jobAssessmentTargets = [3, 3, 3, 6, 5, 5, 2, 3, 6, 4, 4, 3, 5, 3, 5, 2, 3, 5, 6, 2, 2];
     const behavioralTargets = [1, 2, 2, 2, 2, 2, 2, 2, 2, 3];
     
     const jobAssessmentTargetTotal = jobAssessmentTargets.reduce((a, b) => a + b, 0);
@@ -132,16 +133,17 @@ export const HansrajSingh = () => {
         scores.reportSubmission || 0, // Column V (index-21) - 100% adherence to timeline for submission of reports to management and ensure timely update reports by subordinates
         scores.staffTraining || 0, // Column W (index-22) - Impart per month (6 hr) Training to subordinates regarding new policies, Cleaning method, Fire Mock Drill and Emergency codes
         scores.managementTraining || 0, // Column X (index-23) - Attend Training conducted by management (Departmental / Cross functional)
-        scores.qualityOfWork || 0, // Column Y (index-24) - Effectively and efficiently performs job
-        scores.planningExecution || 0, // Column Z (index-25) - Do Plan in advance and execute without deviation
-        scores.timeResources || 0, // Column AA (index-26) - Conserve Company resources and meet deadlines
-        scores.interpersonalRelations || 0, // Column AB (index-27) - Have healthy work relation with peers and superiors
-        scores.flexibilityAdaptability || 0, // Column AC (index-28) - Flexible in taking additional tasks and adaptable to change
-        scores.communication || 0, // Column AD (index-29) - Exchange of information desired through effective means
-        scores.integrity || 0, // Column AE (index-30) - High integrity towards company
-        scores.leadership || 0, // Column AF (index-31) - Ability to Inspire and take initiatives
-        scores.discipline || 0, // Column AG (index-32) - Follow rules and code of conduct
-        scores.punctuality || 0 // Column AH (index-33) - Adherence to time and attendance
+        scores.additionalWorks || 0, // Column Y (index-24) - Laundary, Paste Control, Construction, Renovation and Compliances
+        scores.qualityOfWork || 0, // Column Z (index-25) - Effectively and efficiently performs job
+        scores.planningExecution || 0, // Column AA (index-26) - Do Plan in advance and execute without deviation
+        scores.timeResources || 0, // Column AB (index-27) - Conserve Company resources and meet deadlines
+        scores.interpersonalRelations || 0, // Column AC (index-28) - Have healthy work relation with peers and superiors
+        scores.flexibilityAdaptability || 0, // Column AD (index-29) - Flexible in taking additional tasks and adaptable to change
+        scores.communication || 0, // Column AE (index-30) - Exchange of information desired through effective means
+        scores.integrity || 0, // Column AF (index-31) - High integrity towards company
+        scores.leadership || 0, // Column AG (index-32) - Ability to Inspire and take initiatives
+        scores.discipline || 0, // Column AH (index-33) - Follow rules and code of conduct
+        scores.punctuality || 0 // Column AI (index-34) - Adherence to time and attendance
       ];
 
       const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
@@ -200,6 +202,7 @@ export const HansrajSingh = () => {
             </tr>
           </thead>
           <tbody>
+
             {/* Expenses KRA */}
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td rowSpan="2" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Expenses</td>
@@ -494,16 +497,16 @@ export const HansrajSingh = () => {
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td rowSpan="2" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Training & Development</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Impart per month (6 hr) Training to subordinates regarding new policies, Cleaning method, Fire Mock Drill and Emergency codes</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>8</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>6</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.staffTraining}
                   onChange={(e) => handleScoreChange('staffTraining', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-8"
+                  placeholder="0-6"
                   min="0"
-                  max="8"
+                  max="6"
                 />
               </td>
             </tr>
@@ -515,6 +518,24 @@ export const HansrajSingh = () => {
                   type="number" 
                   value={scores.managementTraining}
                   onChange={(e) => handleScoreChange('managementTraining', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-2"
+                  min="0"
+                  max="2"
+                />
+              </td>
+            </tr>
+
+            {/* Additional Responsibilities KRA */}
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td rowSpan="2" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Additional Responsibilities</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Laundary, Paste Control, Construction, Renovation and Compliances</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.additionalWorks}
+                  onChange={(e) => handleScoreChange('additionalWorks', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
                   placeholder="0-2"
                   min="0"

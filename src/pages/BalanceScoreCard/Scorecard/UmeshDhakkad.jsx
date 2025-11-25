@@ -59,7 +59,7 @@ export const UmeshDhakkad = () => {
     const overallTotal = jobAssessmentTotal + behavioralTotal;
     
     // Calculate target totals (out of values)
-    const jobAssessmentTargets = [5, 5, 3, 7, 5, 5, 5, 3, 8, 8, 5, 5, 2, 2, 7, 5, 3, 3, 5, 3];
+    const jobAssessmentTargets = [5, 5, 3, 2, 5, 5, 5, 3, 4, 8, 5, 5, 2, 2, 2, 5, 3, 3, 5, 3];
     const behavioralTargets = [1, 2, 2, 2, 2, 2, 2, 2, 2, 3];
     
     const jobAssessmentTargetTotal = jobAssessmentTargets.reduce((a, b) => a + b, 0);
@@ -252,16 +252,16 @@ export const UmeshDhakkad = () => {
             </tr>
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>To increase sales turnover by 15% for OPD</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>7</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.salesTurnoverIncrease}
                   onChange={(e) => handleScoreChange('salesTurnoverIncrease', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-7"
+                  placeholder="0-2"
                   min="0"
-                  max="7"
+                  max="2"
                   step="0.1"
                 />
               </td>
@@ -341,16 +341,16 @@ export const UmeshDhakkad = () => {
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>SOP</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Monthly SOP Audit score by HOD {'>='} 80%</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>8</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.sopAuditScore}
                   onChange={(e) => handleScoreChange('sopAuditScore', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-8"
+                  placeholder="0-4"
                   min="0"
-                  max="8"
+                  max="4"
                   step="0.1"
                 />
               </td>
@@ -440,16 +440,16 @@ export const UmeshDhakkad = () => {
             </tr>
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Have to track Vendor's ourstanding and make sure the payment clearance within TAT</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>7</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.vendorOutstanding}
                   onChange={(e) => handleScoreChange('vendorOutstanding', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-7"
+                  placeholder="0-2"
                   min="0"
-                  max="7"
+                  max="2"
                   step="0.1"
                 />
               </td>

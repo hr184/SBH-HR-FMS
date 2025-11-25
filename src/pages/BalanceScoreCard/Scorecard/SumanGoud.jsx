@@ -1,52 +1,55 @@
+import React from 'react'
 import { useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-export const AjayUpadhyay = () => {
+export function SumanGoud() {
+  
   const [scores, setScores] = useState({
     // Job Assessment Scores
-    financialStrategy1: '',
-    financialStrategy2: '',
-    financialStrategy3: '',
-    budgeting1: '',
-    budgeting2: '',
-    budgeting3: '',
-    revenueCycle1: '',
-    revenueCycle2: '',
-    revenueCycle3: '',
-    financialReporting1: '',
-    financialReporting2: '',
-    financialReporting3: '',
-    financialReporting4: '',
-    financialReporting5: '',
-    financialReporting6: '',
-    financialReporting7: '',
-    costControl1: '',
-    costControl2: '',
-    costControl3: '',
-    cashFlow1: '',
-    cashFlow2: '',
-    cashFlow3: '',
-    procurementAndVendor1: '',
-    procurementAndVendor2: '',
-    procurementAndVendor3: '',
-    insurance1: '',
-    insurance2: '',
-    insurance3: '',
-    riskManagement1: '',
-    riskManagement2: '',
-    riskManagement3: '',
-    riskManagement4: '',
-    riskManagement5: '',
-    riskManagement6: '',
-    riskManagement7: '',
-    riskManagement8: '',
-    teamLeadership1: '',
-    teamLeadership2: '',
-    teamLeadership3: '',
-    supportToHospital1: '',
-    supportToHospital2: '',
-    supportToHospital3: '',
+    strategicLeadership1: '',
+    strategicLeadership2: '',
+    strategicLeadership3: '',
+    strategicLeadership4: '',
+    operationsManagement1: '',
+    operationsManagement2: '',
+    operationsManagement3: '',
+    operationsManagement4: '',
+    financialManagement1: '',
+    financialManagement2: '',
+    financialManagement3: '',
+    financialManagement4: '',
+    financialManagement5: '',
+    qualityAndCompliance1: '',
+    qualityAndCompliance2: '',
+    qualityAndCompliance3: '',
+    qualityAndCompliance4: '',
+    qualityAndCompliance5: '',
+    patientExperience1: '',
+    patientExperience2: '',
+    patientExperience3: '',
+    patientExperience4: '',
+    hr1: '',
+    hr2: '',
+    hr3: '',
+    hr4: '',
+    hr5: '',
+    medical1: '',
+    medical2: '',
+    medical3: '',
+    medical4: '',
+    medical5: '',
+    bussinessDevelopment1: '',
+    bussinessDevelopment2: '',
+    bussinessDevelopment3: '',
+    bussinessDevelopment4: '',
+    bussinessDevelopment5: '',
+    technology1: '',
+    technology2: '',
+    technology3: '',
+    governanceAndReporting1: '',
+    governanceAndReporting2: '',
+    governanceAndReporting3: '',
     
     // Behavioral Assessment Scores
     qualityOfWork: '',
@@ -79,7 +82,7 @@ export const AjayUpadhyay = () => {
     const behavioralTotal = Object.values(scores).slice(42).reduce((a, b) => a + (parseFloat(b) || 0), 0);
     const overallTotal = jobAssessmentTotal + behavioralTotal;
     
-    const jobAssessmentTargets = [2, 3, 2, 2, 3, 1, 1, 3, 2, 1, 3, 1, 2, 3, 1, 2, 1, 1, 3, 2, 2, 1, 3, 1, 3, 2, 1, 2, 3, 2, 2, 3, 1, 2, 1, 3, 1, 1, 1, 3, 1, 2];
+    const jobAssessmentTargets = [1, 3, 2, 1, 2, 1, 3, 2, 1, 2, 3, 1, 2, 1, 3, 2, 1, 1, 2, 3, 1, 2, 3, 1, 2, 1, 2, 2, 3, 1, 1, 2, 1, 3, 2, 2, 1, 3, 2, 1, 2, 1, 3, 1];
     const behavioralTargets = [1, 2, 2, 2, 2, 2, 2, 2, 2, 3];
     
     const jobAssessmentTargetTotal = jobAssessmentTargets.reduce((a, b) => a + b, 0);
@@ -232,8 +235,7 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#1e3a8a', color: 'white' }}>
               <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #1e40af' }}>KRA</th>
               <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #1e40af' }}>KPI</th>
-              <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '100px' }}>User</th>
-              <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '100px' }}>VP Sir</th>
+              <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '100px' }}>Out of</th>
               <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '120px' }}>Score</th>
             </tr>
           </thead>
@@ -1133,4 +1135,4 @@ const handleSubmit = async () => {
       </div>
     </div>
   );
-};
+}
