@@ -142,7 +142,8 @@ const Sidebar = ({ onClose }) => {
     { path: '/my-profile', icon: ProfileIcon, label: 'My Profile' },
     { path: '/leave-request', icon: LeaveIcon, label: 'Leave Request' },
     ...(showLeaveManagement ? [{ path: '/leaveApproval', icon: BookPlus, label: 'Leave Approval' }] : []),
-    ...(showBalancedScoreCard ? [{ path: '/misreport', icon: AlarmClockCheck, label: 'Balanced Score Card' }] : []),
+    { path: '/userBalanceScoreCard', icon: LeaveIcon, label: 'Balance Scorecard'},
+    ...(showBalancedScoreCard ? [{ path: '/misreport', icon: AlarmClockCheck, label: 'Delegation Score Card' }] : []),
     { path: '/company-calendar', icon: Calendar, label: 'Company Calendar' },
     { path: '/license', icon: Copyright, label: 'License' },
   ];

@@ -1,9 +1,9 @@
 import React from 'react'
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-export function SumanGoud() {
+export function UserSumanGoud() {
   
   const [scores, setScores] = useState({
     // Job Assessment Scores
@@ -51,112 +51,9 @@ export function SumanGoud() {
     governanceAndReporting2: '',
     governanceAndReporting3: '',
     governanceAndReporting4: '',
-    
-    // Behavioral Assessment Scores
-    qualityOfWork: '',
-    planningExecution: '',
-    timeResources: '',
-    interpersonalRelations: '',
-    flexibilityAdaptability: '',
-    communication: '',
-    integrity: '',
-    leadership: '',
-    discipline: '',
-    punctuality: ''
   });
 
-  const [userData, setUserData] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const scriptURL =
-          "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
-        const sheetId = "162o34BXqnJvmJjjtIoQpcBGo8orn2ZO5Jf0p8MgoUCs";
-        const sheetName = "Suman Goud Kuntla";
-
-        const response = await fetch(
-          `${scriptURL}?sheetId=${encodeURIComponent(
-            sheetId
-          )}&sheetName=${encodeURIComponent(sheetName)}&action=getData`
-        );
-
-        if (response.ok) {
-          const data = await response.json();
-          if (data && data.data && data.data.length > 0) {
-            // Data starts from row 5, so we slice from index 4 (row 5) onwards
-            const dataRows = data.data.slice(4);
-
-            // Filter rows where column C (index 2) has "User" value
-            const userRows = dataRows.filter((row) => row[2] === "User");
-
-            if (userRows.length > 0) {
-              // Find the latest row based on timestamp in Column A (index 0)
-              const latestUserRow = userRows.reduce((latest, current) => {
-                const latestTimestamp = new Date(latest[0]);
-                const currentTimestamp = new Date(current[0]);
-                return currentTimestamp > latestTimestamp ? current : latest;
-              });
-
-              setUserData({
-                strategicLeadership1: latestUserRow[4] || "",
-                strategicLeadership2: latestUserRow[5] || "",
-                strategicLeadership3: latestUserRow[6] || "",
-                strategicLeadership4: latestUserRow[7] || "",
-                operationsManagement1: latestUserRow[8] || "",
-                operationsManagement2: latestUserRow[9] || "",
-                operationsManagement3: latestUserRow[10] || "",
-                operationsManagement4: latestUserRow[11] || "",
-                financialManagement1: latestUserRow[12] || "",
-                financialManagement2: latestUserRow[13] || "",
-                financialManagement3: latestUserRow[14] || "",
-                financialManagement4: latestUserRow[15] || "",
-                financialManagement5: latestUserRow[16] || "",
-                qualityAndCompliance1: latestUserRow[17] || "",
-                qualityAndCompliance2: latestUserRow[18] || "",
-                qualityAndCompliance3: latestUserRow[19] || "",
-                qualityAndCompliance4: latestUserRow[20] || "",
-                qualityAndCompliance5: latestUserRow[21] || "",
-                patientExperience1: latestUserRow[22] || "",
-                patientExperience2: latestUserRow[23] || "",
-                patientExperience3: latestUserRow[24] || "",
-                patientExperience4: latestUserRow[25] || "",
-                hr1: latestUserRow[26] || "",
-                hr2: latestUserRow[27] || "",
-                hr3: latestUserRow[28] || "",
-                hr4: latestUserRow[29] || "",
-                hr5: latestUserRow[30] || "",
-                medical1: latestUserRow[31] || "",
-                medical2: latestUserRow[32] || "",
-                medical3: latestUserRow[33] || "",
-                medical4: latestUserRow[34] || "",
-                medical5: latestUserRow[35] || "",
-                bussinessDevelopment1: latestUserRow[36] || "",
-                bussinessDevelopment2: latestUserRow[37] || "",
-                bussinessDevelopment3: latestUserRow[38] || "",
-                bussinessDevelopment4: latestUserRow[39] || "",
-                bussinessDevelopment5: latestUserRow[40] || "",
-                technology1: latestUserRow[41] || "",
-                technology2: latestUserRow[42] || "",
-                technology3: latestUserRow[43] || "",
-                governanceAndReporting1: latestUserRow[44] || "",
-                governanceAndReporting2: latestUserRow[45] || "",
-                governanceAndReporting3: latestUserRow[46] || "",
-                governanceAndReporting4: latestUserRow[47] || "",
-              });
-            } else {
-              console.log('No row with "User" value found in column C');
-            }
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-
-    fetchUserData();
-  }, []);
 
   const handleScoreChange = (kpi, value) => {
     // Ensure value is within range
@@ -170,24 +67,16 @@ export function SumanGoud() {
   };
 
   const calculateTotals = () => {
-    const jobAssessmentTotal = Object.values(scores).slice(0, 44).reduce((a, b) => a + (parseFloat(b) || 0), 0);
-    const behavioralTotal = Object.values(scores).slice(44).reduce((a, b) => a + (parseFloat(b) || 0), 0);
-    const overallTotal = jobAssessmentTotal + behavioralTotal;
+    const jobAssessmentTotal = Object.values(scores).reduce((a, b) => a + (parseFloat(b) || 0), 0);
     
     const jobAssessmentTargets = [1, 3, 2, 1, 2, 1, 3, 2, 1, 2, 3, 1, 2, 1, 3, 2, 1, 1, 2, 3, 1, 2, 3, 1, 2, 1, 2, 2, 3, 1, 1, 2, 1, 3, 2, 2, 1, 3, 2, 1, 2, 1, 3, 1];
-    const behavioralTargets = [1, 2, 2, 2, 2, 2, 2, 2, 2, 3];
     
     const jobAssessmentTargetTotal = jobAssessmentTargets.reduce((a, b) => a + b, 0);
-    const behavioralTargetTotal = behavioralTargets.reduce((a, b) => a + b, 0);
     
     return {
       jobAssessmentTotal,
-      behavioralTotal,
-      overallTotal,
       jobAssessmentTargetTotal,
-      behavioralTargetTotal,
-      overallTargetTotal: jobAssessmentTargetTotal + behavioralTargetTotal,
-      overallPercentage: overallTotal > 0 ? (overallTotal / (jobAssessmentTargetTotal + behavioralTargetTotal)) * 100 : 0
+      overallPercentage: jobAssessmentTotal > 0 ? (jobAssessmentTotal / jobAssessmentTargetTotal) * 100 : 0
     };
   };
 
@@ -220,7 +109,7 @@ const handleSubmit = async () => {
     
     const timestamp = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
     const currentMonth = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
-    const employeeName = "Suman Goud Kuntla";
+    const employeeName = "User";
 
     const rowData = [
       timestamp, // Column A (index-0) - Timestamp
@@ -271,17 +160,6 @@ const handleSubmit = async () => {
       scores.governanceAndReporting2 || 0,
       scores.governanceAndReporting3 || 0,
       scores.governanceAndReporting4 || 0,
-
-      scores.qualityOfWork || 0,
-      scores.planningExecution || 0,
-      scores.timeResources || 0,
-      scores.interpersonalRelations || 0,
-      scores.flexibilityAdaptability || 0,
-      scores.communication || 0,
-      scores.integrity || 0,
-      scores.leadership || 0,
-      scores.discipline || 0,
-      scores.punctuality || 0
     ];
 
     const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
@@ -331,8 +209,7 @@ const handleSubmit = async () => {
               <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #1e40af' }}>KRA</th>
               <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #1e40af' }}>KPI</th>
               <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '100px' }}>Out of</th>
-              <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '100px' }}>User</th>
-              <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '120px' }}>VP</th>
+              <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '120px' }}>Score</th>
             </tr>
           </thead>
           <tbody>
@@ -340,11 +217,8 @@ const handleSubmit = async () => {
             {/* Strategic Leadership KRA */}
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td rowSpan={4} style={{ padding: '12px', border: '1px solid #e2e8f0',fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Strategic Leadership</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Develop and execute the hospital’s operational strategy aligned with organizational goals.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Develop and execute the hospital's operational strategy aligned with organizational goals.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.strategicLeadership1 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -360,9 +234,6 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Lead long-term planning for service line expansion (Women, Eye, IVF, Diagnostics, IP/OP).</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.strategicLeadership2 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -378,9 +249,6 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Drive business growth, market positioning, and competitive advantage.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.strategicLeadership3 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -396,9 +264,6 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Coordinate with Dorectors & Team on strategic decisions and way forward</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.strategicLeadership4 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -417,9 +282,6 @@ const handleSubmit = async () => {
               <td rowSpan={4} style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Operations Management</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Ensure smooth day-to-day functioning of all clinical & non-clinical departments.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.operationsManagement1|| '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -435,9 +297,6 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Monitor OPD, IPD, OT, Emergency, Diagnostics, Pharmacy, Nursing, and Support services.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.operationsManagement2 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -453,9 +312,6 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Create and implement SOPs to improve efficiency and patient safety.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.operationsManagement3 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -471,9 +327,6 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Streamline workflow processes to reduce TAT and improve patient throughput.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.operationsManagement4 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -492,9 +345,6 @@ const handleSubmit = async () => {
               <td rowSpan={5} style={{ padding: '12px', border: '1px solid #e2e8f0',fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Financial Management</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Oversee budgeting, forecasting, and P&L management.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.financialManagement1 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -510,9 +360,6 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Ensure revenue optimization through effective billing, RCM, cost control, and utilization management.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.financialManagement2 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -528,9 +375,6 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Monitor cash flow, audit compliance, and financial discipline across units.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.financialManagement3 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -546,9 +390,6 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Audit whenver required</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.financialManagement4 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -564,9 +405,6 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Analyze financial performance and drive measures to improve EBITDA.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.financialManagement5 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -585,9 +423,6 @@ const handleSubmit = async () => {
               <td rowSpan={5} style={{ padding: '12px', border: '1px solid #e2e8f0',fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}> Quality & Compliance</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Ensure compliance with NABH standards, statutory norms, biomedical & fire safety.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.qualityAndCompliance1 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -603,9 +438,6 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Lead quality improvement initiatives for departmental audits.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.qualityAndCompliance2 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -621,9 +453,6 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Implement patient safety protocols, infection control, and risk management.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.qualityAndCompliance3 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -639,9 +468,6 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Standardize documentation and ensure clinical governance.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.qualityAndCompliance4 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -657,9 +483,6 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Audit all the deaprtments at regular intervals for transaparancy check</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.qualityAndCompliance5 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -678,9 +501,6 @@ const handleSubmit = async () => {
               <td rowSpan={4} style={{ padding: '12px', border: '1px solid #e2e8f0',fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}> Patient Experience</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Oversee front office, admission, discharge, call center, CRM & customer service teams.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.patientExperience1 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -696,9 +516,6 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Implement patient feedback mechanisms and action plans.- NPS/Google Reviews etc…</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.patientExperience2 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -714,9 +531,6 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Improve service quality, waiting times, counseling, and overall experience.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.patientExperience3 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -732,9 +546,6 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Build a patient-centric culture in the hospital.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.patientExperience4 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -753,9 +564,6 @@ const handleSubmit = async () => {
               <td rowSpan={5} style={{ padding: '12px', border: '1px solid #e2e8f0',fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>HR & Administration</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Lead workforce planning, recruitment, training, and performance management </td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.hr1 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -771,9 +579,6 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Define KRAs, KPIs, and department scorecards.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.hr2 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -789,9 +594,6 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Strengthen staff engagement and retention.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.hr3 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -807,9 +609,6 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Interactions with team & Doctors at regular intervals to ensure smooth operatiosn and address the concerns if any . </td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.hr4 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -825,9 +624,6 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Oversee administrative functions: security, housekeeping, transport, F&B, maintenance.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.hr5 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -847,9 +643,6 @@ const handleSubmit = async () => {
               <td rowSpan={5} style={{ padding: '12px', border: '1px solid #e2e8f0',fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Medical & Clinical Coordination</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Work closely with doctors, consultants, and clinical team  for seamless coordination.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.medical1 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -865,9 +658,6 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Monthly regular meetings with consultans for business and other ground issues if any </td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.medical2 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -883,9 +673,6 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Ensure specialty-wise growth targets are briefed and achived  by the team ( Gynecology, IVF, Ophthalmology).</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.medical3 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -901,9 +688,6 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Strengthen clinical protocols and safety norms.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.medical4 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -919,9 +703,6 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Ensure the Clinical records are updated on time to govt departments and MRD is maintained</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.medical5 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -941,9 +722,6 @@ const handleSubmit = async () => {
               <td rowSpan={5} style={{ padding: '12px', border: '1px solid #e2e8f0',fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Business Development & Marketing</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>CGHS/EHS/ESI/AYUSHMAN  tie up to build the IP & OP</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.bussinessDevelopment1 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -959,9 +737,6 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Drive branding, digital marketing, corporate tie-ups, and referral strengthening.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.bussinessDevelopment2 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -977,9 +752,6 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Build strategies for patient acquisition & retention.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.bussinessDevelopment3 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -993,11 +765,8 @@ const handleSubmit = async () => {
               </td>
             </tr>
             <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Monitor lead conversions for IVF, Women’s health, and Eye care.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Monitor lead conversions for IVF, Women's health, and Eye care.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.bussinessDevelopment4 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -1013,9 +782,6 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Expansion idea;  services through new centers, partnerships, and verticals.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.bussinessDevelopment5 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -1034,9 +800,6 @@ const handleSubmit = async () => {
               <td rowSpan={3} style={{ padding: '12px', border: '1px solid #e2e8f0',fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Technology & Digital Transformation	KRA</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Oversee HMIS/EMR implementation and optimization.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.technology1 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -1052,9 +815,6 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Ensure digital workflows for billing, documentation, and patient data.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.technology2 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -1070,9 +830,6 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}> automation and analytics for decision-making.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.technology3 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -1091,9 +848,6 @@ const handleSubmit = async () => {
               <td rowSpan={4} style={{ padding: '12px', border: '1px solid #e2e8f0',fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Governance & Reporting</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Present Daily/weekly/monthly performance dashboards to top management.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.governanceAndReporting1 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -1109,9 +863,6 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Review KPIs with department heads and ensure accountability.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.governanceAndReporting2 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -1127,9 +878,6 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Ensure strong internal controls and operational discipline.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.governanceAndReporting3 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -1145,9 +893,6 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Updation on new policies in market and align with the departments accordingly.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.governanceAndReporting4 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -1167,200 +912,12 @@ const handleSubmit = async () => {
         </div>
       </div>
 
-      {/* Behavioral Assessment Section */}
-      <div style={{ marginBottom: '30px', backgroundColor: 'white', borderRadius: '10px', padding: '20px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
-        <h2 style={{ color: '#1e3a8a', borderBottom: '3px solid #1e3a8a', paddingBottom: '10px', marginBottom: '20px' }}>BEHAVIORAL ASSESSMENT</h2>
-        <table style={{ width: '100%', borderCollapse: 'collapse', borderRadius: '8px', overflow: 'hidden' }}>
-          <thead>
-            <tr style={{ backgroundColor: '#1e3a8a', color: 'white' }}>
-              <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #1e40af' }}>Behavioral Factor</th>
-              <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #1e40af' }}>Description</th>
-              <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '100px' }}>Out of</th>
-              <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '120px' }}>Score</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontWeight: '500' }}>Quality Of Work Performed</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Effectively and efficiently performs job</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.qualityOfWork}
-                  onChange={(e) => handleScoreChange('qualityOfWork', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-1"
-                  min="0"
-                  max="1"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontWeight: '500' }}>Planning & Execution Of Assignments</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Do Plan in advance and execute without deviation</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.planningExecution}
-                  onChange={(e) => handleScoreChange('planningExecution', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-2"
-                  min="0"
-                  max="2"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontWeight: '500' }}>Use Of Time & Resources</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Conserve Company resources and meet deadlines</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.timeResources}
-                  onChange={(e) => handleScoreChange('timeResources', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-2"
-                  min="0"
-                  max="2"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontWeight: '500' }}>Interpersonal Relations</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Have healthy work relation with peers and superiors</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.interpersonalRelations}
-                  onChange={(e) => handleScoreChange('interpersonalRelations', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-2"
-                  min="0"
-                  max="2"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontWeight: '500' }}>Flexibility & Adaptability</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Flexible in taking additional tasks and adaptable to change</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.flexibilityAdaptability}
-                  onChange={(e) => handleScoreChange('flexibilityAdaptability', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-2"
-                  min="0"
-                  max="2"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontWeight: '500' }}>Communication</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Exchange of information desired through effective means</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.communication}
-                  onChange={(e) => handleScoreChange('communication', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-2"
-                  min="0"
-                  max="2"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontWeight: '500' }}>Integrity</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>High integrity towards company</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.integrity}
-                  onChange={(e) => handleScoreChange('integrity', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-2"
-                  min="0"
-                  max="2"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontWeight: '500' }}>Leadership</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Ability to Inspire and take initiatives</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.leadership}
-                  onChange={(e) => handleScoreChange('leadership', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-2"
-                  min="0"
-                  max="2"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontWeight: '500' }}>Discipline</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Follow rules and code of conduct</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.discipline}
-                  onChange={(e) => handleScoreChange('discipline', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-2"
-                  min="0"
-                  max="2"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontWeight: '500' }}>Punctuality</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Adherence to time and attendance</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.punctuality}
-                  onChange={(e) => handleScoreChange('punctuality', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-3"
-                  min="0"
-                  max="3"
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div style={{ marginTop: '15px', fontWeight: 'bold', padding: '12px', backgroundColor: '#eff6ff', borderRadius: '6px', borderLeft: '4px solid #1e3a8a' }}>
-          Behavioral Assessment Total: {totals.behavioralTotal.toFixed(1)} / {totals.behavioralTargetTotal.toFixed(1)}
-        </div>
-      </div>
-
       <div style={{ textAlign: 'center', marginTop: '20px', padding: '20px', backgroundColor: 'white', borderRadius: '10px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
         <h3 style={{ color: '#1e3a8a', marginBottom: '15px' }}>Overall Summary</h3>
         <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: '10px', flexWrap: 'wrap', gap: '15px' }}>
           <div style={{ padding: '12px', backgroundColor: '#eff6ff', borderRadius: '6px', minWidth: '200px', border: '1px solid #bfdbfe' }}>
             <strong style={{ color: '#1e3a8a' }}>Job Assessment:</strong><br />
             {totals.jobAssessmentTotal.toFixed(1)} / {totals.jobAssessmentTargetTotal.toFixed(1)}
-          </div>
-          <div style={{ padding: '12px', backgroundColor: '#eff6ff', borderRadius: '6px', minWidth: '200px', border: '1px solid #bfdbfe' }}>
-            <strong style={{ color: '#1e3a8a' }}>Behavioral Assessment:</strong><br />
-            {totals.behavioralTotal.toFixed(1)} / {totals.behavioralTargetTotal.toFixed(1)}
-          </div>
-          <div style={{ padding: '12px', backgroundColor: '#eff6ff', borderRadius: '6px', minWidth: '200px', border: '1px solid #bfdbfe' }}>
-            <strong style={{ color: '#1e3a8a' }}>Overall Total:</strong><br />
-            {totals.overallTotal.toFixed(1)} / {totals.overallTargetTotal.toFixed(1)}
           </div>
           <div style={{ padding: '12px', backgroundColor: '#eff6ff', borderRadius: '6px', minWidth: '200px', border: '1px solid #bfdbfe' }}>
             <strong style={{ color: '#1e3a8a' }}>Overall Percentage:</strong><br />

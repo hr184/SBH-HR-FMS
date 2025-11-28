@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { User, Mail, Phone, MapPin, Calendar, Building, Edit3, Save, X, Camera } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const MyProfile = () => {
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({});
   const [profileData, setProfileData] = useState(null);
@@ -346,8 +348,11 @@ useEffect(() => {
   if (profileData && profileData.candidateName) {
     fetchLeaveData();
     fetchGatePassData(); 
+  } else if (profileData === null && !loading) {
+    // Redirect to Leave Request if profile data is not found after loading
+    navigate('/leave-request');
   }
-}, [profileData]);
+}, [profileData, loading, navigate]);
 
 
   const fetchJoiningData = async () => {

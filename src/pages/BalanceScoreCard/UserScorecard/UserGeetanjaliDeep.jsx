@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-export const GeetanjaliDeep = () => {
+export const UserGeetanjaliDeep = () => {
   const [scores, setScores] = useState({
     // Job Assessment Scores - Updated KPIs
     talenntAquisation1: '',
@@ -25,84 +25,10 @@ export const GeetanjaliDeep = () => {
     strategyAndRoadmap4: '',
     strategyAndRoadmap5: '',
     strategyAndRoadmap6: '',
-    strategyAndRoadmap7: '',
-    
-    // Behavioral Assessment Scores (unchanged)
-    qualityOfWork: '',
-    planningExecution: '',
-    timeResources: '',
-    interpersonalRelations: '',
-    flexibilityAdaptability: '',
-    communication: '',
-    integrity: '',
-    leadership: '',
-    discipline: '',
-    punctuality: ''
+    strategyAndRoadmap7: ''
   });
 
-  const [userData, setUserData] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  useEffect(() => {
-        const fetchUserData = async () => {
-          try {
-            const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
-            const sheetId = "162o34BXqnJvmJjjtIoQpcBGo8orn2ZO5Jf0p8MgoUCs";
-            const sheetName = "Geetanjali Deep";
-    
-            const response = await fetch(`${scriptURL}?sheetId=${encodeURIComponent(sheetId)}&sheetName=${encodeURIComponent(sheetName)}&action=getData`);
-            
-            if (response.ok) {
-              const data = await response.json();
-              if (data && data.data && data.data.length > 0) {
-                // Data starts from row 5, so we slice from index 4 (row 5) onwards
-                const dataRows = data.data.slice(4);
-                
-                // Filter rows where column C (index 2) has "User" value
-                const userRows = dataRows.filter(row => row[2] === "User");
-                
-                if (userRows.length > 0) {
-                  // Find the latest row based on timestamp in Column A (index 0)
-                  const latestUserRow = userRows.reduce((latest, current) => {
-                    const latestTimestamp = new Date(latest[0]);
-                    const currentTimestamp = new Date(current[0]);
-                    return currentTimestamp > latestTimestamp ? current : latest;
-                  });
-    
-                  setUserData({
-                    talenntAquisation1: latestUserRow[4] || "",
-                    talenntAquisation2: latestUserRow[5] || "",
-                    talenntAquisation3: latestUserRow[6] || "",
-                    talenntAquisation4: latestUserRow[7] || "",
-                    talenntAquisation5: latestUserRow[8] || "",
-                    talenntAquisation6: latestUserRow[9] || "",
-                    hrPolicy1: latestUserRow[10] || "",
-                    hrPolicy2: latestUserRow[11] || "",
-                    hrPolicy3: latestUserRow[12] || "",
-                    hrPolicy4: latestUserRow[13] || "",
-                    hrPolicy5: latestUserRow[14] || "",
-                    hrPolicy6: latestUserRow[15] || "",
-                    hrPolicy7: latestUserRow[16] || "",
-                    strategyAndRoadmap1: latestUserRow[17] || "",
-                    strategyAndRoadmap2: latestUserRow[18] || "",
-                    strategyAndRoadmap3: latestUserRow[19] || "",
-                    strategyAndRoadmap4: latestUserRow[20] || "",
-                    strategyAndRoadmap5: latestUserRow[21] || "",
-                    strategyAndRoadmap6: latestUserRow[22] || "",
-                    strategyAndRoadmap7: latestUserRow[23] || "",
-                  });
-                } else {
-                  console.log('No row with "User" value found in column C');
-                }
-              }
-            }
-          } catch (error) {
-            console.error('Error fetching user data:', error);
-          }
-        };
-    
-        fetchUserData();
-      }, []);
 
   const handleScoreChange = (kpi, value) => {
     // Ensure value is within range
@@ -116,25 +42,17 @@ export const GeetanjaliDeep = () => {
   };
 
   const calculateTotals = () => {
-    const jobAssessmentTotal = Object.values(scores).slice(0, 20).reduce((a, b) => a + (parseFloat(b) || 0), 0);
-    const behavioralTotal = Object.values(scores).slice(20).reduce((a, b) => a + (parseFloat(b) || 0), 0);
-    const overallTotal = jobAssessmentTotal + behavioralTotal;
+    const jobAssessmentTotal = Object.values(scores).reduce((a, b) => a + (parseFloat(b) || 0), 0);
     
     // Calculate target totals (out of values) - Updated targets
     const jobAssessmentTargets = [3, 4, 4, 5, 3, 4, 4, 5, 4, 4, 3, 5, 4, 4, 4, 4, 4, 4, 4, 4];
-    const behavioralTargets = [1, 2, 2, 2, 2, 2, 2, 2, 2, 3];
     
     const jobAssessmentTargetTotal = jobAssessmentTargets.reduce((a, b) => a + b, 0);
-    const behavioralTargetTotal = behavioralTargets.reduce((a, b) => a + b, 0);
     
     return {
       jobAssessmentTotal,
-      behavioralTotal,
-      overallTotal,
       jobAssessmentTargetTotal,
-      behavioralTargetTotal,
-      overallTargetTotal: jobAssessmentTargetTotal + behavioralTargetTotal,
-      overallPercentage: overallTotal > 0 ? (overallTotal / (jobAssessmentTargetTotal + behavioralTargetTotal)) * 100 : 0
+      overallPercentage: jobAssessmentTotal > 0 ? (jobAssessmentTotal / jobAssessmentTargetTotal) * 100 : 0
     };
   };
 
@@ -167,7 +85,7 @@ export const GeetanjaliDeep = () => {
       
       const timestamp = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
       const currentMonth = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
-      const employeeName = "Geetanjali Deep";
+      const employeeName = "User";
 
       const rowData = [
         timestamp, // Column A (index-0) - Timestamp
@@ -193,17 +111,7 @@ export const GeetanjaliDeep = () => {
         scores.strategyAndRoadmap4 || 0, // Column U (index-20) - Manage payroll, compliance, and HR operations efficiently
         scores.strategyAndRoadmap5 || 0, // Column V (index-21) - Partner with leadership to align HR strategy with business goals and expansion plans
         scores.strategyAndRoadmap6 || 0, // Column W (index-22) - Act as a trusted advisor to management, balancing empathy with accountability
-        scores.strategyAndRoadmap7 || 0, // Column X (index-23) - Drive change initiatives and lead by example in implementing modern HR best practices
-        scores.qualityOfWork || 0, // Column AB (index-27) - Effectively and efficiently performs job
-        scores.planningExecution || 0, // Column AC (index-28) - Do Plan in advance and execute without deviation
-        scores.timeResources || 0, // Column AD (index-29) - Conserve Company resources and meet deadlines
-        scores.interpersonalRelations || 0, // Column AE (index-30) - Have healthy work relation with peers and superiors
-        scores.flexibilityAdaptability || 0, // Column AF (index-31) - Flexible in taking additional tasks and adaptable to change
-        scores.communication || 0, // Column AG (index-32) - Exchange of information desired through effective means
-        scores.integrity || 0, // Column AH (index-33) - High integrity towards company
-        scores.leadership || 0, // Column AI (index-34) - Ability to Inspire and take initiatives
-        scores.discipline || 0, // Column AJ (index-35) - Follow rules and code of conduct
-        scores.punctuality || 0 // Column AK (index-36) - Adherence to time and attendance
+        scores.strategyAndRoadmap7 || 0 // Column X (index-23) - Drive change initiatives and lead by example in implementing modern HR best practices
       ];
 
       const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
@@ -258,8 +166,7 @@ export const GeetanjaliDeep = () => {
               <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #1e40af' }}>KRA</th>
               <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #1e40af' }}>KPI</th>
               <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '100px' }}>Out of</th>
-              <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '100px' }}>User</th>
-              <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '120px' }}>VP</th>
+              <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '120px' }}>Score</th>
             </tr>
           </thead>
           <tbody>
@@ -270,9 +177,6 @@ export const GeetanjaliDeep = () => {
               <td rowSpan={6} style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Talennt Aquisation</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Talent Acquisition and Management.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.talenntAquisation1 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -288,9 +192,6 @@ export const GeetanjaliDeep = () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Onboarding and Offboarding.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.talenntAquisation2 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -306,9 +207,6 @@ export const GeetanjaliDeep = () => {
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Employee Relations and Engagement.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.talenntAquisation3 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -324,9 +222,6 @@ export const GeetanjaliDeep = () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Performance Management.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.talenntAquisation4 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -342,9 +237,6 @@ export const GeetanjaliDeep = () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Training and Development.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.talenntAquisation5 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -360,9 +252,6 @@ export const GeetanjaliDeep = () => {
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Compensation and Benefits Strategy and Administration.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.talenntAquisation6 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -381,9 +270,6 @@ export const GeetanjaliDeep = () => {
               <td rowSpan={7} style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Hr Policy & SOP</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>HR Policies and Compliance.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.hrPolicy1 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -399,9 +285,6 @@ export const GeetanjaliDeep = () => {
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>HR Analytics and Reporting.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.hrPolicy2 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -417,9 +300,6 @@ export const GeetanjaliDeep = () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Change Management and Organizational Effectiveness.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.hrPolicy3 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -435,9 +315,6 @@ export const GeetanjaliDeep = () => {
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Stakeholder Management and Leadership.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.hrPolicy4 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -453,9 +330,6 @@ export const GeetanjaliDeep = () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>HR SOP training should be provided to the new joiners.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.hrPolicy5 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -471,9 +345,6 @@ export const GeetanjaliDeep = () => {
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>HR SOP refreshment training to be provided to all employees across the board.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.hrPolicy6 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -489,9 +360,6 @@ export const GeetanjaliDeep = () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>HR Documentation in alignment with the Quality Management System standards (GDP, CAPA, Change Management, Risk Assessment, Deviation, Maintaining Training Records of planned and unplanned sessions, etc).</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.hrPolicy7 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -510,9 +378,6 @@ export const GeetanjaliDeep = () => {
               <td rowSpan={7} style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Strategy & Road Map</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Design and implement organization structure, HR frameworks, and SOPs.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.strategyAndRoadmap1 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -528,9 +393,6 @@ export const GeetanjaliDeep = () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Oversee talent acquisition, employee engagement, learning & development, and performance management.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.strategyAndRoadmap2 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -546,9 +408,6 @@ export const GeetanjaliDeep = () => {
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Build a service excellence and customer-focused culture across all levels.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.strategyAndRoadmap3 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -564,9 +423,6 @@ export const GeetanjaliDeep = () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Manage payroll, compliance, and HR operations efficiently.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.strategyAndRoadmap4 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -582,9 +438,6 @@ export const GeetanjaliDeep = () => {
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Partner with leadership to align HR strategy with business goals and expansion plans.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.strategyAndRoadmap5 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -600,9 +453,6 @@ export const GeetanjaliDeep = () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Act as a trusted advisor to management, balancing empathy with accountability.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.strategyAndRoadmap6 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -618,9 +468,6 @@ export const GeetanjaliDeep = () => {
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Drive change initiatives and lead by example in implementing modern HR best practices.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.strategyAndRoadmap7 || '-'}
-              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -640,199 +487,12 @@ export const GeetanjaliDeep = () => {
         </div>
       </div>
 
-      <div style={{ marginBottom: '30px', backgroundColor: 'white', borderRadius: '10px', padding: '20px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
-        <h2 style={{ color: '#1e3a8a', borderBottom: '3px solid #1e3a8a', paddingBottom: '10px', marginBottom: '20px' }}>BEHAVIORAL ASSESSMENT</h2>
-        <table style={{ width: '100%', borderCollapse: 'collapse', borderRadius: '8px', overflow: 'hidden' }}>
-          <thead>
-            <tr style={{ backgroundColor: '#1e3a8a', color: 'white' }}>
-              <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #1e40af' }}>Behavioral Factor</th>
-              <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #1e40af' }}>Description</th>
-              <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '100px' }}>Out of</th>
-              <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '120px' }}>Score</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontWeight: '500' }}>Quality Of Work Performed</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Effectively and efficiently performs job</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.qualityOfWork}
-                  onChange={(e) => handleScoreChange('qualityOfWork', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-1"
-                  min="0"
-                  max="1"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontWeight: '500' }}>Planning & Execution Of Assignments</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Do Plan in advance and execute without deviation</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.planningExecution}
-                  onChange={(e) => handleScoreChange('planningExecution', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-2"
-                  min="0"
-                  max="2"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontWeight: '500' }}>Use Of Time & Resources</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Conserve Company resources and meet deadlines</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.timeResources}
-                  onChange={(e) => handleScoreChange('timeResources', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-2"
-                  min="0"
-                  max="2"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontWeight: '500' }}>Interpersonal Relations</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Have healthy work relation with peers and superiors</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.interpersonalRelations}
-                  onChange={(e) => handleScoreChange('interpersonalRelations', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-2"
-                  min="0"
-                  max="2"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontWeight: '500' }}>Flexibility & Adaptability</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Flexible in taking additional tasks and adaptable to change</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.flexibilityAdaptability}
-                  onChange={(e) => handleScoreChange('flexibilityAdaptability', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-2"
-                  min="0"
-                  max="2"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontWeight: '500' }}>Communication</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Exchange of information desired through effective means</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.communication}
-                  onChange={(e) => handleScoreChange('communication', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-2"
-                  min="0"
-                  max="2"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontWeight: '500' }}>Integrity</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>High integrity towards company</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.integrity}
-                  onChange={(e) => handleScoreChange('integrity', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-2"
-                  min="0"
-                  max="2"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontWeight: '500' }}>Leadership</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Ability to Inspire and take initiatives</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.leadership}
-                  onChange={(e) => handleScoreChange('leadership', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-2"
-                  min="0"
-                  max="2"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontWeight: '500' }}>Discipline</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Follow rules and code of conduct</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.discipline}
-                  onChange={(e) => handleScoreChange('discipline', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-2"
-                  min="0"
-                  max="2"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontWeight: '500' }}>Punctuality</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Adherence to time and attendance</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.punctuality}
-                  onChange={(e) => handleScoreChange('punctuality', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-3"
-                  min="0"
-                  max="3"
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div style={{ marginTop: '15px', fontWeight: 'bold', padding: '12px', backgroundColor: '#eff6ff', borderRadius: '6px', borderLeft: '4px solid #1e3a8a' }}>
-          Behavioral Assessment Total: {totals.behavioralTotal.toFixed(1)} / {totals.behavioralTargetTotal.toFixed(1)}
-        </div>
-      </div>
-
       <div style={{ textAlign: 'center', marginTop: '20px', padding: '20px', backgroundColor: 'white', borderRadius: '10px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
         <h3 style={{ color: '#1e3a8a', marginBottom: '15px' }}>Overall Summary</h3>
         <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: '10px', flexWrap: 'wrap', gap: '15px' }}>
           <div style={{ padding: '12px', backgroundColor: '#eff6ff', borderRadius: '6px', minWidth: '200px', border: '1px solid #bfdbfe' }}>
             <strong style={{ color: '#1e3a8a' }}>Job Assessment:</strong><br />
             {totals.jobAssessmentTotal.toFixed(1)} / {totals.jobAssessmentTargetTotal.toFixed(1)}
-          </div>
-          <div style={{ padding: '12px', backgroundColor: '#eff6ff', borderRadius: '6px', minWidth: '200px', border: '1px solid #bfdbfe' }}>
-            <strong style={{ color: '#1e3a8a' }}>Behavioral Assessment:</strong><br />
-            {totals.behavioralTotal.toFixed(1)} / {totals.behavioralTargetTotal.toFixed(1)}
-          </div>
-          <div style={{ padding: '12px', backgroundColor: '#eff6ff', borderRadius: '6px', minWidth: '200px', border: '1px solid #bfdbfe' }}>
-            <strong style={{ color: '#1e3a8a' }}>Overall Total:</strong><br />
-            {totals.overallTotal.toFixed(1)} / {totals.overallTargetTotal.toFixed(1)}
           </div>
           <div style={{ padding: '12px', backgroundColor: '#eff6ff', borderRadius: '6px', minWidth: '200px', border: '1px solid #bfdbfe' }}>
             <strong style={{ color: '#1e3a8a' }}>Overall Percentage:</strong><br />

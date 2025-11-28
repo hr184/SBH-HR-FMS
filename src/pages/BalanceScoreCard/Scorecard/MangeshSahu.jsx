@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -30,7 +30,59 @@ export const MangeshSahu = () => {
     punctuality: ''
   });
 
+  const [userData, setUserData] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+          const fetchUserData = async () => {
+            try {
+              const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
+              const sheetId = "162o34BXqnJvmJjjtIoQpcBGo8orn2ZO5Jf0p8MgoUCs";
+              const sheetName = "Mangesh Sahu";
+        
+              const response = await fetch(`${scriptURL}?sheetId=${encodeURIComponent(sheetId)}&sheetName=${encodeURIComponent(sheetName)}&action=getData`);
+              
+              if (response.ok) {
+                const data = await response.json();
+                if (data && data.data && data.data.length > 0) {
+                  // Data starts from row 5, so we slice from index 4 (row 5) onwards
+                  const dataRows = data.data.slice(4);
+                  
+                  // Filter rows where column C (index 2) has "User" value
+                  const userRows = dataRows.filter(row => row[2] === "User");
+                  
+                  if (userRows.length > 0) {
+                    // Find the latest row based on timestamp in Column A (index 0)
+                    const latestUserRow = userRows.reduce((latest, current) => {
+                      const latestTimestamp = new Date(latest[0]);
+                      const currentTimestamp = new Date(current[0]);
+                      return currentTimestamp > latestTimestamp ? current : latest;
+                    });
+        
+                    setUserData({
+                      visitTarget1: latestUserRow[4] ||"",
+                      visitTarget2: latestUserRow[5] || "",
+                      revenueBusinessTarget1: latestUserRow[6] || "",
+                      revenueBusinessTarget2: latestUserRow[7] || "",
+                      revenueBusinessTarget3: latestUserRow[8] || "",
+                      coordinatingCampsReports1: latestUserRow[9] || "",
+                      coordinatingCampsReports2: latestUserRow[10] || "",
+                      coordinatingCampsReports3: latestUserRow[11] || "",
+                      conductingCampsBusiness1: latestUserRow[12] || "",
+                      conductingCampsBusiness2: latestUserRow[13] || "",
+                    });
+                  } else {
+                    console.log('No row with "User" value found in column C');
+                  }
+                }
+              }
+            } catch (error) {
+              console.error('Error fetching user data:', error);
+            }
+          };
+        
+          fetchUserData();
+        }, []);
 
   const handleScoreChange = (kpi, value) => {
     // Ensure value is within range
@@ -171,7 +223,8 @@ export const MangeshSahu = () => {
               <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #1e40af' }}>KRA</th>
               <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #1e40af' }}>KPI</th>
               <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '100px' }}>Out of</th>
-              <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '120px' }}>Score</th>
+              <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '100px' }}>User</th>
+              <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '120px' }}>VP</th>
             </tr>
           </thead>
           <tbody>
@@ -180,6 +233,9 @@ export const MangeshSahu = () => {
               <td rowSpan="2" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Visit Target</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>KPI Visiting min 8 Dr's a day</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>8</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.visitTarget1 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -195,6 +251,9 @@ export const MangeshSahu = () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Ensuring 50 new patients a month to the unit</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>7</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.visitTarget2 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -213,6 +272,9 @@ export const MangeshSahu = () => {
               <td rowSpan="3" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Revenue & Generating Business Target Achieved</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Getting atleast 2 empanelment done a month</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>6</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.revenueBusinessTarget1 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -228,6 +290,9 @@ export const MangeshSahu = () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Generating a business through cataract surgeries, Retina etc….</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>9</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.revenueBusinessTarget2 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -241,8 +306,11 @@ export const MangeshSahu = () => {
               </td>
             </tr>
             <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Achive a target of min 5 Lacs a month (Inclusive of OPD, LASIK, cataract surgery, retina care, optical services and womens /Cosmetis services.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Achive a target of min 5 Lacs a month Inclusive of OPD, LASIK, cataract surgery, retina care, optical services and womens /Cosmetis services.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>10</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.revenueBusinessTarget3 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -261,6 +329,9 @@ export const MangeshSahu = () => {
               <td rowSpan="3" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Coordinating Camps and Submission of Reports</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Daily updation of Patients leads in official whats up Groups & to manager</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.coordinatingCampsReports1 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -276,6 +347,9 @@ export const MangeshSahu = () => {
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Co ordinating with Unit team for business support and to get involved in camps.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>8</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.coordinatingCampsReports2 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -291,6 +365,9 @@ export const MangeshSahu = () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Submission of rating sheets to manager and team on weekly basis</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>9</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.coordinatingCampsReports3 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -311,6 +388,9 @@ export const MangeshSahu = () => {
               <td rowSpan="2" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Conducting Camps and Generating business</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Conducting min 4 Large Camps in a month</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>9</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.conductingCampsBusiness1 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -326,6 +406,9 @@ export const MangeshSahu = () => {
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Min 2 Inhouse camps on Sunday's or Public Holidays to drive more Newer Footfalls and generate business.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>9</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.conductingCampsBusiness2 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 

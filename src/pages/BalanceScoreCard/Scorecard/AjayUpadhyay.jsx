@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -61,7 +61,92 @@ export const AjayUpadhyay = () => {
     punctuality: ''
   });
 
+  const [userData, setUserData] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Add useEffect to fetch user data
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
+        const sheetId = "162o34BXqnJvmJjjtIoQpcBGo8orn2ZO5Jf0p8MgoUCs";
+        const sheetName = "Ajay Upadhyay";
+
+        const response = await fetch(`${scriptURL}?sheetId=${encodeURIComponent(sheetId)}&sheetName=${encodeURIComponent(sheetName)}&action=getData`);
+        
+        if (response.ok) {
+          const data = await response.json();
+          if (data && data.data && data.data.length > 0) {
+            // Data starts from row 5, so we slice from index 4 (row 5) onwards
+            const dataRows = data.data.slice(4);
+            
+            // Filter rows where column C (index 2) has "User" value
+            const userRows = dataRows.filter(row => row[2] === "User");
+            
+            if (userRows.length > 0) {
+              // Find the latest row based on timestamp in Column A (index 0)
+              const latestUserRow = userRows.reduce((latest, current) => {
+                const latestTimestamp = new Date(latest[0]);
+                const currentTimestamp = new Date(current[0]);
+                return currentTimestamp > latestTimestamp ? current : latest;
+              });
+
+              setUserData({
+                financialStrategy1: latestUserRow[4] || '',
+                financialStrategy2: latestUserRow[5] || '',
+                financialStrategy3: latestUserRow[6] || '',
+                budgeting1: latestUserRow[7] || '',
+                budgeting2: latestUserRow[8] || '',
+                budgeting3: latestUserRow[9] || '',
+                revenueCycle1: latestUserRow[10] || '',
+                revenueCycle2: latestUserRow[11] || '',
+                revenueCycle3: latestUserRow[12] || '',
+                financialReporting1: latestUserRow[13] || '',
+                financialReporting2: latestUserRow[14] || '',
+                financialReporting3: latestUserRow[15] || '',
+                financialReporting4: latestUserRow[16] || '',
+                financialReporting5: latestUserRow[17] || '',
+                financialReporting6: latestUserRow[18] || '',
+                financialReporting7: latestUserRow[19] || '',
+                costControl1: latestUserRow[20] || '',
+                costControl2: latestUserRow[21] || '',
+                costControl3: latestUserRow[22] || '',
+                cashFlow1: latestUserRow[23] || '',
+                cashFlow2: latestUserRow[24] || '',
+                cashFlow3: latestUserRow[25] || '',
+                procurementAndVendor1: latestUserRow[26] || '',
+                procurementAndVendor2: latestUserRow[27] || '',
+                procurementAndVendor3: latestUserRow[28] || '',
+                insurance1: latestUserRow[29] || '',
+                insurance2: latestUserRow[30] || '',
+                insurance3: latestUserRow[31] || '',
+                riskManagement1: latestUserRow[32] || '',
+                riskManagement2: latestUserRow[33] || '',
+                riskManagement3: latestUserRow[34] || '',
+                riskManagement4: latestUserRow[35] || '',
+                riskManagement5: latestUserRow[36] || '',
+                riskManagement6: latestUserRow[37] || '',
+                riskManagement7: latestUserRow[38] || '',
+                riskManagement8: latestUserRow[39] || '',
+                teamLeadership1: latestUserRow[40] || '',
+                teamLeadership2: latestUserRow[41] || '',
+                teamLeadership3: latestUserRow[42] || '',
+                supportToHospital1: latestUserRow[43] || '',
+                supportToHospital2: latestUserRow[44] || '',
+                supportToHospital3: latestUserRow[45] || ''
+              });
+            } else {
+              console.log('No row with "User" value found in column C');
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const handleScoreChange = (kpi, value) => {
     // Ensure value is within range
@@ -98,133 +183,132 @@ export const AjayUpadhyay = () => {
 
   const totals = calculateTotals();
 
-const handleSubmit = async () => {
-  if (isSubmitting) return;
+  const handleSubmit = async () => {
+    if (isSubmitting) return;
 
-  // Validate if all required scores are filled
-  const requiredScores = Object.values(scores).filter(score => score === '');
-  if (requiredScores.length > 0) {
-    if (!confirm('Some scores are empty. Do you want to submit anyway?')) {
-      return;
+    // Validate if all required scores are filled
+    const requiredScores = Object.values(scores).filter(score => score === '');
+    if (requiredScores.length > 0) {
+      if (!confirm('Some scores are empty. Do you want to submit anyway?')) {
+        return;
+      }
     }
-  }
 
-  setIsSubmitting(true);
+    setIsSubmitting(true);
 
-  try {
-    // Prepare data according to your column structure
-    const currentDate = new Date();
-    
-    // Format timestamp as dd/mm/yyyy hh:mm:ss
-    const day = String(currentDate.getDate()).padStart(2, '0');
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-    const year = currentDate.getFullYear();
-    const hours = String(currentDate.getHours()).padStart(2, '0');
-    const minutes = String(currentDate.getMinutes()).padStart(2, '0');
-    const seconds = String(currentDate.getSeconds()).padStart(2, '0');
-    
-    const timestamp = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
-    const currentMonth = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
-    const employeeName = "Ajay Upadhyay";
+    try {
+      // Prepare data according to your column structure
+      const currentDate = new Date();
+      
+      // Format timestamp as dd/mm/yyyy hh:mm:ss
+      const day = String(currentDate.getDate()).padStart(2, '0');
+      const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+      const year = currentDate.getFullYear();
+      const hours = String(currentDate.getHours()).padStart(2, '0');
+      const minutes = String(currentDate.getMinutes()).padStart(2, '0');
+      const seconds = String(currentDate.getSeconds()).padStart(2, '0');
+      
+      const timestamp = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+      const currentMonth = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+      const employeeName = "Ajay Upadhyay";
 
-    const rowData = [
-      timestamp, // Column A (index-0) - Timestamp
-      currentMonth, // Column B (index-1) - Current Month
-      employeeName, // Column C (index-2) - Employee Name
-      "", // Column D (index-3) - Empty column
-      scores.financialStrategy1 || 0,
-      scores.financialStrategy2 || 0,
-      scores.financialStrategy3 || 0,
-      scores.budgeting1 || 0,
-      scores.budgeting2 || 0,
-      scores.budgeting3 || 0,
-      scores.revenueCycle1 || 0,
-      scores.revenueCycle2 || 0,
-      scores.revenueCycle3 || 0,
-      scores.financialReporting1 || 0,
-      scores.financialReporting2 || 0,
-      scores.financialReporting3 || 0,
-      scores.financialReporting4 || 0,
-      scores.financialReporting5 || 0,
-      scores.financialReporting6 || 0,
-      scores.financialReporting7 || 0,
-      scores.costControl1 || 0,
-      scores.costControl2 || 0,
-      scores.costControl3 || 0,
-      scores.cashFlow1 || 0,
-      scores.cashFlow2 || 0,
-      scores.cashFlow3 || 0,
-      scores.procurementAndVendor1 || 0,
-      scores.procurementAndVendor2 || 0,
-      scores.procurementAndVendor3 || 0,
-      scores.insurance1 || 0,
-      scores.insurance2 || 0,
-      scores.insurance3 || 0,
-      scores.riskManagement1 || 0,
-      scores.riskManagement2 || 0,
-      scores.riskManagement3 || 0,
-      scores.riskManagement4 || 0,
-      scores.riskManagement5 || 0,
-      scores.riskManagement6 || 0,
-      scores.riskManagement7 || 0,
-      scores.riskManagement8 || 0,
-      scores.teamLeadership1 || 0,
-      scores.teamLeadership2 || 0,
-      scores.teamLeadership3 || 0,
-      scores.supportToHospital1 || 0,
-      scores.supportToHospital2 || 0,
-      scores.supportToHospital3 || 0,
-      scores.qualityOfWork || 0,
-      scores.planningExecution || 0,
-      scores.timeResources || 0,
-      scores.interpersonalRelations || 0,
-      scores.flexibilityAdaptability || 0,
-      scores.communication || 0,
-      scores.integrity || 0,
-      scores.leadership || 0,
-      scores.discipline || 0,
-      scores.punctuality || 0
-    ];
+      const rowData = [
+        timestamp, // Column A (index-0) - Timestamp
+        currentMonth, // Column B (index-1) - Current Month
+        employeeName, // Column C (index-2) - Employee Name
+        "", // Column D (index-3) - Empty column
+        scores.financialStrategy1 || 0,
+        scores.financialStrategy2 || 0,
+        scores.financialStrategy3 || 0,
+        scores.budgeting1 || 0,
+        scores.budgeting2 || 0,
+        scores.budgeting3 || 0,
+        scores.revenueCycle1 || 0,
+        scores.revenueCycle2 || 0,
+        scores.revenueCycle3 || 0,
+        scores.financialReporting1 || 0,
+        scores.financialReporting2 || 0,
+        scores.financialReporting3 || 0,
+        scores.financialReporting4 || 0,
+        scores.financialReporting5 || 0,
+        scores.financialReporting6 || 0,
+        scores.financialReporting7 || 0,
+        scores.costControl1 || 0,
+        scores.costControl2 || 0,
+        scores.costControl3 || 0,
+        scores.cashFlow1 || 0,
+        scores.cashFlow2 || 0,
+        scores.cashFlow3 || 0,
+        scores.procurementAndVendor1 || 0,
+        scores.procurementAndVendor2 || 0,
+        scores.procurementAndVendor3 || 0,
+        scores.insurance1 || 0,
+        scores.insurance2 || 0,
+        scores.insurance3 || 0,
+        scores.riskManagement1 || 0,
+        scores.riskManagement2 || 0,
+        scores.riskManagement3 || 0,
+        scores.riskManagement4 || 0,
+        scores.riskManagement5 || 0,
+        scores.riskManagement6 || 0,
+        scores.riskManagement7 || 0,
+        scores.riskManagement8 || 0,
+        scores.teamLeadership1 || 0,
+        scores.teamLeadership2 || 0,
+        scores.teamLeadership3 || 0,
+        scores.supportToHospital1 || 0,
+        scores.supportToHospital2 || 0,
+        scores.supportToHospital3 || 0,
+        scores.qualityOfWork || 0,
+        scores.planningExecution || 0,
+        scores.timeResources || 0,
+        scores.interpersonalRelations || 0,
+        scores.flexibilityAdaptability || 0,
+        scores.communication || 0,
+        scores.integrity || 0,
+        scores.leadership || 0,
+        scores.discipline || 0,
+        scores.punctuality || 0
+      ];
 
-    const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
-    const sheetId = "162o34BXqnJvmJjjtIoQpcBGo8orn2ZO5Jf0p8MgoUCs";
-    const sheetName = "Ajay Upadhyay";
+      const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
+      const sheetId = "162o34BXqnJvmJjjtIoQpcBGo8orn2ZO5Jf0p8MgoUCs";
+      const sheetName = "Ajay Upadhyay";
 
-    // Use fetch with form data to properly submit to Google Apps Script
-    const formData = new FormData();
-    formData.append('sheetId', sheetId);
-    formData.append('sheetName', sheetName);
-    formData.append('payload', JSON.stringify(rowData));
+      const response = await fetch(scriptURL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `sheetId=${encodeURIComponent(sheetId)}&sheetName=${encodeURIComponent(sheetName)}&payload=${encodeURIComponent(JSON.stringify(rowData))}`
+      });
 
-    const response = await fetch(scriptURL, {
-      method: 'POST',
-      body: formData,
-      mode: 'no-cors' // Use no-cors mode to avoid CORS issues
-    });
+      // Check if the response is successful
+      if (response.ok) {
+        console.log('Submitted Scores:', scores);
+        console.log('Row Data sent to sheet:', rowData);
+        
+        // Show success message
+        toast.success('Scores submitted successfully!');
+        
+        // Optional: You can also open the sheet URL to verify data was stored
+        const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/edit#gid=0`;
+        console.log('Check your Google Sheet here:', sheetUrl);
+      } else {
+        throw new Error(`Server responded with status: ${response.status}`);
+      }
 
-    // Since we're using no-cors, we can't read the response, but the data should be submitted
-    console.log('Submitted Scores:', scores);
-    console.log('Row Data sent to sheet:', rowData);
-    console.log('Response status:', response.status);
-
-    // Show success message (the data should be submitted even if we can't read the response)
-    toast.success('Scores submitted successfully!');
-    
-    // Optional: You can also open the sheet URL to verify data was stored
-    const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/edit#gid=0`;
-    console.log('Check your Google Sheet here:', sheetUrl);
-
-   } catch (error) {
-    console.error('Error submitting scores:', error);
-    toast.error('Failed to submit scores. Please try again.');
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+    } catch (error) {
+      console.error('Error submitting scores:', error);
+      toast.error('Failed to submit scores. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', minHeight: '100vh' }}>      
-    <ToastContainer />
+      <ToastContainer />
       <div style={{ marginBottom: '30px', backgroundColor: 'white', borderRadius: '10px', padding: '20px', boxShadow: '0 6px 10px rgba(0, 0, 0, 0.1)' }}>
         <h2 style={{ color: '#1e3a8a', borderBottom: '3px solid #1e3a8a', paddingBottom: '10px', marginBottom: '20px' }}>JOB ASSESSMENT</h2>
         <table style={{ width: '100%', borderCollapse: 'collapse', borderRadius: '8px', overflow: 'hidden' }}>
@@ -233,7 +317,8 @@ const handleSubmit = async () => {
               <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #1e40af' }}>KRA</th>
               <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #1e40af' }}>KPI</th>
               <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '100px' }}>Out of</th>
-              <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '120px' }}>Score</th>
+              <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '120px' }}>User</th>
+              <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '120px' }}>VP</th>
             </tr>
           </thead>
           <tbody>
@@ -241,12 +326,15 @@ const handleSubmit = async () => {
             {/* Financial Strategy & Leadership KRA */}
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td rowSpan={3} style={{ padding: '12px', border: '1px solid #e2e8f0',fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Financial Strategy & Leadership</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Develop and implement long-term financial strategy aligned with hospital’s mission and growth plans</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Develop and implement long-term financial strategy aligned with hospital's mission and growth plans</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.financialStrategy1 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                   value={scores.financialStrategy1}
+                  value={scores.financialStrategy1}
                   onChange={(e) => handleScoreChange('financialStrategy1', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
                   placeholder="0-2"
@@ -258,6 +346,9 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Guide Executive Leadership on capital allocation, investments, and expansion (new units, equipment, service lines)</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.financialStrategy2 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -273,6 +364,9 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Ensure compliance with Directors & Leadership team for  strategic financial decisions</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.financialStrategy3 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -291,6 +385,9 @@ const handleSubmit = async () => {
               <td rowSpan={3} style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Budgeting & Financial Planning</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Lead annual budget preparation alinging with leaderships team  for all hospital departments</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.budgeting1 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -303,9 +400,12 @@ const handleSubmit = async () => {
                 />
               </td>
             </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Monitor financial performance vs. budget monthly and provide variance analysis</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.budgeting2 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -321,6 +421,9 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Drive cost-optimization initiatives across clinical and non-clinical functions</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.budgeting3 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -339,6 +442,9 @@ const handleSubmit = async () => {
               <td rowSpan={3} style={{ padding: '12px', border: '1px solid #e2e8f0',fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Revenue Cycle Management (RCM) Oversight		</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Oversee entire Billing cycle—from registration, billing, coding, claims submission, to final collection</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.revenueCycle1 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -354,6 +460,9 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Strengthen TAT for discharge, billing accuracy, and minimize denials </td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.revenueCycle2 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -366,9 +475,12 @@ const handleSubmit = async () => {
                 />
               </td>
             </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Improve cash flow through efficient collection processes</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.revenueCycle3 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -383,10 +495,13 @@ const handleSubmit = async () => {
             </tr>
 
             {/* Financial Reporting & Compliance KRA */}
-            <tr style={{ backgroundColor: '#f8fafc' }}>
+            <tr style={{ backgroundColor: '#ffffff' }}>
               <td rowSpan={7} style={{ padding: '12px', border: '1px solid #e2e8f0',fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Financial Reporting & Compliance</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Ensure accurate and timely MIS reports, monthly financial statements with senior leadership team and directors</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.financialReporting1 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -402,6 +517,9 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Oversee statutory audits, internal audits, and compliance.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.financialReporting2 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -414,9 +532,12 @@ const handleSubmit = async () => {
                 />
               </td>
             </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
+            <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>NABH financial guidelines</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.financialReporting3 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -432,6 +553,9 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Income Tax</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.financialReporting4 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -444,9 +568,12 @@ const handleSubmit = async () => {
                 />
               </td>
             </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
+            <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>GST</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.financialReporting5 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -462,6 +589,9 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Hospital accounting standards</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.financialReporting6 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -474,9 +604,12 @@ const handleSubmit = async () => {
                 />
               </td>
             </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
+            <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Ensure transparent financial governance</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.financialReporting7 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -491,10 +624,13 @@ const handleSubmit = async () => {
             </tr>
 
             {/* Cost Control & Profitability Enhancement KRA */}
-            <tr style={{ backgroundColor: '#ffffff' }}>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
               <td rowSpan={3} style={{ padding: '12px', border: '1px solid #e2e8f0',fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Cost Control & Profitability Enhancement</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Develop cost-reduction plans (consumables, HR productivity, pharmacy, procurement)</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.costControl1 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -510,6 +646,9 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Monitor unit economics of each department (OT, ICU, OPD, Lab, Imaging, Eye, Women, IVF etc.)</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.costControl2 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -522,9 +661,12 @@ const handleSubmit = async () => {
                 />
               </td>
             </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Improve EBITDA margins through pricing optimization and cost rationalization</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.costControl3 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -539,10 +681,13 @@ const handleSubmit = async () => {
             </tr>
 
             {/* Cash Flow & Treasury Management KRA */}
-            <tr style={{ backgroundColor: '#f8fafc' }}>
+            <tr style={{ backgroundColor: '#ffffff' }}>
               <td rowSpan={3} style={{ padding: '12px', border: '1px solid #e2e8f0',fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Cash Flow & Treasury Management</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Maintain liquidity to ensure smooth operational functioning</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.cashFlow1 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -555,9 +700,12 @@ const handleSubmit = async () => {
                 />
               </td>
             </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Optimize working capital—inventory, payables, receivables</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.cashFlow2 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -570,9 +718,12 @@ const handleSubmit = async () => {
                 />
               </td>
             </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
+            <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Review and authorize major payments, vendor contracts, and capex disbursements</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.cashFlow3 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -592,6 +743,9 @@ const handleSubmit = async () => {
               <td rowSpan={3} style={{ padding: '12px', border: '1px solid #e2e8f0',fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Procurement & Vendor Management</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Approve high-value purchases for medical equipment and consumables</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.procurementAndVendor1 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -607,6 +761,9 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Negotiate vendor contracts to ensure best pricing and credit terms</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.procurementAndVendor2 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -622,6 +779,9 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Implement purchase controls, e-procurement, and vendor performance tracking</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.procurementAndVendor3 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -637,10 +797,13 @@ const handleSubmit = async () => {
 
 
             {/* Insurance, TPA & Govt Schemes KRA */}
-            <tr style={{ backgroundColor: '#f8fafc' }}>
+            <tr style={{ backgroundColor: '#ffffff' }}>
               <td rowSpan={3} style={{ padding: '12px', border: '1px solid #e2e8f0',fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Insurance, TPA & Govt Schemes</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Oversee TPA coordination, claim settlement, and package billing</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.insurance1 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -653,9 +816,12 @@ const handleSubmit = async () => {
                 />
               </td>
             </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Ensure accurate documentation for insurance and government schemes (CGHS, ESI, Ayushman Bharat, State schemes)</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.insurance2 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -668,9 +834,12 @@ const handleSubmit = async () => {
                 />
               </td>
             </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
+            <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Monitor aging of insurance receivables</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.insurance3 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -685,10 +854,13 @@ const handleSubmit = async () => {
             </tr>
 
             {/* Risk Management & Internal Controls */}
-            <tr style={{ backgroundColor: '#ffffff' }}>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
               <td rowSpan={8} style={{ padding: '12px', border: '1px solid #e2e8f0',fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Risk Management & Internal Controls</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Implement strong internal control systems for:</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.riskManagement1 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -701,9 +873,12 @@ const handleSubmit = async () => {
                 />
               </td>
             </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
+            <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Billing</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.riskManagement2 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -716,9 +891,12 @@ const handleSubmit = async () => {
                 />
               </td>
             </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Cash Handling</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.riskManagement3 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -731,9 +909,12 @@ const handleSubmit = async () => {
                 />
               </td>
             </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
+            <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Pharmacy</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.riskManagement4 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -746,9 +927,12 @@ const handleSubmit = async () => {
                 />
               </td>
             </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>OT & ICU Consumables</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.riskManagement5 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -761,9 +945,12 @@ const handleSubmit = async () => {
                 />
               </td>
             </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
+            <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Discounts</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.riskManagement6 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -776,9 +963,12 @@ const handleSubmit = async () => {
                 />
               </td>
             </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Minimize Financial Fraud and Revenue Leakage</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.riskManagement7 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -791,9 +981,12 @@ const handleSubmit = async () => {
                 />
               </td>
             </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
+            <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Develop Robust Risk Management Framework - SOP</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.riskManagement8 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -808,10 +1001,13 @@ const handleSubmit = async () => {
             </tr>
 
             {/* Team Leadership */}
-            <tr style={{ backgroundColor: '#ffffff' }}>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
               <td rowSpan={3} style={{ padding: '12px', border: '1px solid #e2e8f0',fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Team Leadership</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Lead and train Finance team , RCM, Billing, Accounts, Audit, and Insurance teams</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.teamLeadership1 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -827,6 +1023,9 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Provide training on financial controls, billing accuracy, and compliance</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.teamLeadership2 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -839,9 +1038,12 @@ const handleSubmit = async () => {
                 />
               </td>
             </tr>
-            <tr style={{ backgroundColor: '#ffffff' }}>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Build a culture of accountability and transparency</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.teamLeadership3 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -856,10 +1058,13 @@ const handleSubmit = async () => {
             </tr>
             
             {/* Support to Hospital Operations */}
-            <tr style={{ backgroundColor: '#f8fafc' }}>
+            <tr style={{ backgroundColor: '#ffffff' }}>
               <td rowSpan={3} style={{ padding: '12px', border: '1px solid #e2e8f0',fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Support to Hospital Operations</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Work with Operations, Medical Admin, and HR to align financial decisions</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.supportToHospital1 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -875,6 +1080,9 @@ const handleSubmit = async () => {
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Analyze profitability of departments and consultants</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.supportToHospital2 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
@@ -887,9 +1095,12 @@ const handleSubmit = async () => {
                 />
               </td>
             </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
+            <tr style={{ backgroundColor: '#ffffff' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Support new service launches and business growth initiatives</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.supportToHospital3 || '-'}
+              </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 

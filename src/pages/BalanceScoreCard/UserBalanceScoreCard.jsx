@@ -1,49 +1,28 @@
 import { Activity } from 'lucide-react';
-import React, { useState } from 'react';
-import { AjayUpadhyay } from './Scorecard/AjayUpadhyay';
-import { AjayUpadhyayScorecardHistory } from './ScorecardHistory/AjayUpadhyayScorecardHistory'
-import { AlokPandey } from './Scorecard/AlokPandey';
-import { AlokPandeyScorecardHistory } from './ScorecardHistory/AlokPandeyScorecardHistory'
-import { DeepmalaPatil } from './Scorecard/DeepmalaPatil';
-import { DeepmalaPatilScorecardHistory } from './ScorecardHistory/DeepmalaPatilScorecardHistory'
-import { DeepuMourya } from './Scorecard/DeepuMourya';
-import { DeepuMouryaScorecardHistory } from './ScorecardHistory/DeepuMouryaScorecardHistory'
-import {GeetanjaliDeep } from './Scorecard/GeetanjaliDeep';
-import { GeetanjaliDeepScorecardHistory } from './ScorecardHistory/GeetanjaliDeepScorecardHistory'
-import { HansrajSingh } from './Scorecard/HansrajSingh';
-import { HansrajSinghScorecardHistory } from './ScorecardHistory/HansrajSinghScorecardHistory'
-import { HarshRai } from './Scorecard/HarshRai';
-import { HarshRaiScorecardHistory } from './ScorecardHistory/HarshRaiScorecardHistory';
-import { JharnaAmbulkar } from './Scorecard/JharnaAmbulkar';
-import { JharnaAmbulkarScorecardHistory } from './ScorecardHistory/JharnaAmbulkarScorecardHistory'
-import { LalitMohanBisht } from './Scorecard/LalitMohanBisht';
-import { LalitMohanBishtScorecardHistory } from './ScorecardHistory/LalitMohanBishtScorecardHistory'
-import { NeeluSahu } from './Scorecard/NeeluSahu';
-import { NeeluSahuScorecardHistory } from './ScorecardHistory/NeeluSahuScorecardHistory'
-import { PoorwaGajbhiye } from './Scorecard/PoorwaGajbhiye';
-import { PoorwaGajbhiyeScorecardHistory } from './ScorecardHistory/PoorwaGajbhiyeScorecardHistory'
-import { PratimaVarthi } from './Scorecard/PratimaVarthi';
-import { PratimaVarthiScorecardHistory } from './ScorecardHistory/PratimaVarthiScorecardHistory'
-import { PraveenGupta } from './Scorecard/PraveenGupta';
-import { PraveenGuptaScorecardHistory } from './ScorecardHistory/PraveenGuptaScorecardHistory'
-import { SumanBalaSahu } from './Scorecard/SumanBalaSahu';
-import { SumanBalaSahuScorecardHistory } from './ScorecardHistory/SumanBalaSahuScorecardHistory'
-import { UmeshDhakkad } from './Scorecard/UmeshDhakkad';
-import { UmeshDhakkadScorecardHistory } from './ScorecardHistory/UmeshDhakkadScorecardHistory'
-import { IshaShrivastava } from './Scorecard/IshaShrivastava';
-import { IshaShrivastavaScorecardHistory } from './ScorecardHistory/IshaShrivastavaScorecardHistory';
-import { MangeshSahu } from './Scorecard/MangeshSahu';
-import { MangeshSahuScorecardHistory } from './ScorecardHistory/MangeshSahuScorecardHistory';
-import { NighatPraveen } from './Scorecard/NighatPraveen';
-import { NighatPraveenScorecardHistory } from './ScorecardHistory/NighatPraveenScorecardHistory';
-import { PannaSenani } from './Scorecard/PannaSenani';
-import { PannaSenaniScorecardHistory } from './ScorecardHistory/PannaSenaniScorecardHistory';
-import { SurbhiNetam } from './Scorecard/SurbhiNetam';
-import { SurbhiNetamScorecardHistory } from './ScorecardHistory/SurbhiNetamScorecardHistory';
-import { SumanGoud } from './Scorecard/SumanGoud';
-import { SumanGoudScorecardHistory } from './ScorecardHistory/SumanGoudScorecardHistory';
+import React, { useState, useEffect } from 'react';
+import { UserAjayUpadhyay } from './UserScorecard/UserAjayUpadhyay';
+import { UserAlokPandey } from './UserScorecard/UserAlokUpadhyay';
+import { UserDeepmalaPatil } from './UserScorecard/UserDeepmalaPatil';
+import { UserDeepuMourya } from './UserScorecard/UserDeepuMourya';
+import { UserGeetanjaliDeep } from './UserScorecard/UserGeetanjaliDeep';
+import { UserHansrajSingh } from './UserScorecard/UserHansraj';
+import { UserIshaShrivastava } from './UserScorecard/UserIshaShrivastava';
+import { UserHarshRai } from './UserScorecard/UserHarshRai';
+import { UserJharnaAmbulkar } from './UserScorecard/UserJharnaAmbulkar';
+import { UserLalitMohanBisht } from './UserScorecard/UserLalitMohanBisht';
+import { UserMangeshSahu } from './UserScorecard/UserMangeshSahu';
+import { UserNeeluSahu } from './UserScorecard/UserNeeluSahu';
+import { UserNighatPraveen } from './UserScorecard/UserNighatPraveen';
+import { UserPannaSenani } from './UserScorecard/UserPannaSenani';
+import { UserPoorwaGajbhiye } from './UserScorecard/UserPoorwaGajbhiye';
+import { UserPratimaVarthi } from './UserScorecard/UserPratimaVarthi';
+import { UserPraveenGupta } from './UserScorecard/UserPraveenGupta';
+import { UserSumanBalaSahu } from './UserScorecard/UserSumanBalaSahu';
+import { UserSurbhiNetam } from './UserScorecard/UserSurbhiNetam';
+import { UserUmeshDhakkad } from './UserScorecard/UserUmeshDhakkad';
+import { UserSumanGoud } from './UserScorecard/UserSumanGoud';
 
-export const BalanceScoreCard = () => {
+export const UserBalanceScoreCard = () => {
   const [employees] = useState([
   { id: 1, name: "Ajay Upadhyay", department: "Account" },
   { id: 2, name: "Alok Pandey", department: "Marketing" },
@@ -70,6 +49,39 @@ export const BalanceScoreCard = () => {
 
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [viewType, setViewType] = useState(''); // 'scorecard' or 'history'
+  const [filteredEmployees, setFilteredEmployees] = useState(employees);
+
+  useEffect(() => {
+    // Get logged-in user from localStorage
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      try {
+        const user = JSON.parse(userData);
+        const loggedInUserName = user.Name || user.Username || '';
+        
+        // Find matching employee with case-insensitive comparison
+        const matchedEmployee = employees.find(emp => 
+          emp.name.toLowerCase() === loggedInUserName.toLowerCase()
+        );
+        
+        if (matchedEmployee) {
+          // Auto-select the user's scorecard
+          setSelectedEmployee(matchedEmployee.name);
+          setViewType('scorecard');
+          // Filter to show only this employee
+          setFilteredEmployees([matchedEmployee]);
+        } else {
+          // User not found in employee list, show all employees
+          setFilteredEmployees(employees);
+        }
+      } catch (error) {
+        console.error('Error parsing user data:', error);
+        setFilteredEmployees(employees);
+      }
+    } else {
+      setFilteredEmployees(employees);
+    }
+  }, [employees]);
 
   const handleEmployeeClick = (employeeName, type) => {
     setSelectedEmployee(employeeName);
@@ -149,141 +161,69 @@ export const BalanceScoreCard = () => {
         {selectedEmployee ? (
           <div>
             {viewType === "scorecard" &&
-              selectedEmployee === "Poorwa Gajbhiye" && <PoorwaGajbhiye />}
-            {viewType === "history" &&
-              selectedEmployee === "Poorwa Gajbhiye" && (
-                <PoorwaGajbhiyeScorecardHistory />
-              )}
+              selectedEmployee === "Ajay Upadhyay" && <UserAjayUpadhyay />}
             {viewType === "scorecard" &&
-              selectedEmployee === "Geetanjali Deep" && <GeetanjaliDeep />}
-            {viewType === "history" &&
-              selectedEmployee === "Geetanjali Deep" && (
-                <GeetanjaliDeepScorecardHistory />
-              )}
+              selectedEmployee === "Alok Pandey" && <UserAlokPandey />}
             {viewType === "scorecard" &&
-              selectedEmployee === "Deepmala Patil" && <DeepmalaPatil />}
-            {viewType === "history" &&
-              selectedEmployee === "Deepmala Patil" && (
-                <DeepmalaPatilScorecardHistory />
-              )}
+              selectedEmployee === "Deepmala Patil" && <UserDeepmalaPatil />}
             {viewType === "scorecard" &&
-              selectedEmployee === "Lalit Mohan Bisht" && <LalitMohanBisht />}
-            {viewType === "history" &&
-              selectedEmployee === "Lalit Mohan Bisht" && (
-                <LalitMohanBishtScorecardHistory />
-              )}
+              selectedEmployee === "Deepu Mourya" && <UserDeepuMourya />}
             {viewType === "scorecard" &&
-              selectedEmployee === "Ajay Upadhyay" && <AjayUpadhyay />}
-            {viewType === "history" && selectedEmployee === "Ajay Upadhyay" && (
-              <AjayUpadhyayScorecardHistory />
-            )}
+              selectedEmployee === "Geetanjali Deep" && <UserGeetanjaliDeep />}
             {viewType === "scorecard" &&
-              selectedEmployee === "Deepu Mourya" && <DeepuMourya />}
-            {viewType === "history" && selectedEmployee === "Deepu Mourya" && (
-              <DeepuMouryaScorecardHistory />
-            )}
+              selectedEmployee === "Hansraj Singh" && <UserHansrajSingh />}
             {viewType === "scorecard" &&
-              selectedEmployee === "Pratima Varthi" && <PratimaVarthi />}
-            {viewType === "history" &&
-              selectedEmployee === "Pratima Varthi" && (
-                <PratimaVarthiScorecardHistory />
-              )}
+              selectedEmployee === "Harsh Rai" && <UserHarshRai />}
             {viewType === "scorecard" &&
-              selectedEmployee === "Jharna Ambulkar" && <JharnaAmbulkar />}
-            {viewType === "history" &&
-              selectedEmployee === "Jharna Ambulkar" && (
-                <JharnaAmbulkarScorecardHistory />
-              )}
+              selectedEmployee === "Isha Shrivastava" && <UserIshaShrivastava />}
             {viewType === "scorecard" &&
-              selectedEmployee === "Suman Bala Sahu" && <SumanBalaSahu />}
-            {viewType === "history" &&
-              selectedEmployee === "Suman Bala Sahu" && (
-                <SumanBalaSahuScorecardHistory />
-              )}
+              selectedEmployee === "Jharna Ambulkar" && <UserJharnaAmbulkar />}
             {viewType === "scorecard" &&
-              selectedEmployee === "Umesh Dhakkad" && <UmeshDhakkad />}
-            {viewType === "history" && selectedEmployee === "Umesh Dhakkad" && (
-              <UmeshDhakkadScorecardHistory />
-            )}
+              selectedEmployee === "Lalit Mohan Bisht" && <UserLalitMohanBisht />}
             {viewType === "scorecard" &&
-              selectedEmployee === "Hansraj Singh" && <HansrajSingh />}
-            {viewType === "history" && selectedEmployee === "Hansraj Singh" && (
-              <HansrajSinghScorecardHistory />
-            )}
+              selectedEmployee === "Mangesh Sahu" && <UserMangeshSahu />}
             {viewType === "scorecard" &&
-              selectedEmployee === "Harsh Rai" && <HarshRai />}
-            {viewType === "history" && selectedEmployee === "Harsh Rai" && (
-              <HarshRaiScorecardHistory />
-            )}
+              selectedEmployee === "Neelu Sahu" && <UserNeeluSahu />}
             {viewType === "scorecard" &&
-              selectedEmployee === "Isha Shrivastava" && <IshaShrivastava />}
-            {viewType === "history" && selectedEmployee === "Isha Shrivastava" && (
-              <IshaShrivastavaScorecardHistory />
-            )}
+              selectedEmployee === "Nighat Praveen" && <UserNighatPraveen />}
             {viewType === "scorecard" &&
-              selectedEmployee === "Mangesh Sahu" && <MangeshSahu />}
-            {viewType === "history" && selectedEmployee === "Mangesh Sahu" && (
-              <MangeshSahuScorecardHistory />
-            )}
+              selectedEmployee === "Panna Senani" && <UserPannaSenani />}
             {viewType === "scorecard" &&
-              selectedEmployee === "Nighat Praveen" && <NighatPraveen />}
-            {viewType === "history" && selectedEmployee === "Nighat Praveen" && (
-              <NighatPraveenScorecardHistory />
-            )}
+              selectedEmployee === "Poorwa Gajbhiye" && <UserPoorwaGajbhiye />}
             {viewType === "scorecard" &&
-              selectedEmployee === "Panna Senani" && <PannaSenani />}
-            {viewType === "history" && selectedEmployee === "Panna Senani" && (
-              <PannaSenaniScorecardHistory />
-            )}
+              selectedEmployee === "Pratima Varthi" && <UserPratimaVarthi />}
             {viewType === "scorecard" &&
-              selectedEmployee === "Praveen Gupta" && <PraveenGupta />}
-            {viewType === "history" && selectedEmployee === "Praveen Gupta" && (
-              <PraveenGuptaScorecardHistory />
-            )}
+              selectedEmployee === "Praveen Gupta" && <UserPraveenGupta />}
             {viewType === "scorecard" &&
-              selectedEmployee === "Surbhi Netam" && <SurbhiNetam />}
-            {viewType === "history" && selectedEmployee === "Surbhi Netam" && (
-              <SurbhiNetamScorecardHistory />
-            )}
+              selectedEmployee === "Suman Bala Sahu" && <UserSumanBalaSahu />}
             {viewType === "scorecard" &&
-              selectedEmployee === "Suman Goud Kuntla" && <SumanGoud />}
-            {viewType === "history" && selectedEmployee === "Suman Goud Kuntla" && (
-              <SumanGoudScorecardHistory />
-            )}
-            {viewType === "scorecard" && selectedEmployee === "Alok Pandey" && (
-              <AlokPandey />
-            )}
-            {viewType === "history" && selectedEmployee === "Alok Pandey" && (
-              <AlokPandeyScorecardHistory />
-            )}
-            {viewType === "scorecard" && selectedEmployee === "Neelu Sahu" && (
-              <NeeluSahu />
-            )}
-            {viewType === "history" && selectedEmployee === "Neelu Sahu" && (
-              <NeeluSahuScorecardHistory />
-            )}
+              selectedEmployee === "Suman Goud Kuntla" && <UserSumanGoud />}
+            {viewType === "scorecard" &&
+              selectedEmployee === "Surbhi Netam" && <UserSurbhiNetam />}
+            {viewType === "scorecard" &&
+              selectedEmployee === "Umesh Dhakkad" && <UserUmeshDhakkad />}
             {![
               "Ajay Upadhyay",
-              "Poorwa Gajbhiye",
-              "Geetanjali Deep",
+              "Alok Pandey",
               "Deepmala Patil",
-              "Lalit Mohan Bisht",
               "Deepu Mourya",
-              "Pratima Varthi",
-              "Jharna Ambulkar",
-              "Suman Bala Sahu",
-              "Umesh Dhakkad",
+              "Geetanjali Deep",
               "Hansraj Singh",
               "Harsh Rai",
-              "Surbhi Netam",
               "Isha Shrivastava",
-              "Panna Senani",
-              "Alok Pandey",
+              "Jharna Ambulkar",
+              "Lalit Mohan Bisht",
               "Mangesh Sahu",
-              "Nighat Praveen",
-              "Praveen Gupta",
-              "Suman Goud Kuntla",
               "Neelu Sahu",
+              "Nighat Praveen",
+              "Panna Senani",
+              "Poorwa Gajbhiye",
+              "Pratima Varthi",
+              "Praveen Gupta",
+              "Suman Bala Sahu",
+              "Suman Goud Kuntla",
+              "Surbhi Netam",
+              "Umesh Dhakkad",
             ].includes(selectedEmployee) && (
               <div className="bg-white rounded-lg shadow p-4 md:p-6">
                 <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-4">
@@ -321,8 +261,8 @@ export const BalanceScoreCard = () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {employees.length > 0 ? (
-                      employees.map((employee, index) => (
+                    {filteredEmployees.length > 0 ? (
+                      filteredEmployees.map((employee, index) => (
                         <tr
                           key={employee.id}
                           className={
@@ -389,9 +329,9 @@ export const BalanceScoreCard = () => {
             {/* Mobile Card View */}
             <div className="md:hidden bg-white rounded-lg shadow overflow-hidden">
               <div className="p-0">
-                {employees.length > 0 ? (
+                {filteredEmployees.length > 0 ? (
                   <div className="space-y-0">
-                    {employees.map((employee, index) => (
+                    {filteredEmployees.map((employee, index) => (
                       <div
                         key={employee.id}
                         className={`p-4 border-b border-gray-200 ${
@@ -448,5 +388,3 @@ export const BalanceScoreCard = () => {
     </div>
   );
 };
-
-export default BalanceScoreCard;
