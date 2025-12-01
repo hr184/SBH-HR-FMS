@@ -12,7 +12,7 @@ import { UserJharnaAmbulkar } from './UserScorecard/UserJharnaAmbulkar';
 import { UserLalitMohanBisht } from './UserScorecard/UserLalitMohanBisht';
 import { UserMangeshSahu } from './UserScorecard/UserMangeshSahu';
 import { UserNeeluSahu } from './UserScorecard/UserNeeluSahu';
-import { UserNighatPraveen } from './UserScorecard/UserNighatPraveen';
+import { UserNighatParveen } from './UserScorecard/UserNighatParveen';
 import { UserPannaSenani } from './UserScorecard/UserPannaSenani';
 import { UserPoorwaGajbhiye } from './UserScorecard/UserPoorwaGajbhiye';
 import { UserPratimaVarthi } from './UserScorecard/UserPratimaVarthi';
@@ -36,7 +36,7 @@ export const UserBalanceScoreCard = () => {
   { id: 10, name: "Lalit Mohan Bisht", department: "Operations" },
   { id: 11, name: "Mangesh Sahu", department: "Marketing"},
   { id: 12, name: "Neelu Sahu", department: "Operation" },
-  { id: 13, name: "Nighat Praveen", department: "Marketing" },
+  { id: 13, name: "Nighat Parveen", department: "Marketing" },
   { id: 14, name: "Panna Senani", department: "Accounts" },
   { id: 15, name: "Poorwa Gajbhiye", department: "HR" },
   { id: 16, name: "Pratima Varthi", department: "Store" },
@@ -185,7 +185,7 @@ export const UserBalanceScoreCard = () => {
             {viewType === "scorecard" &&
               selectedEmployee === "Neelu Sahu" && <UserNeeluSahu />}
             {viewType === "scorecard" &&
-              selectedEmployee === "Nighat Praveen" && <UserNighatPraveen />}
+              selectedEmployee === "Nighat Parveen" && <UserNighatParveen />}
             {viewType === "scorecard" &&
               selectedEmployee === "Panna Senani" && <UserPannaSenani />}
             {viewType === "scorecard" &&
@@ -215,7 +215,7 @@ export const UserBalanceScoreCard = () => {
               "Lalit Mohan Bisht",
               "Mangesh Sahu",
               "Neelu Sahu",
-              "Nighat Praveen",
+              "Nighat Parveen",
               "Panna Senani",
               "Poorwa Gajbhiye",
               "Pratima Varthi",

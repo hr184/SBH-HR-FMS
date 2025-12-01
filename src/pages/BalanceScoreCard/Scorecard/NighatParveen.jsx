@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-export const NighatPraveen = () => {
+export const NighatParveen = () => {
   const [scores, setScores] = useState({
     // Job Assessment Scores - Based on provided data
     visitTarget: '',
@@ -38,7 +38,7 @@ export const NighatPraveen = () => {
                 try {
                   const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
                   const sheetId = "162o34BXqnJvmJjjtIoQpcBGo8orn2ZO5Jf0p8MgoUCs";
-                  const sheetName = "Nighat Praveen";
+                  const sheetName = "Nighat Parveen";
             
                   const response = await fetch(`${scriptURL}?sheetId=${encodeURIComponent(sheetId)}&sheetName=${encodeURIComponent(sheetName)}&action=getData`);
                   
@@ -147,7 +147,7 @@ export const NighatPraveen = () => {
       
       const timestamp = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
       const currentMonth = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
-      const employeeName = "Nighat Praveen";
+      const employeeName = "Nighat Parveen";
 
       const rowData = [
         timestamp, // Column A (index-0) - Timestamp
@@ -180,7 +180,7 @@ export const NighatPraveen = () => {
 
       const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
       const sheetId = "162o34BXqnJvmJjjtIoQpcBGo8orn2ZO5Jf0p8MgoUCs";
-      const sheetName = "Nighat Praveen";
+      const sheetName = "Nighat Parveen";
 
       const response = await fetch(scriptURL, {
         method: 'POST',
