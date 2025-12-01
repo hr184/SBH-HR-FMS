@@ -71,7 +71,9 @@ function App() {
               {/* <Route path="payroll" element={<Payroll />} /> */}
               <Route path="misreport" element={<MisReport />} />
               <Route path='balanceScoreCard' element={<BalanceScoreCard />} />
+              <Route path='balanceScoreCard/:employeeName/:viewType' element={<BalanceScoreCard />} />
               <Route path='userBalanceScoreCard' element={<UserBalanceScoreCard />} />
+              <Route path='userBalanceScoreCard/:employeeName/:viewType' element={<UserBalanceScoreCard />} />
               <Route path="license" element={<License/>} />
               <Route path="jobPoster" element={<JobPoster/>} />
               <Route path='leaveApproval' element={<LeaveApproval/>} />
