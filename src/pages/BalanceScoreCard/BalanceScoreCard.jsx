@@ -1,6 +1,5 @@
 import { Activity } from 'lucide-react';
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useState } from 'react';
 import { AjayUpadhyay } from './Scorecard/AjayUpadhyay';
 import { AjayUpadhyayScorecardHistory } from './ScorecardHistory/AjayUpadhyayScorecardHistory'
 import { AlokPandey } from './Scorecard/AlokPandey';
@@ -71,37 +70,13 @@ export const BalanceScoreCard = () => {
 
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [viewType, setViewType] = useState(''); // 'scorecard' or 'history'
-  const navigate = useNavigate();
-  const { employeeName: paramEmployeeName, viewType: paramViewType } = useParams();
-
-  useEffect(() => {
-    if (paramEmployeeName) {
-      try {
-        const decoded = decodeURIComponent(paramEmployeeName);
-        const matched = employees.find(
-          (emp) => emp.name.toLowerCase() === decoded.toLowerCase()
-        );
-        if (matched) {
-          setSelectedEmployee(matched.name);
-          setViewType(paramViewType || 'scorecard');
-        }
-      } catch (e) {
-        console.error('Invalid route param for employeeName:', paramEmployeeName, e);
-      }
-    }
-  }, [paramEmployeeName, paramViewType, employees]);
 
   const handleEmployeeClick = (employeeName, type) => {
-    // navigate to the admin balanceScoreCard route so the URL reflects selection
-    const path = `/balanceScoreCard/${encodeURIComponent(employeeName)}/${type}`;
-    navigate(path);
     setSelectedEmployee(employeeName);
     setViewType(type);
   };
 
   const handleBackClick = () => {
-    // navigate back to the base balanceScoreCard route
-    navigate('/balanceScoreCard');
     setSelectedEmployee(null);
     setViewType('');
   };

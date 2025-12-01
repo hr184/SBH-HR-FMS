@@ -1,6 +1,5 @@
 import { Activity } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 import { UserAjayUpadhyay } from './UserScorecard/UserAjayUpadhyay';
 import { UserAlokPandey } from './UserScorecard/UserAlokUpadhyay';
 import { UserDeepmalaPatil } from './UserScorecard/UserDeepmalaPatil';
@@ -51,16 +50,10 @@ export const UserBalanceScoreCard = () => {
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [viewType, setViewType] = useState(''); // 'scorecard' or 'history'
   const [filteredEmployees, setFilteredEmployees] = useState(employees);
-  const navigate = useNavigate();
-  const { employeeName: paramEmployeeName, viewType: paramViewType } = useParams();
 
   useEffect(() => {
     // Get logged-in user from localStorage
     const userData = localStorage.getItem('user');
-    // If route param is present, let the route-driven effect handle selection
-    if (paramEmployeeName) {
-      return; // skip auto-selection when URL contains an employee
-    }
     if (userData) {
       try {
         const user = JSON.parse(userData);
@@ -90,39 +83,14 @@ export const UserBalanceScoreCard = () => {
     }
   }, [employees]);
 
-  // If the route contains an employeeName param, select that employee
-  useEffect(() => {
-    if (paramEmployeeName) {
-      try {
-        const decoded = decodeURIComponent(paramEmployeeName);
-        const matched = employees.find(
-          (emp) => emp.name.toLowerCase() === decoded.toLowerCase()
-        );
-        if (matched) {
-          setSelectedEmployee(matched.name);
-          setViewType(paramViewType || 'scorecard');
-          setFilteredEmployees([matched]);
-        }
-      } catch (e) {
-        console.error('Invalid route param for employeeName:', paramEmployeeName, e);
-      }
-    }
-  }, [paramEmployeeName, paramViewType, employees]);
-
   const handleEmployeeClick = (employeeName, type) => {
-    // navigate to a URL that contains the employee name and view type
-    const path = `/userBalanceScoreCard/${encodeURIComponent(employeeName)}/${type}`;
-    navigate(path);
     setSelectedEmployee(employeeName);
     setViewType(type);
   };
 
   const handleBackClick = () => {
-    // navigate back to the base list route and reset state
-    navigate('/userBalanceScoreCard');
     setSelectedEmployee(null);
     setViewType('');
-    setFilteredEmployees(employees);
   };
 
   return (
