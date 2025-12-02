@@ -275,17 +275,7 @@ export const UserBalanceScoreCard = () => {
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center justify-center">
                               <div className="ml-4">
-                                <button
-                                  onClick={() =>
-                                    handleEmployeeClick(
-                                      employee.name,
-                                      "history"
-                                    )
-                                  }
-                                  className="text-sm font-medium text-blue-600 hover:text-blue-800 focus:outline-none"
-                                >
                                   {employee.name}
-                                </button>
                               </div>
                             </div>
                           </td>

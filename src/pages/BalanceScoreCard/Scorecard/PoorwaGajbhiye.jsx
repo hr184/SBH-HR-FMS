@@ -17,12 +17,11 @@ export const PoorwaGajbhiye = () => {
     inductionTraining1: '',
     inductionTraining2: '',
     auditingAndProcess1: '',
-    auditingAndProcess2: '',
-    auditingAndProcess3: '',
-    auditingAndProcess4: '',
-    auditingAndProcess5: '',
     employeeEngagement1: '',
     employeeEngagement2: '',
+    employeeEngagement3: '',
+    employeeEngagement4: '',
+    employeeEngagement5: '',
     
     // Behavioral Assessment Scores
     qualityOfWork: '',
@@ -78,12 +77,11 @@ export const PoorwaGajbhiye = () => {
                               inductionTraining1: latestUserRow[12] || "",
                               inductionTraining2: latestUserRow[13] || "",
                               auditingAndProcess1: latestUserRow[14] || "",
-                              auditingAndProcess2: latestUserRow[15] || "",
-                              auditingAndProcess3: latestUserRow[16] || "",
-                              auditingAndProcess4: latestUserRow[17] || "",
-                              auditingAndProcess5: latestUserRow[18] || "",
-                              employeeEngagement1: latestUserRow[19] || "",
-                              employeeEngagement2: latestUserRow[20] || "",
+                              employeeEngagement1: latestUserRow[15] || "",
+                              employeeEngagement2: latestUserRow[16] || "",
+                              employeeEngagement3: latestUserRow[17] || "",
+                              employeeEngagement4: latestUserRow[18] || "",
+                              employeeEngagement5: latestUserRow[19] || "",
                             });
                           } else {
                             console.log('No row with "User" value found in column C');
@@ -110,12 +108,12 @@ export const PoorwaGajbhiye = () => {
   };
 
   const calculateTotals = () => {
-    const jobAssessmentTotal = Object.values(scores).slice(0, 17).reduce((a, b) => a + (parseFloat(b) || 0), 0);
-    const behavioralTotal = Object.values(scores).slice(17).reduce((a, b) => a + (parseFloat(b) || 0), 0);
+    const jobAssessmentTotal = Object.values(scores).slice(0, 16).reduce((a, b) => a + (parseFloat(b) || 0), 0);
+    const behavioralTotal = Object.values(scores).slice(16).reduce((a, b) => a + (parseFloat(b) || 0), 0);
     const overallTotal = jobAssessmentTotal + behavioralTotal;
     
     // Calculate target totals (out of values)
-    const jobAssessmentTargets = [6, 4, 7, 5, 3, 4, 6, 5, 4, 3, 7, 4, 5, 4, 3, 4, 6];
+    const jobAssessmentTargets = [6, 4, 7, 5, 3, 4, 6, 5, 4, 3, 7, 5, 4, 7, 4, 6];
     const behavioralTargets = [1, 2, 2, 2, 2, 2, 2, 2, 2, 3];
     
     const jobAssessmentTargetTotal = jobAssessmentTargets.reduce((a, b) => a + b, 0);
@@ -179,22 +177,21 @@ export const PoorwaGajbhiye = () => {
         scores.inductionTraining1 || 0, // Column M (index-12)
         scores.inductionTraining2 || 0, // Column N (index-13)
         scores.auditingAndProcess1 || 0, // Column O (index-14)
-        scores.auditingAndProcess2 || 0, // Column P (index-15)
-        scores.auditingAndProcess3 || 0, // Column Q (index-16)
-        scores.auditingAndProcess4 || 0, // Column R (index-17)
-        scores.auditingAndProcess5 || 0, // Column S (index-18)
-        scores.employeeEngagement1 || 0, // Column T (index-19)
-        scores.employeeEngagement2 || 0, // Column U (index-20)
-        scores.qualityOfWork || 0, // Column V (index-21)
-        scores.planningExecution || 0, // Column W (index-22)
-        scores.timeResources || 0, // Column X (index-23)
-        scores.interpersonalRelations || 0, // Column Y (index-24)
-        scores.flexibilityAdaptability || 0, // Column Z (index-25)
-        scores.communication || 0, // Column AA (index-26)
-        scores.integrity || 0, // Column AB (index-27)
-        scores.leadership || 0, // Column AC (index-28)
-        scores.discipline || 0, // Column AD (index-29)
-        scores.punctuality || 0 // Column AE (index-30)
+        scores.employeeEngagement1 || 0, // Column P (index-15)
+        scores.employeeEngagement2 || 0, // Column Q (index-16)
+        scores.employeeEngagement3 || 0, // Column R (index-17)
+        scores.employeeEngagement4 || 0, // Column S (index-18)
+        scores.employeeEngagement5 || 0, // Column T (index-19)
+        scores.qualityOfWork || 0, // Column U (index-20)
+        scores.planningExecution || 0, // Column V (index-21)
+        scores.timeResources || 0, // Column W (index-22)
+        scores.interpersonalRelations || 0, // Column X (index-23)
+        scores.flexibilityAdaptability || 0, // Column Y (index-24)
+        scores.communication || 0, // Column Z (index-25)
+        scores.integrity || 0, // Column AA (index-26)
+        scores.leadership || 0, // Column AB (index-27)
+        scores.discipline || 0, // Column AC (index-28)
+        scores.punctuality || 0 // Column AD (index-29)
       ];
 
       const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
@@ -455,8 +452,8 @@ export const PoorwaGajbhiye = () => {
             
             {/* Auditing & Process Improvement KRA */}
             <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td rowSpan="5" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Auditing & Process Improvement</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Calls audit & do the analysis to check the quality of the contact center</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Auditing & Process Improvement</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Attend various departmental meetings on the assigned tasks</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>7</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
                 {userData.auditingAndProcess1 || '-'}
@@ -474,36 +471,21 @@ export const PoorwaGajbhiye = () => {
                 />
               </td>
             </tr>
+
+
+            {/* Employee Engagement	 KRA */}
             <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Weekly monthly dashboard published for various campaigns to gaze the performance</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.auditingAndProcess2 || '-'}
-              </td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.auditingAndProcess2}
-                  onChange={(e) => handleScoreChange('auditingAndProcess2', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-4"
-                  min="0"
-                  max="4"
-                  step="0.1"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td rowSpan="5" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Employee Engagement	</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Develop content for the training as per the latest trend of the market</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.auditingAndProcess3 || '-'}
+                {userData.employeeEngagement1 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.auditingAndProcess3}
-                  onChange={(e) => handleScoreChange('auditingAndProcess3', e.target.value)}
+                  value={scores.employeeEngagement1}
+                  onChange={(e) => handleScoreChange('employeeEngagement1', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
                   placeholder="0-5"
                   min="0"
@@ -513,16 +495,16 @@ export const PoorwaGajbhiye = () => {
               </td>
             </tr>
             <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Feedback sessions on audits for the contact center agents for the performance improvement</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Payroll management</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.auditingAndProcess4 || '-'}
+                {userData.employeeEngagement2 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.auditingAndProcess4}
-                  onChange={(e) => handleScoreChange('auditingAndProcess4', e.target.value)}
+                  value={scores.employeeEngagement2}
+                  onChange={(e) => handleScoreChange('employeeEngagement2', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
                   placeholder="0-4"
                   min="0"
@@ -532,39 +514,35 @@ export const PoorwaGajbhiye = () => {
               </td>
             </tr>
             <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Sharing process gaps for the process improvement and standardization</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Recruitment - Junior staff</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>7</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.auditingAndProcess5 || '-'}
+                {userData.employeeEngagement3 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.auditingAndProcess5}
-                  onChange={(e) => handleScoreChange('auditingAndProcess5', e.target.value)}
+                  value={scores.employeeEngagement3}
+                  onChange={(e) => handleScoreChange('employeeEngagement3', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-3"
+                  placeholder="0-7"
                   min="0"
-                  max="3"
+                  max="7"
                   step="0.1"
                 />
               </td>
             </tr>
-
-
-            {/* Employee Engagement	 KRA */}
             <tr style={{ backgroundColor: '#ffffff' }}>
-              <td rowSpan="2" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Employee Engagement	</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Attend meetings with the various departments on the assigned tasks</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Conduct employee engagement activities</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.employeeEngagement1 || '-'}
+                {userData.employeeEngagement4 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.employeeEngagement1}
-                  onChange={(e) => handleScoreChange('employeeEngagement1', e.target.value)}
+                  value={scores.employeeEngagement4}
+                  onChange={(e) => handleScoreChange('employeeEngagement4', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
                   placeholder="0-4"
                   min="0"
@@ -577,13 +555,13 @@ export const PoorwaGajbhiye = () => {
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Assist in employee engagement activities</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>6</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
-                {userData.employeeEngagement2 || '-'}
+                {userData.employeeEngagement5 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.employeeEngagement2}
-                  onChange={(e) => handleScoreChange('employeeEngagement2', e.target.value)}
+                  value={scores.employeeEngagement5}
+                  onChange={(e) => handleScoreChange('employeeEngagement5', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
                   placeholder="0-6"
                   min="0"

@@ -14,6 +14,7 @@ export const JharnaAmbulkar = () => {
     revenueReview: '',
     debtorsAnalysis: '',
     statisticalDataPreparation: '',
+    prepareMarketing: '',
     misCollaboration: '',
     statisticalDataReview: '',
     misActivities: '',
@@ -79,19 +80,20 @@ export const JharnaAmbulkar = () => {
                   revenueReview: latestUserRow[9] || "",
                   debtorsAnalysis: latestUserRow[10] || "",
                   statisticalDataPreparation: latestUserRow[11] || "",
-                  misCollaboration: latestUserRow[12] || "",
-                  statisticalDataReview: latestUserRow[13] || "",
-                  misActivities: latestUserRow[14] || "",
-                  sapEntries: latestUserRow[15] || "",
-                  overheadsReview: latestUserRow[16] || "",
-                  provisionsAnalysis: latestUserRow[17] || "",
-                  plBalanceSheet: latestUserRow[18] || "",
-                  headcountReview: latestUserRow[19] || "",
-                  prepareMonthly: latestUserRow[20] || "",
-                  checkSocial: latestUserRow[21] || "",
-                  financialPlanning: latestUserRow[22] || "",
-                  monthlyConsolidation: latestUserRow[23] || "",
-                  globalCollaboration: latestUserRow[24] || "",
+                  prepareMarketing: latestUserRow[12] || "",
+                  misCollaboration: latestUserRow[13] || "",
+                  statisticalDataReview: latestUserRow[14] || "",
+                  misActivities: latestUserRow[15] || "",
+                  sapEntries: latestUserRow[16] || "",
+                  overheadsReview: latestUserRow[17] || "",
+                  provisionsAnalysis: latestUserRow[18] || "",
+                  plBalanceSheet: latestUserRow[19] || "",
+                  headcountReview: latestUserRow[20] || "",
+                  prepareMonthly: latestUserRow[21] || "",
+                  checkSocial: latestUserRow[22] || "",
+                  financialPlanning: latestUserRow[23] || "",
+                  monthlyConsolidation: latestUserRow[24] || "",
+                  globalCollaboration: latestUserRow[25] || "",
                 });
               } else {
                 console.log('No row with "User" value found in column C');
@@ -118,12 +120,12 @@ export const JharnaAmbulkar = () => {
   };
 
   const calculateTotals = () => {
-    const jobAssessmentTotal = Object.values(scores).slice(0, 21).reduce((a, b) => a + (parseFloat(b) || 0), 0);
-    const behavioralTotal = Object.values(scores).slice(21).reduce((a, b) => a + (parseFloat(b) || 0), 0);
+    const jobAssessmentTotal = Object.values(scores).slice(0, 22).reduce((a, b) => a + (parseFloat(b) || 0), 0);
+    const behavioralTotal = Object.values(scores).slice(22).reduce((a, b) => a + (parseFloat(b) || 0), 0);
     const overallTotal = jobAssessmentTotal + behavioralTotal;
     
     // Calculate target totals (out of values) - Updated based on provided data
-    const jobAssessmentTargets = [6, 4, 3, 6, 4, 5, 3, 4, 5, 4, 3, 5, 4, 4, 5, 3, 4, 5, 3];
+    const jobAssessmentTargets = [6, 4, 3, 6, 4, 2, 3, 4, 3, 5, 4, 3, 2, 4, 4, 2, 3, 3, 3, 4, 5, 3];
     const behavioralTargets = [1, 2, 2, 2, 2, 2, 2, 2, 2, 3];
     
     const jobAssessmentTargetTotal = jobAssessmentTargets.reduce((a, b) => a + b, 0);
@@ -185,6 +187,7 @@ export const JharnaAmbulkar = () => {
         scores.revenueReview || 0,
         scores.debtorsAnalysis || 0,
         scores.statisticalDataPreparation || 0,
+        scores.prepareMarketing || 0,
         scores.misCollaboration || 0,
         scores.statisticalDataReview || 0,
         scores.misActivities || 0,
@@ -340,7 +343,7 @@ export const JharnaAmbulkar = () => {
 
             {/* MIS KRA */}
             <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td rowSpan="7" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>MIS</td>
+              <td rowSpan="8" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>MIS</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Monthly MIS preparation and various activities related to MIS.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
@@ -359,8 +362,8 @@ export const JharnaAmbulkar = () => {
               </td>
             </tr>
             <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Monthly review of revenue, salaries, and overheads actuals v/s plan and previous year</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Timely Completion of PPT Presentations with accurate Checking of OPD Numbers Procedure data and IPD Counts.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
                 {userData.revenueReview || '-'}
               </td>
@@ -370,9 +373,9 @@ export const JharnaAmbulkar = () => {
                   value={scores.revenueReview}
                   onChange={(e) => handleScoreChange('revenueReview', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-5"
+                  placeholder="0-2"
                   min="0"
-                  max="5"
+                  max="2"
                 />
               </td>
             </tr>
@@ -395,7 +398,7 @@ export const JharnaAmbulkar = () => {
               </td>
             </tr>
             <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Preparation and review of statistical data such as headcount FTE, utilization, missing time etc.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Daily Tracking of digital patient inflow and revenue accross all branches, with monthly consolidated reporting.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
                 {userData.statisticalDataPreparation || '-'}
@@ -409,6 +412,24 @@ export const JharnaAmbulkar = () => {
                   placeholder="0-4"
                   min="0"
                   max="4"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Prapare marketing petient data and mandatoryily share it with the director on time at the end of every month.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.prepareMarketing || '-'}
+              </td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.prepareMarketing}
+                  onChange={(e) => handleScoreChange('prepareMarketing', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-3"
+                  min="0"
+                  max="3"
                 />
               </td>
             </tr>

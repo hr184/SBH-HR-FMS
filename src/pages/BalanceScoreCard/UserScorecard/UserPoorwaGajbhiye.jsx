@@ -17,12 +17,11 @@ export const UserPoorwaGajbhiye = () => {
     inductionTraining1: '',
     inductionTraining2: '',
     auditingAndProcess1: '',
-    auditingAndProcess2: '',
-    auditingAndProcess3: '',
-    auditingAndProcess4: '',
-    auditingAndProcess5: '',
     employeeEngagement1: '',
     employeeEngagement2: '',
+    employeeEngagement3: '',
+    employeeEngagement4: '',
+    employeeEngagement5: '',
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -100,12 +99,11 @@ export const UserPoorwaGajbhiye = () => {
         scores.inductionTraining1 || 0, // Column M (index-12)
         scores.inductionTraining2 || 0, // Column N (index-13)
         scores.auditingAndProcess1 || 0, // Column O (index-14)
-        scores.auditingAndProcess2 || 0, // Column P (index-15)
-        scores.auditingAndProcess3 || 0, // Column Q (index-16)
-        scores.auditingAndProcess4 || 0, // Column R (index-17)
-        scores.auditingAndProcess5 || 0, // Column S (index-18)
-        scores.employeeEngagement1 || 0, // Column T (index-19)
-        scores.employeeEngagement2 || 0, // Column U (index-20)
+        scores.employeeEngagement1 || 0, // Column P (index-15)
+        scores.employeeEngagement2 || 0, // Column Q (index-16)
+        scores.employeeEngagement3 || 0, // Column R (index-17)
+        scores.employeeEngagement4 || 0, // Column S (index-18)
+        scores.employeeEngagement5 || 0, // Column T (index-19)
       ];
 
       const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
@@ -333,10 +331,10 @@ export const UserPoorwaGajbhiye = () => {
               </td>
             </tr>
             
-            {/* Auditing & Process Improvement KRA */}
+             {/* Auditing & Process Improvement KRA */}
             <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td rowSpan="5" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Auditing & Process Improvement</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Calls audit & do the analysis to check the quality of the contact center</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Auditing & Process Improvement</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Attend various departmental meetings on the assigned tasks</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>7</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
@@ -351,30 +349,18 @@ export const UserPoorwaGajbhiye = () => {
                 />
               </td>
             </tr>
+
+
+            {/* Employee Engagement	 KRA */}
             <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Weekly monthly dashboard published for various campaigns to gaze the performance</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.auditingAndProcess2}
-                  onChange={(e) => handleScoreChange('auditingAndProcess2', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-4"
-                  min="0"
-                  max="4"
-                  step="0.1"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td rowSpan="5" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Employee Engagement	</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Develop content for the training as per the latest trend of the market</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.auditingAndProcess3}
-                  onChange={(e) => handleScoreChange('auditingAndProcess3', e.target.value)}
+                  value={scores.employeeEngagement1}
+                  onChange={(e) => handleScoreChange('employeeEngagement1', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
                   placeholder="0-5"
                   min="0"
@@ -384,13 +370,13 @@ export const UserPoorwaGajbhiye = () => {
               </td>
             </tr>
             <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Feedback sessions on audits for the contact center agents for the performance improvement</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Payroll management</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.auditingAndProcess4}
-                  onChange={(e) => handleScoreChange('auditingAndProcess4', e.target.value)}
+                  value={scores.employeeEngagement2}
+                  onChange={(e) => handleScoreChange('employeeEngagement2', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
                   placeholder="0-4"
                   min="0"
@@ -400,33 +386,29 @@ export const UserPoorwaGajbhiye = () => {
               </td>
             </tr>
             <tr style={{ backgroundColor: '#ffffff' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Sharing process gaps for the process improvement and standardization</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Recruitment - Junior staff</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>7</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.auditingAndProcess5}
-                  onChange={(e) => handleScoreChange('auditingAndProcess5', e.target.value)}
+                  value={scores.employeeEngagement3}
+                  onChange={(e) => handleScoreChange('employeeEngagement3', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-3"
+                  placeholder="0-7"
                   min="0"
-                  max="3"
+                  max="7"
                   step="0.1"
                 />
               </td>
             </tr>
-
-
-            {/* Employee Engagement	 KRA */}
             <tr style={{ backgroundColor: '#ffffff' }}>
-              <td rowSpan="2" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Employee Engagement	</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Attend meetings with the various departments on the assigned tasks</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Conduct employee engagement activities</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.employeeEngagement1}
-                  onChange={(e) => handleScoreChange('employeeEngagement1', e.target.value)}
+                  value={scores.employeeEngagement4}
+                  onChange={(e) => handleScoreChange('employeeEngagement4', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
                   placeholder="0-4"
                   min="0"
@@ -441,8 +423,8 @@ export const UserPoorwaGajbhiye = () => {
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
-                  value={scores.employeeEngagement2}
-                  onChange={(e) => handleScoreChange('employeeEngagement2', e.target.value)}
+                  value={scores.employeeEngagement5}
+                  onChange={(e) => handleScoreChange('employeeEngagement5', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
                   placeholder="0-6"
                   min="0"
