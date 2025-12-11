@@ -198,34 +198,34 @@ const formatMonth = (monthString) => {
                     {row[2] || "-"}
                   </td>
                   <td className="px-4 py-3 text-sm text-gray-900 border text-right">
-                    {formatNumber(row[39])}
+                    {formatNumber(row[56])}
                   </td>
                   <td className="px-4 py-3 text-sm text-gray-900 border text-right">
-                    {formatNumber(row[40])}
+                    {formatNumber(row[57])}
                   </td>
                   <td className="px-4 py-3 text-sm text-gray-900 border text-right">
-                    {formatNumber(row[41])}
+                    {formatNumber(row[58])}
                   </td>
                   {/* <td className="px-4 py-3 text-sm text-gray-900 border text-right">
-                    {formatNumber(row[42])}
+                    {formatNumber(row[59])}
                   </td>
                   <td className="px-4 py-3 text-sm text-gray-900 border text-right">
-                    {formatNumber(row[43])}
+                    {formatNumber(row[60])}
                   </td>
                   <td className="px-4 py-3 text-sm text-gray-900 border text-right">
-                    {formatNumber(row[44])}
+                    {formatNumber(row[61])}
                   </td> */}
                   <td className="px-4 py-3 text-sm text-gray-900 border text-right">
-                    {formatNumber(row[45])}
+                    {formatNumber(row[62])}
                   </td>
                   <td className="px-4 py-3 text-sm text-gray-900 border text-right">
-                    {formatNumber(row[46])}
+                    {formatNumber(row[63])}
                   </td>
                   <td className="px-4 py-3 text-sm text-gray-900 border text-right">
-                    {formatNumber(row[47])}
+                    {formatNumber(row[64])}
                   </td>
                   <td className="px-4 py-3 text-sm text-gray-900 border text-right">
-                    {formatPercentage(row[48])}
+                    {formatPercentage(row[65])}
                   </td>
                 </tr>
               ))}
