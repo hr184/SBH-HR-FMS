@@ -330,13 +330,12 @@ const fetchLeaveData = async () => {
 
     const dataRows = rawData.length > 1 ? rawData.slice(1) : [];
     
-    // Process and filter data by employee name
-    // Updated column indices according to your requirements:
+    // Updated column indices:
     // Column E (index 4) - From Date
     // Column F (index 5) - To Date
     // Column H (index 7) - Status
     // Column I (index 8) - Leave Type
-    // Column N (index 13) - Days
+    // Column M (index 12) - Days (changed from index 13)
     const processedData = dataRows
       .map((row, index) => ({
         id: index + 1,
@@ -349,7 +348,7 @@ const fetchLeaveData = async () => {
         reason: row[6] || '',
         status: row[7] || 'Pending', // Column H (index 7) - Status
         leaveType: row[8] || '', // Column I (index 8) - Leave Type
-        days: row[13] || 0, // Column N (index 13) - Days
+        days: row[12] || 0, // Column M (index 12) - Days (changed from 13)
         appliedDate: row[0] || '', // Using timestamp as applied date
         approvedBy: row[9] || '',
       }))
@@ -376,89 +375,97 @@ const fetchLeaveData = async () => {
   }, []);
 
 const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (
-      !formData.employeeName ||
-      !formData.leaveType ||
-      !formData.fromDate ||
-      !formData.toDate ||
-      !formData.reason ||
-      !formData.hodName ||
-      !formData.substitute // Added substitute as required field
-    ) {
-      toast.error("Please fill all required fields");
-      return;
-    }
+  if (
+    !formData.employeeName ||
+    !formData.leaveType ||
+    !formData.fromDate ||
+    !formData.toDate ||
+    !formData.reason ||
+    !formData.hodName ||
+    !formData.substitute
+  ) {
+    toast.error("Please fill all required fields");
+    return;
+  }
 
-    try {
-      setSubmitting(true);
-      const now = new Date();
+  try {
+    setSubmitting(true);
+    const now = new Date();
 
-      // Format timestamp as DD/MM/YYYY HH:MM:SS
-      const day = String(now.getDate()).padStart(2, '0');
-      const month = String(now.getMonth() + 1).padStart(2, '0');
-      const year = now.getFullYear();
-      const hours = String(now.getHours()).padStart(2, '0');
-      const minutes = String(now.getMinutes()).padStart(2, '0');
-      const seconds = String(now.getSeconds()).padStart(2, '0');
-      const formattedTimestamp = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+    // Format timestamp as DD/MM/YYYY HH:MM:SS
+    const day = String(now.getDate()).padStart(2, "0");
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const year = now.getFullYear();
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    const seconds = String(now.getSeconds()).padStart(2, "0");
+    const formattedTimestamp = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
 
-      const rowData = [
-        formattedTimestamp,           // Timestamp
-        "",                          // Serial number (empty for auto-increment)
-        formData.employeeId,         // Employee ID
-        formData.employeeName,       // Employee Name
-        formatDOB(formData.fromDate), // Leave Date Start (formatted to dd/mm/yyyy)
-        formatDOB(formData.toDate),   // Leave Date End (formatted to dd/mm/yyyy)
-        formData.reason,             // Reason
-        "Pending",                   // Status
-        formData.leaveType,          // Leave Type
-        formData.hodName,            // HOD Name
-        formData.department,         // Department (changed from designation)
-        formData.substitute,         // Substitute (new field)
-        "Pending",                   // Column M (index 12) - Add Pending status here
-      ];
+    // Calculate leave days
+    const leaveDays = calculateDays(formData.fromDate, formData.toDate);
 
-      const response = await fetch('https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec', {
-        method: 'POST',
+    // Updated rowData array with days at index 12
+    const rowData = [
+      formattedTimestamp, // Timestamp - index 0
+      "", // Serial number (empty for auto-increment) - index 1
+      formData.employeeId, // Employee ID - index 2
+      formData.employeeName, // Employee Name - index 3
+      formatDOB(formData.fromDate), // Leave Date Start (formatted to dd/mm/yyyy) - index 4
+      formatDOB(formData.toDate), // Leave Date End (formatted to dd/mm/yyyy) - index 5
+      formData.reason, // Reason - index 6
+      "Pending", // Status - index 7
+      formData.leaveType, // Leave Type - index 8
+      formData.hodName, // HOD Name - index 9
+      formData.department, // Department - index 10
+      formData.substitute, // Substitute - index 11
+      leaveDays.toString(), // Total Days - index 12 (Column M)
+      "", // Empty for future use - index 13 (Column N)
+    ];
+
+    const response = await fetch(
+      "https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec",
+      {
+        method: "POST",
         body: new URLSearchParams({
-          sheetName: 'Leave Management',
-          action: 'insert',
+          sheetName: "Leave Management",
+          action: "insert",
           rowData: JSON.stringify(rowData),
         }),
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        toast.success('Leave Request submitted successfully!');
-        
-        // Refresh the data immediately to update the button state
-        await fetchLeaveData();
-        
-        setFormData({
-          employeeId: employeeId,
-          employeeName: user.Name || '',
-          department: formData.department || '',
-          hodName: '',
-          substitute: '',
-          leaveType: '',
-          fromDate: '',
-          toDate: '',
-          reason: ''
-        });
-        setShowModal(false);
-      } else {
-        toast.error('Failed to insert: ' + (result.error || 'Unknown error'));
       }
-    } catch (error) {
-      console.error('Insert error:', error);
-      toast.error('Something went wrong!');
-    } finally {
-      setSubmitting(false);
+    );
+
+    const result = await response.json();
+
+    if (result.success) {
+      toast.success("Leave Request submitted successfully!");
+
+      // Refresh the data immediately to update the button state
+      await fetchLeaveData();
+
+      setFormData({
+        employeeId: employeeId,
+        employeeName: user.Name || "",
+        department: formData.department || "",
+        hodName: "",
+        substitute: "",
+        leaveType: "",
+        fromDate: "",
+        toDate: "",
+        reason: "",
+      });
+      setShowModal(false);
+    } else {
+      toast.error("Failed to insert: " + (result.error || "Unknown error"));
     }
-  };
+  } catch (error) {
+    console.error("Insert error:", error);
+    toast.error("Something went wrong!");
+  } finally {
+    setSubmitting(false);
+  }
+};
 
 
 const hasSubmittedToday = () => {
@@ -509,7 +516,7 @@ const calculateLeaveStats = () => {
     leave.employeeName === user.Name
   );
 
-  // Calculate approved leaves using days from Column N (index 13)
+  // Calculate approved leaves using days from Column M (index 12)
   const casualLeaveTaken = relevantLeaves
     .filter((leave) => {
       const leaveYear = new Date(
@@ -522,7 +529,7 @@ const calculateLeaveStats = () => {
       );
     })
     .reduce((sum, leave) => {
-      // Use days from Column N (index 13), fallback to 0 if not available
+      // Use days from Column M (index 12), fallback to 0 if not available
       const days = leave.days ? parseInt(leave.days) : 0;
       return sum + (isNaN(days) ? 0 : days);
     }, 0);
