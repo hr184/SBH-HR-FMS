@@ -17,7 +17,8 @@ export const UserDeepmalaPatil = () => {
     NPS3: '',
     NPS4: '',
     other1: '',
-    other2: ''
+    other2: '',
+    other3: ''
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -37,7 +38,7 @@ export const UserDeepmalaPatil = () => {
     const jobAssessmentTotal = Object.values(scores).reduce((a, b) => a + (parseFloat(b) || 0), 0);
     
     // Calculate target totals (out of values) - Updated targets for Deepmala Patil
-    const jobAssessmentTargets = [7, 5, 6, 4, 9, 8, 5, 7, 6, 8, 7, 8];
+    const jobAssessmentTargets = [7, 5, 6, 4, 9, 8, 5, 7, 6, 8, 7, 5, 3];
     
     const jobAssessmentTargetTotal = jobAssessmentTargets.reduce((a, b) => a + b, 0);
     
@@ -95,7 +96,8 @@ export const UserDeepmalaPatil = () => {
         scores.NPS3 || 0, // Column M (index-12) - Provide prompt, courteous, efficient and personalized service
         scores.NPS4 || 0, // Column N (index-13) - Responsible for Daily Cash Tally
         scores.other1 || 0, // Column O (index-14) - Finally responsible for the Hospitals Business targets
-        scores.other2 || 0 // Column P (index-15) - Responsible for additional tasks assigned
+        scores.other2 || 0, // Column P (index-15) - Responsible for additional tasks assigned
+        scores.other3 || 0 // Column Q (index-16) - Monthly submission of doctors incentive to  vp sir & Account department.
       ];
 
       const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
@@ -315,7 +317,7 @@ export const UserDeepmalaPatil = () => {
 
             {/* Other KRA */}
             <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td rowSpan="2" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Other</td>
+              <td rowSpan="3" style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Other</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Finally repsosibile for the Hospitals Business targets - Monthly targets given by management ( Not less than  90% Ach is acceptable).  - NEW FF / REVIEW FF</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>7</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
@@ -332,16 +334,31 @@ export const UserDeepmalaPatil = () => {
             </tr>
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Responsible for additional tasks assigned by the reporting HOD & Directors - Updation on same through mail or whatsapp to the concern people</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>8</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.other2}
                   onChange={(e) => handleScoreChange('other2', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-8"
+                  placeholder="0-5"
                   min="0"
-                  max="8"
+                  max="5"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Monthly submission of doctors incentive to  vp sir & Account department</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.other3}
+                  onChange={(e) => handleScoreChange('other3', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-3"
+                  min="0"
+                  max="3"
                 />
               </td>
             </tr>

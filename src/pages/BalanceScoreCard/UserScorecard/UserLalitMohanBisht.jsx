@@ -33,6 +33,8 @@ export const UserLalitMohanBisht = () => {
     taskManagement: '',
     businessTargets: '',
     additionalTasks: '',
+    doctorIncentive: '',
+    
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -52,7 +54,7 @@ export const UserLalitMohanBisht = () => {
     const jobAssessmentTotal = Object.values(scores).reduce((a, b) => a + (parseFloat(b) || 0), 0);
     
     // Calculate target totals (out of values) - Updated based on provided data
-    const jobAssessmentTargets = [4, 3, 2, 4, 3, 2, 3, 4, 3, 2, 3, 3, 4, 2, 3, 3, 3, 4, 3, 2, 3, 1, 4, 2, 3, 3, 4];
+    const jobAssessmentTargets = [4, 3, 2, 4, 3, 2, 3, 4, 3, 2, 3, 3, 4, 2, 3, 3, 3, 4, 3, 2, 3, 1, 4, 2, 3, 3, 2, 2];
     
     const jobAssessmentTargetTotal = jobAssessmentTargets.reduce((a, b) => a + b, 0);
     
@@ -127,6 +129,7 @@ export const UserLalitMohanBisht = () => {
         scores.taskManagement || 0, // Column AC (index-28)
         scores.businessTargets || 0, // Column AD (index-29)
         scores.additionalTasks || 0, // Column AE (index-30)
+        scores.doctorIncentive || 0, // Column AF (index-31)
       ];
 
       const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
@@ -503,9 +506,9 @@ export const UserLalitMohanBisht = () => {
               </td>
             </tr>
 
-              {/* Other KRA */}
+              {/* Problem SOlving KRA */}
             <tr style={{ backgroundColor: '#ffffff' }}>
-              <td rowSpan={6} style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Problem Solving</td>
+              <td rowSpan={7} style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Problem Solving</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Handling VIP patients and relationship building with bureaucrats.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
@@ -582,19 +585,35 @@ export const UserLalitMohanBisht = () => {
             </tr>
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Responsible for additional tasks assigned by the reporting HOD & Directors.</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.additionalTasks}
                   onChange={(e) => handleScoreChange('additionalTasks', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-4"
+                  placeholder="0-2"
                   min="0"
-                  max="4"
+                  max="2"
                 />
               </td>
             </tr>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Monthly submission of doctors incentive to  vp sir & Account department.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.doctorIncentive}
+                  onChange={(e) => handleScoreChange('doctorIncentive', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-2"
+                  min="0"
+                  max="2"
+                />
+              </td>
+            </tr>
+
           </tbody>
         </table>
         <div style={{ marginTop: '15px', fontWeight: 'bold', padding: '12px', backgroundColor: '#eff6ff', borderRadius: '6px', borderLeft: '4px solid #1e3a8a' }}>

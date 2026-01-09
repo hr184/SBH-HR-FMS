@@ -21,6 +21,7 @@ export const UserNeeluSahu = () => {
     other1: '',
     other2: '',
     other3: '',
+    other4: '',
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -40,7 +41,7 @@ export const UserNeeluSahu = () => {
     const jobAssessmentTotal = Object.values(scores).reduce((a, b) => a + (parseFloat(b) || 0), 0);
     
     // Calculate target totals (out of values) - Updated according to your data
-    const jobAssessmentTargets = [6, 5, 4, 7, 6, 5, 4, 6, 5, 4, 7, 6, 5, 4, 6];
+    const jobAssessmentTargets = [6, 5, 4, 7, 6, 5, 4, 6, 5, 4, 7, 6, 5, 4, 2, 4];
     
     const jobAssessmentTargetTotal = jobAssessmentTargets.reduce((a, b) => a + b, 0);
     
@@ -102,6 +103,7 @@ export const UserNeeluSahu = () => {
         scores.other1 || 0, // Column Q (index-16) - Provide prompt, courteous, efficient and personalized service to all patients. - Ensure Patient Experience delight
         scores.other2 || 0, // Column R (index-17) - Responsible for Daily Cash Tally - Cash/Card/wallet
         scores.other3 || 0, // Column S (index-18) - Task management of self and team - Automations updation
+        scores.other4 || 0, // Column T (index-19) - Monthly submission of doctors incentive to  vp sir & Account department.
       ];
 
       const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
@@ -342,7 +344,7 @@ export const UserNeeluSahu = () => {
 
             {/* Other KRA */}
             <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td rowSpan={3} style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Other</td>
+              <td rowSpan={4} style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Other</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Finally repsosibile for the Hospitals Business targets - Monthly targets given by management ( Not less than  90% Ach is acceptable).  - NEW FF / REVIEW FF</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>5</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
@@ -374,16 +376,31 @@ export const UserNeeluSahu = () => {
             </tr>
             <tr style={{ backgroundColor: '#f8fafc' }}>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>IPD - Admission status / Discharge status  - Daily track & Update …</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>6</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <input 
                   type="number" 
                   value={scores.other3}
                   onChange={(e) => handleScoreChange('other3', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-6"
+                  placeholder="0-2"
                   min="0"
-                  max="6"
+                  max="2"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#f8fafc' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Monthly submission of doctors incentive to  vp sir & Account department.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input 
+                  type="number" 
+                  value={scores.other4}
+                  onChange={(e) => handleScoreChange('other4', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-4"
+                  min="0"
+                  max="4"
                 />
               </td>
             </tr>

@@ -197,26 +197,23 @@ const formatMonth = (monthString) => {
                                   {row[2] || '-'}
                                 </td>
                                 <td className="px-4 py-3 text-sm text-gray-900 border text-right">
-                                  {formatNumber(row[41])}
-                                </td>
-                                <td className="px-4 py-3 text-sm text-gray-900 border text-right">
                                   {formatNumber(row[42])}
                                 </td>
                                 <td className="px-4 py-3 text-sm text-gray-900 border text-right">
                                   {formatNumber(row[43])}
                                 </td>
-                                {/* <td className="px-4 py-3 text-sm text-gray-900 border text-right">
+                                <td className="px-4 py-3 text-sm text-gray-900 border text-right">
                                   {formatNumber(row[44])}
                                 </td>
-                                <td className="px-4 py-3 text-sm text-gray-900 border text-right">
+                                {/* <td className="px-4 py-3 text-sm text-gray-900 border text-right">
                                   {formatNumber(row[45])}
                                 </td>
                                 <td className="px-4 py-3 text-sm text-gray-900 border text-right">
                                   {formatNumber(row[46])}
-                                </td> */}
+                                </td>
                                 <td className="px-4 py-3 text-sm text-gray-900 border text-right">
                                   {formatNumber(row[47])}
-                                </td>
+                                </td> */}
                                 <td className="px-4 py-3 text-sm text-gray-900 border text-right">
                                   {formatNumber(row[48])}
                                 </td>
@@ -224,7 +221,10 @@ const formatMonth = (monthString) => {
                                   {formatNumber(row[49])}
                                 </td>
                                 <td className="px-4 py-3 text-sm text-gray-900 border text-right">
-                                  {formatPercentage(row[50])}
+                                  {formatNumber(row[50])}
+                                </td>
+                                <td className="px-4 py-3 text-sm text-gray-900 border text-right">
+                                  {formatPercentage(row[51])}
                                 </td>
                               </tr>
                             ))}
