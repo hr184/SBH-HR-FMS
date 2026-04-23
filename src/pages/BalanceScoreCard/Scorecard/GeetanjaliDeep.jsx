@@ -26,7 +26,7 @@ export const GeetanjaliDeep = () => {
     strategyAndRoadmap5: '',
     strategyAndRoadmap6: '',
     strategyAndRoadmap7: '',
-    
+
     // Behavioral Assessment Scores (unchanged)
     qualityOfWork: '',
     planningExecution: '',
@@ -44,71 +44,71 @@ export const GeetanjaliDeep = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-        const fetchUserData = async () => {
-          try {
-            const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
-            const sheetId = "162o34BXqnJvmJjjtIoQpcBGo8orn2ZO5Jf0p8MgoUCs";
-            const sheetName = "Geetanjali Deep";
-    
-            const response = await fetch(`${scriptURL}?sheetId=${encodeURIComponent(sheetId)}&sheetName=${encodeURIComponent(sheetName)}&action=getData`);
-            
-            if (response.ok) {
-              const data = await response.json();
-              if (data && data.data && data.data.length > 0) {
-                // Data starts from row 5, so we slice from index 4 (row 5) onwards
-                const dataRows = data.data.slice(4);
-                
-                // Filter rows where column C (index 2) has "User" value
-                const userRows = dataRows.filter(row => row[2] === "User");
-                
-                if (userRows.length > 0) {
-                  // Find the latest row based on timestamp in Column A (index 0)
-                  const latestUserRow = userRows.reduce((latest, current) => {
-                    const latestTimestamp = new Date(latest[0]);
-                    const currentTimestamp = new Date(current[0]);
-                    return currentTimestamp > latestTimestamp ? current : latest;
-                  });
-    
-                  setUserData({
-                    talenntAquisation1: latestUserRow[4] || "",
-                    talenntAquisation2: latestUserRow[5] || "",
-                    talenntAquisation3: latestUserRow[6] || "",
-                    talenntAquisation4: latestUserRow[7] || "",
-                    talenntAquisation5: latestUserRow[8] || "",
-                    talenntAquisation6: latestUserRow[9] || "",
-                    hrPolicy1: latestUserRow[10] || "",
-                    hrPolicy2: latestUserRow[11] || "",
-                    hrPolicy3: latestUserRow[12] || "",
-                    hrPolicy4: latestUserRow[13] || "",
-                    hrPolicy5: latestUserRow[14] || "",
-                    hrPolicy6: latestUserRow[15] || "",
-                    hrPolicy7: latestUserRow[16] || "",
-                    strategyAndRoadmap1: latestUserRow[17] || "",
-                    strategyAndRoadmap2: latestUserRow[18] || "",
-                    strategyAndRoadmap3: latestUserRow[19] || "",
-                    strategyAndRoadmap4: latestUserRow[20] || "",
-                    strategyAndRoadmap5: latestUserRow[21] || "",
-                    strategyAndRoadmap6: latestUserRow[22] || "",
-                    strategyAndRoadmap7: latestUserRow[23] || "",
-                  });
-                } else {
-                  console.log('No row with "User" value found in column C');
-                }
-              }
+    const fetchUserData = async () => {
+      try {
+        const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
+        const sheetId = "162o34BXqnJvmJjjtIoQpcBGo8orn2ZO5Jf0p8MgoUCs";
+        const sheetName = "Geetanjali Deep";
+
+        const response = await fetch(`${scriptURL}?sheetId=${encodeURIComponent(sheetId)}&sheetName=${encodeURIComponent(sheetName)}&action=getData`);
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data && data.data && data.data.length > 0) {
+            // Data starts from row 5, so we slice from index 4 (row 5) onwards
+            const dataRows = data.data.slice(4);
+
+            // Filter rows where column C (index 2) has "User" value
+            const userRows = dataRows.filter(row => row[2] === "User");
+
+            if (userRows.length > 0) {
+              // Find the latest row based on timestamp in Column A (index 0)
+              const latestUserRow = userRows.reduce((latest, current) => {
+                const latestTimestamp = new Date(latest[0]);
+                const currentTimestamp = new Date(current[0]);
+                return currentTimestamp > latestTimestamp ? current : latest;
+              });
+
+              setUserData({
+                talenntAquisation1: latestUserRow[4] || "",
+                talenntAquisation2: latestUserRow[5] || "",
+                talenntAquisation3: latestUserRow[6] || "",
+                talenntAquisation4: latestUserRow[7] || "",
+                talenntAquisation5: latestUserRow[8] || "",
+                talenntAquisation6: latestUserRow[9] || "",
+                hrPolicy1: latestUserRow[10] || "",
+                hrPolicy2: latestUserRow[11] || "",
+                hrPolicy3: latestUserRow[12] || "",
+                hrPolicy4: latestUserRow[13] || "",
+                hrPolicy5: latestUserRow[14] || "",
+                hrPolicy6: latestUserRow[15] || "",
+                hrPolicy7: latestUserRow[16] || "",
+                strategyAndRoadmap1: latestUserRow[17] || "",
+                strategyAndRoadmap2: latestUserRow[18] || "",
+                strategyAndRoadmap3: latestUserRow[19] || "",
+                strategyAndRoadmap4: latestUserRow[20] || "",
+                strategyAndRoadmap5: latestUserRow[21] || "",
+                strategyAndRoadmap6: latestUserRow[22] || "",
+                strategyAndRoadmap7: latestUserRow[23] || "",
+              });
+            } else {
+              console.log('No row with "User" value found in column C');
             }
-          } catch (error) {
-            console.error('Error fetching user data:', error);
           }
-        };
-    
-        fetchUserData();
-      }, []);
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const handleScoreChange = (kpi, value) => {
     // Ensure value is within range
     const numValue = parseFloat(value);
     if (numValue < 0) return;
-    
+
     setScores(prev => ({
       ...prev,
       [kpi]: value
@@ -119,14 +119,14 @@ export const GeetanjaliDeep = () => {
     const jobAssessmentTotal = Object.values(scores).slice(0, 20).reduce((a, b) => a + (parseFloat(b) || 0), 0);
     const behavioralTotal = Object.values(scores).slice(20).reduce((a, b) => a + (parseFloat(b) || 0), 0);
     const overallTotal = jobAssessmentTotal + behavioralTotal;
-    
+
     // Calculate target totals (out of values) - Updated targets
     const jobAssessmentTargets = [3, 4, 4, 5, 3, 4, 4, 5, 4, 4, 3, 5, 4, 4, 4, 4, 4, 4, 4, 4];
     const behavioralTargets = [1, 2, 2, 2, 2, 2, 2, 2, 2, 3];
-    
+
     const jobAssessmentTargetTotal = jobAssessmentTargets.reduce((a, b) => a + b, 0);
     const behavioralTargetTotal = behavioralTargets.reduce((a, b) => a + b, 0);
-    
+
     return {
       jobAssessmentTotal,
       behavioralTotal,
@@ -156,7 +156,7 @@ export const GeetanjaliDeep = () => {
     try {
       // Prepare data according to your column structure
       const currentDate = new Date();
-      
+
       // Format timestamp as dd/mm/yyyy hh:mm:ss
       const day = String(currentDate.getDate()).padStart(2, '0');
       const month = String(currentDate.getMonth() + 1).padStart(2, '0');
@@ -164,7 +164,7 @@ export const GeetanjaliDeep = () => {
       const hours = String(currentDate.getHours()).padStart(2, '0');
       const minutes = String(currentDate.getMinutes()).padStart(2, '0');
       const seconds = String(currentDate.getSeconds()).padStart(2, '0');
-      
+
       const timestamp = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
       const currentMonth = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
       const employeeName = "Geetanjali Deep";
@@ -217,39 +217,39 @@ export const GeetanjaliDeep = () => {
       formData.append('payload', JSON.stringify(rowData));
 
       const response = await fetch(scriptURL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: `sheetId=${encodeURIComponent(sheetId)}&sheetName=${encodeURIComponent(sheetName)}&payload=${encodeURIComponent(JSON.stringify(rowData))}`
-    });
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `sheetId=${encodeURIComponent(sheetId)}&sheetName=${encodeURIComponent(sheetName)}&payload=${encodeURIComponent(JSON.stringify(rowData))}`
+      });
 
-    // Check if the response is successful
-    if (response.ok) {
-      console.log('Submitted Scores:', scores);
-      console.log('Row Data sent to sheet:', rowData);
-      
-      // Show success message
-      toast.success('Scores submitted successfully!');
-      
-      // Optional: You can also open the sheet URL to verify data was stored
-      const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/edit#gid=0`;
-      console.log('Check your Google Sheet here:', sheetUrl);
-    } else {
-      throw new Error(`Server responded with status: ${response.status}`);
+      // Check if the response is successful
+      if (response.ok) {
+        console.log('Submitted Scores:', scores);
+        console.log('Row Data sent to sheet:', rowData);
+
+        // Show success message
+        toast.success('Scores submitted successfully!');
+
+        // Optional: You can also open the sheet URL to verify data was stored
+        const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/edit#gid=0`;
+        console.log('Check your Google Sheet here:', sheetUrl);
+      } else {
+        throw new Error(`Server responded with status: ${response.status}`);
+      }
+
+    } catch (error) {
+      console.error('Error submitting scores:', error);
+      toast.error('Failed to submit scores. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
-
-  } catch (error) {
-    console.error('Error submitting scores:', error);
-    toast.error('Failed to submit scores. Please try again.');
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+  };
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', minHeight: '100vh' }}>      
-    <ToastContainer />
+    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', minHeight: '100vh' }}>
+      <ToastContainer />
       <div style={{ marginBottom: '30px', backgroundColor: 'white', borderRadius: '10px', padding: '20px', boxShadow: '0 6px 10px rgba(0, 0, 0, 0.1)' }}>
         <h2 style={{ color: '#1e3a8a', borderBottom: '3px solid #1e3a8a', paddingBottom: '10px', marginBottom: '20px' }}>JOB ASSESSMENT</h2>
         <table style={{ width: '100%', borderCollapse: 'collapse', borderRadius: '8px', overflow: 'hidden' }}>
@@ -259,7 +259,7 @@ export const GeetanjaliDeep = () => {
               <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #1e40af' }}>KPI</th>
               <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '100px' }}>Out of</th>
               <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '100px' }}>User</th>
-              <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '120px' }}>VP</th>
+              <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '120px' }}>COO</th>
             </tr>
           </thead>
           <tbody>
@@ -274,8 +274,8 @@ export const GeetanjaliDeep = () => {
                 {userData.talenntAquisation1 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.talenntAquisation1}
                   onChange={(e) => handleScoreChange('talenntAquisation1', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -292,8 +292,8 @@ export const GeetanjaliDeep = () => {
                 {userData.talenntAquisation2 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.talenntAquisation2}
                   onChange={(e) => handleScoreChange('talenntAquisation2', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -310,8 +310,8 @@ export const GeetanjaliDeep = () => {
                 {userData.talenntAquisation3 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.talenntAquisation3}
                   onChange={(e) => handleScoreChange('talenntAquisation3', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -328,8 +328,8 @@ export const GeetanjaliDeep = () => {
                 {userData.talenntAquisation4 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.talenntAquisation4}
                   onChange={(e) => handleScoreChange('talenntAquisation4', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -346,8 +346,8 @@ export const GeetanjaliDeep = () => {
                 {userData.talenntAquisation5 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.talenntAquisation5}
                   onChange={(e) => handleScoreChange('talenntAquisation5', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -364,8 +364,8 @@ export const GeetanjaliDeep = () => {
                 {userData.talenntAquisation6 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.talenntAquisation6}
                   onChange={(e) => handleScoreChange('talenntAquisation6', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -385,8 +385,8 @@ export const GeetanjaliDeep = () => {
                 {userData.hrPolicy1 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.hrPolicy1}
                   onChange={(e) => handleScoreChange('hrPolicy1', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -403,8 +403,8 @@ export const GeetanjaliDeep = () => {
                 {userData.hrPolicy2 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.hrPolicy2}
                   onChange={(e) => handleScoreChange('hrPolicy2', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -421,8 +421,8 @@ export const GeetanjaliDeep = () => {
                 {userData.hrPolicy3 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.hrPolicy3}
                   onChange={(e) => handleScoreChange('hrPolicy3', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -439,8 +439,8 @@ export const GeetanjaliDeep = () => {
                 {userData.hrPolicy4 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.hrPolicy4}
                   onChange={(e) => handleScoreChange('hrPolicy4', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -457,8 +457,8 @@ export const GeetanjaliDeep = () => {
                 {userData.hrPolicy5 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.hrPolicy5}
                   onChange={(e) => handleScoreChange('hrPolicy5', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -475,8 +475,8 @@ export const GeetanjaliDeep = () => {
                 {userData.hrPolicy6 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.hrPolicy6}
                   onChange={(e) => handleScoreChange('hrPolicy6', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -493,8 +493,8 @@ export const GeetanjaliDeep = () => {
                 {userData.hrPolicy7 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.hrPolicy7}
                   onChange={(e) => handleScoreChange('hrPolicy7', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -514,8 +514,8 @@ export const GeetanjaliDeep = () => {
                 {userData.strategyAndRoadmap1 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.strategyAndRoadmap1}
                   onChange={(e) => handleScoreChange('strategyAndRoadmap1', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -532,8 +532,8 @@ export const GeetanjaliDeep = () => {
                 {userData.strategyAndRoadmap2 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.strategyAndRoadmap2}
                   onChange={(e) => handleScoreChange('strategyAndRoadmap2', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -550,8 +550,8 @@ export const GeetanjaliDeep = () => {
                 {userData.strategyAndRoadmap3 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.strategyAndRoadmap3}
                   onChange={(e) => handleScoreChange('strategyAndRoadmap3', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -568,8 +568,8 @@ export const GeetanjaliDeep = () => {
                 {userData.strategyAndRoadmap4 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.strategyAndRoadmap4}
                   onChange={(e) => handleScoreChange('strategyAndRoadmap4', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -586,8 +586,8 @@ export const GeetanjaliDeep = () => {
                 {userData.strategyAndRoadmap5 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.strategyAndRoadmap5}
                   onChange={(e) => handleScoreChange('strategyAndRoadmap5', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -604,8 +604,8 @@ export const GeetanjaliDeep = () => {
                 {userData.strategyAndRoadmap6 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.strategyAndRoadmap6}
                   onChange={(e) => handleScoreChange('strategyAndRoadmap6', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -622,8 +622,8 @@ export const GeetanjaliDeep = () => {
                 {userData.strategyAndRoadmap7 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.strategyAndRoadmap7}
                   onChange={(e) => handleScoreChange('strategyAndRoadmap7', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -657,8 +657,8 @@ export const GeetanjaliDeep = () => {
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Effectively and efficiently performs job</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.qualityOfWork}
                   onChange={(e) => handleScoreChange('qualityOfWork', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -673,8 +673,8 @@ export const GeetanjaliDeep = () => {
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Do Plan in advance and execute without deviation</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.planningExecution}
                   onChange={(e) => handleScoreChange('planningExecution', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -689,8 +689,8 @@ export const GeetanjaliDeep = () => {
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Conserve Company resources and meet deadlines</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.timeResources}
                   onChange={(e) => handleScoreChange('timeResources', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -705,8 +705,8 @@ export const GeetanjaliDeep = () => {
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Have healthy work relation with peers and superiors</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.interpersonalRelations}
                   onChange={(e) => handleScoreChange('interpersonalRelations', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -721,8 +721,8 @@ export const GeetanjaliDeep = () => {
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Flexible in taking additional tasks and adaptable to change</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.flexibilityAdaptability}
                   onChange={(e) => handleScoreChange('flexibilityAdaptability', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -737,8 +737,8 @@ export const GeetanjaliDeep = () => {
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Exchange of information desired through effective means</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.communication}
                   onChange={(e) => handleScoreChange('communication', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -753,8 +753,8 @@ export const GeetanjaliDeep = () => {
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>High integrity towards company</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.integrity}
                   onChange={(e) => handleScoreChange('integrity', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -769,8 +769,8 @@ export const GeetanjaliDeep = () => {
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Ability to Inspire and take initiatives</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.leadership}
                   onChange={(e) => handleScoreChange('leadership', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -785,8 +785,8 @@ export const GeetanjaliDeep = () => {
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Follow rules and code of conduct</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.discipline}
                   onChange={(e) => handleScoreChange('discipline', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -801,8 +801,8 @@ export const GeetanjaliDeep = () => {
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Adherence to time and attendance</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.punctuality}
                   onChange={(e) => handleScoreChange('punctuality', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -842,7 +842,7 @@ export const GeetanjaliDeep = () => {
       </div>
 
       <div style={{ textAlign: 'center', marginTop: '20px' }}>
-        <button 
+        <button
           onClick={handleSubmit}
           disabled={isSubmitting}
           style={{

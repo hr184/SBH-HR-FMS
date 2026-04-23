@@ -20,32 +20,34 @@ import { UserPraveenGupta } from './UserScorecard/UserPraveenGupta';
 import { UserSumanBalaSahu } from './UserScorecard/UserSumanBalaSahu';
 // import { UserSurbhiNetam } from './UserScorecard/UserSurbhiNetam';
 import { UserUmeshDhakkad } from './UserScorecard/UserUmeshDhakkad';
-import { UserSumanGoud } from './UserScorecard/UserSumanGoud';
+// import { UserSumanGoud } from './UserScorecard/UserSumanGoud';   
+import { UserNikhileshDavda } from './UserScorecard/UserNikhileshDavda';
 
 export const UserBalanceScoreCard = () => {
   const [employees] = useState([
-  { id: 1, name: "Ajay Upadhyay", department: "Account" },
-  { id: 2, name: "Alok Pandey", department: "Marketing" },
-  { id: 3, name: "Deepmala Patil", department: "OPD" },
-  { id: 4, name: "Deepu Mourya", department: "TPA" },
-  { id: 5, name: "Geetanjali Deep", department: "HR" },
-  { id: 6, name: "Hansraj Singh", department: "Housekeeping" },
-  { id: 7, name: "Harsh Rai", department: "Marketing"},
-  // { id: 8, name: "Isha Shrivastava", department: "Marketing" },
-  { id: 9, name: "Jharna Ambulkar", department: "Admin" },
-  { id: 10, name: "Lalit Mohan Bisht", department: "Operations" },
-  { id: 11, name: "Mangesh Sahu", department: "Marketing"},
-  { id: 12, name: "Neelu Sahu", department: "Operation" },
-  { id: 13, name: "Nighat Parveen", department: "Marketing" },
-  { id: 14, name: "Panna Senani", department: "Accounts" },
-  { id: 15, name: "Poorwa Gajbhiye", department: "HR" },
-  { id: 16, name: "Pratima Varthi", department: "Store" },
-  { id: 17, name: "Praveen Gupta", department: "IT" },
-  { id: 18, name: "Suman Bala Sahu", department: "Admin" },
-  { id: 19, name: "Suman Goud Kuntla", department: "VP- Operations" },
-  // { id: 20, name: "Surbhi Netam", department: "Marketing" },
-  { id: 21, name: "Umesh Dhakkad", department: "Pharmacy" }
-]);
+    { id: 1, name: "Ajay Upadhyay", department: "Account" },
+    { id: 2, name: "Alok Pandey", department: "Marketing" },
+    { id: 3, name: "Deepmala Patil", department: "OPD" },
+    { id: 4, name: "Deepu Mourya", department: "TPA" },
+    { id: 5, name: "Geetanjali Deep", department: "HR" },
+    { id: 6, name: "Hansraj Singh", department: "Housekeeping" },
+    { id: 7, name: "Harsh Rai", department: "Marketing" },
+    // { id: 8, name: "Isha Shrivastava", department: "Marketing" },
+    { id: 9, name: "Jharna Ambulkar", department: "Admin" },
+    { id: 10, name: "Lalit Mohan Bisht", department: "Operations" },
+    { id: 11, name: "Mangesh Sahu", department: "Marketing" },
+    { id: 12, name: "Neelu Sahu", department: "Operation" },
+    { id: 13, name: "Nighat Parveen", department: "Marketing" },
+    { id: 14, name: "Panna Senani", department: "Accounts" },
+    { id: 15, name: "Poorwa Gajbhiye", department: "HR" },
+    { id: 16, name: "Pratima Varthi", department: "Store" },
+    { id: 17, name: "Praveen Gupta", department: "IT" },
+    { id: 18, name: "Suman Bala Sahu", department: "Admin" },
+    // { id: 19, name: "Suman Goud Kuntla", department: "COO- Operations" },
+    { id: 19, name: "Nikhilesh Davda", department: "COO" },
+    // { id: 20, name: "Surbhi Netam", department: "Marketing" },
+    { id: 20, name: "Umesh Dhakkad", department: "Pharmacy" }
+  ]);
 
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [viewType, setViewType] = useState(''); // 'scorecard' or 'history'
@@ -58,12 +60,12 @@ export const UserBalanceScoreCard = () => {
       try {
         const user = JSON.parse(userData);
         const loggedInUserName = user.Name || user.Username || '';
-        
+
         // Find matching employee with case-insensitive comparison
-        const matchedEmployee = employees.find(emp => 
+        const matchedEmployee = employees.find(emp =>
           emp.name.toLowerCase() === loggedInUserName.toLowerCase()
         );
-        
+
         if (matchedEmployee) {
           // Auto-select the user's scorecard
           setSelectedEmployee(matchedEmployee.name);
@@ -196,8 +198,10 @@ export const UserBalanceScoreCard = () => {
               selectedEmployee === "Praveen Gupta" && <UserPraveenGupta />}
             {viewType === "scorecard" &&
               selectedEmployee === "Suman Bala Sahu" && <UserSumanBalaSahu />}
+            {/* {viewType === "scorecard" &&
+              selectedEmployee === "Suman Goud Kuntla" && <UserSumanGoud />} */}
             {viewType === "scorecard" &&
-              selectedEmployee === "Suman Goud Kuntla" && <UserSumanGoud />}
+              selectedEmployee === "Nikhilesh Davda" && <UserNikhileshDavda />}
             {viewType === "scorecard" &&
               selectedEmployee === "Surbhi Netam" && <UserSurbhiNetam />}
             {viewType === "scorecard" &&
@@ -221,19 +225,20 @@ export const UserBalanceScoreCard = () => {
               "Pratima Varthi",
               "Praveen Gupta",
               "Suman Bala Sahu",
-              "Suman Goud Kuntla",
+              // "Suman Goud Kuntla",
+              "Nikhilesh Davda",
               "Surbhi Netam",
               "Umesh Dhakkad",
             ].includes(selectedEmployee) && (
-              <div className="bg-white rounded-lg shadow p-4 md:p-6">
-                <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-4">
-                  Employee Details
-                </h2>
-                <p className="text-gray-600">
-                  Details for {selectedEmployee} will be displayed here.
-                </p>
-              </div>
-            )}
+                <div className="bg-white rounded-lg shadow p-4 md:p-6">
+                  <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-4">
+                    Employee Details
+                  </h2>
+                  <p className="text-gray-600">
+                    Details for {selectedEmployee} will be displayed here.
+                  </p>
+                </div>
+              )}
           </div>
         ) : (
           <>
@@ -275,7 +280,7 @@ export const UserBalanceScoreCard = () => {
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center justify-center">
                               <div className="ml-4">
-                                  {employee.name}
+                                {employee.name}
                               </div>
                             </div>
                           </td>
@@ -324,9 +329,8 @@ export const UserBalanceScoreCard = () => {
                     {filteredEmployees.map((employee, index) => (
                       <div
                         key={employee.id}
-                        className={`p-4 border-b border-gray-200 ${
-                          index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                        }`}
+                        className={`p-4 border-b border-gray-200 ${index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                          }`}
                       >
                         <div className="flex justify-between items-start mb-3">
                           <div className="flex items-center">

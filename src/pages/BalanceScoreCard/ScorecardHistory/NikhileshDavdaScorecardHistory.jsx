@@ -1,13 +1,13 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
 
-export const SumanGoudScorecardHistory = () => {
+export const NikhileshDavdaScorecardHistory = () => {
    const [data, setData] = useState([]);
                   const [loading, setLoading] = useState(true);
                   const [error, setError] = useState(null);
                 
                   const sheetId = '162o34BXqnJvmJjjtIoQpcBGo8orn2ZO5Jf0p8MgoUCs';
-                  const sheetName = 'Suman Goud Kuntla';
+                  const sheetName = 'Nikhilesh Davda';
                   const appScriptUrl = 'https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec';
                 
                   useEffect(() => {
@@ -102,7 +102,7 @@ const formatMonth = (monthString) => {
                     return (
                       <div className="p-4">
                         <div className="text-center">
-                          <div className="text-lg font-semibold mb-4">Suman Goud Scorecard History</div>
+                          <div className="text-lg font-semibold mb-4">Nikhilesh Davda Scorecard History</div>
                           <div className="text-gray-600">Loading data...</div>
                         </div>
                       </div>
@@ -113,7 +113,7 @@ const formatMonth = (monthString) => {
                     return (
                       <div className="p-4">
                         <div className="text-center">
-                          <div className="text-lg font-semibold mb-4">Suman Goud Scorecard History</div>
+                          <div className="text-lg font-semibold mb-4">Nikhilesh Davda Scorecard History</div>
                           <div className="text-red-600 bg-red-100 p-3 rounded-md">
                             Error: {error}
                           </div>

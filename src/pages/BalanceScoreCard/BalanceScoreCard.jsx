@@ -40,33 +40,36 @@ import { PannaSenani } from './Scorecard/PannaSenani';
 import { PannaSenaniScorecardHistory } from './ScorecardHistory/PannaSenaniScorecardHistory';
 // import { SurbhiNetam } from './Scorecard/SurbhiNetam';
 // import { SurbhiNetamScorecardHistory } from './ScorecardHistory/SurbhiNetamScorecardHistory';
-import { SumanGoud } from './Scorecard/SumanGoud';
+// import { SumanGoud } from './Scorecard/SumanGoud';
+import { NikhileshDavda } from './Scorecard/NikhileshDavda';
+import { NikhileshDavdaScorecardHistory } from './ScorecardHistory/NikhileshDavdaScorecardHistory';
 import { SumanGoudScorecardHistory } from './ScorecardHistory/SumanGoudScorecardHistory';
 
 export const BalanceScoreCard = () => {
   const [employees] = useState([
-  { id: 1, name: "Ajay Upadhyay", department: "Account" },
-  { id: 2, name: "Alok Pandey", department: "Marketing" },
-  { id: 3, name: "Deepmala Patil", department: "OPD" },
-  { id: 4, name: "Deepu Mourya", department: "TPA" },
-  { id: 5, name: "Geetanjali Deep", department: "HR" },
-  { id: 6, name: "Hansraj Singh", department: "Housekeeping" },
-  { id: 7, name: "Harsh Rai", department: "Marketing"},
-  // { id: 8, name: "Isha Shrivastava", department: "Marketing" },
-  { id: 9, name: "Jharna Ambulkar", department: "Admin" },
-  { id: 10, name: "Lalit Mohan Bisht", department: "Operations" },
-  { id: 11, name: "Mangesh Sahu", department: "Marketing"},
-  { id: 12, name: "Neelu Sahu", department: "Operation" },
-  { id: 13, name: "Nighat Parveen", department: "Marketing" },
-  { id: 14, name: "Panna Senani", department: "Accounts" },
-  { id: 15, name: "Poorwa Gajbhiye", department: "HR" },
-  { id: 16, name: "Pratima Varthi", department: "Store" },
-  { id: 17, name: "Praveen Gupta", department: "IT" },
-  { id: 18, name: "Suman Bala Sahu", department: "Admin" },
-  { id: 19, name: "Suman Goud Kuntla", department: "VP- Operations" },
-  // { id: 20, name: "Surbhi Netam", department: "Marketing" },
-  { id: 21, name: "Umesh Dhakkad", department: "Pharmacy" }
-]);
+    { id: 1, name: "Ajay Upadhyay", department: "Account" },
+    { id: 2, name: "Alok Pandey", department: "Marketing" },
+    { id: 3, name: "Deepmala Patil", department: "OPD" },
+    { id: 4, name: "Deepu Mourya", department: "TPA" },
+    { id: 5, name: "Geetanjali Deep", department: "HR" },
+    { id: 6, name: "Hansraj Singh", department: "Housekeeping" },
+    { id: 7, name: "Harsh Rai", department: "Marketing" },
+    // { id: 8, name: "Isha Shrivastava", department: "Marketing" },
+    { id: 9, name: "Jharna Ambulkar", department: "Admin" },
+    { id: 10, name: "Lalit Mohan Bisht", department: "Operations" },
+    { id: 11, name: "Mangesh Sahu", department: "Marketing" },
+    { id: 12, name: "Neelu Sahu", department: "Operation" },
+    { id: 13, name: "Nighat Parveen", department: "Marketing" },
+    { id: 14, name: "Panna Senani", department: "Accounts" },
+    { id: 15, name: "Poorwa Gajbhiye", department: "HR" },
+    { id: 16, name: "Pratima Varthi", department: "Store" },
+    { id: 17, name: "Praveen Gupta", department: "IT" },
+    { id: 18, name: "Suman Bala Sahu", department: "Admin" },
+    // { id: 19, name: "Suman Goud Kuntla", department: "COO- Operations" },
+    { id: 19, name: "Nikhilesh Davda", department: "COO" },
+    // { id: 20, name: "Surbhi Netam", department: "Marketing" },
+    { id: 21, name: "Umesh Dhakkad", department: "Pharmacy" }
+  ]);
 
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [viewType, setViewType] = useState(''); // 'scorecard' or 'history'
@@ -245,10 +248,16 @@ export const BalanceScoreCard = () => {
             {viewType === "history" && selectedEmployee === "Surbhi Netam" && (
               <SurbhiNetamScorecardHistory />
             )}
-            {viewType === "scorecard" &&
+            {/* {viewType === "scorecard" &&
               selectedEmployee === "Suman Goud Kuntla" && <SumanGoud />}
             {viewType === "history" && selectedEmployee === "Suman Goud Kuntla" && (
               <SumanGoudScorecardHistory />
+            )} */}
+            {viewType === "scorecard" && selectedEmployee === "Nikhilesh Davda" && (
+              <NikhileshDavda />
+            )}
+            {viewType === "history" && selectedEmployee === "Nikhilesh Davda" && (
+              <NikhileshDavdaScorecardHistory />
             )}
             {viewType === "scorecard" && selectedEmployee === "Alok Pandey" && (
               <AlokPandey />
@@ -282,18 +291,19 @@ export const BalanceScoreCard = () => {
               "Mangesh Sahu",
               "Nighat Parveen",
               "Praveen Gupta",
-              "Suman Goud Kuntla",
+              // "Suman Goud Kuntla",
+              "Nikhilesh Davda",
               "Neelu Sahu",
             ].includes(selectedEmployee) && (
-              <div className="bg-white rounded-lg shadow p-4 md:p-6">
-                <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-4">
-                  Employee Details
-                </h2>
-                <p className="text-gray-600">
-                  Details for {selectedEmployee} will be displayed here.
-                </p>
-              </div>
-            )}
+                <div className="bg-white rounded-lg shadow p-4 md:p-6">
+                  <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-4">
+                    Employee Details
+                  </h2>
+                  <p className="text-gray-600">
+                    Details for {selectedEmployee} will be displayed here.
+                  </p>
+                </div>
+              )}
           </div>
         ) : (
           <>
@@ -394,9 +404,8 @@ export const BalanceScoreCard = () => {
                     {employees.map((employee, index) => (
                       <div
                         key={employee.id}
-                        className={`p-4 border-b border-gray-200 ${
-                          index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                        }`}
+                        className={`p-4 border-b border-gray-200 ${index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                          }`}
                       >
                         <div className="flex justify-between items-start mb-3">
                           <div className="flex items-center">

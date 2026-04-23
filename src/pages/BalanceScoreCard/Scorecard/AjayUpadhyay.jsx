@@ -47,7 +47,7 @@ export const AjayUpadhyay = () => {
     supportToHospital1: '',
     supportToHospital2: '',
     supportToHospital3: '',
-    
+
     // Behavioral Assessment Scores
     qualityOfWork: '',
     planningExecution: '',
@@ -73,16 +73,16 @@ export const AjayUpadhyay = () => {
         const sheetName = "Ajay Upadhyay";
 
         const response = await fetch(`${scriptURL}?sheetId=${encodeURIComponent(sheetId)}&sheetName=${encodeURIComponent(sheetName)}&action=getData`);
-        
+
         if (response.ok) {
           const data = await response.json();
           if (data && data.data && data.data.length > 0) {
             // Data starts from row 5, so we slice from index 4 (row 5) onwards
             const dataRows = data.data.slice(4);
-            
+
             // Filter rows where column C (index 2) has "User" value
             const userRows = dataRows.filter(row => row[2] === "User");
-            
+
             if (userRows.length > 0) {
               // Find the latest row based on timestamp in Column A (index 0)
               const latestUserRow = userRows.reduce((latest, current) => {
@@ -152,7 +152,7 @@ export const AjayUpadhyay = () => {
     // Ensure value is within range
     const numValue = parseFloat(value);
     if (numValue < 0) return;
-    
+
     setScores(prev => ({
       ...prev,
       [kpi]: value
@@ -163,13 +163,13 @@ export const AjayUpadhyay = () => {
     const jobAssessmentTotal = Object.values(scores).slice(0, 42).reduce((a, b) => a + (parseFloat(b) || 0), 0);
     const behavioralTotal = Object.values(scores).slice(42).reduce((a, b) => a + (parseFloat(b) || 0), 0);
     const overallTotal = jobAssessmentTotal + behavioralTotal;
-    
+
     const jobAssessmentTargets = [2, 3, 2, 2, 3, 1, 1, 3, 2, 1, 3, 1, 2, 3, 1, 2, 1, 1, 3, 2, 2, 1, 3, 1, 3, 2, 1, 2, 3, 2, 2, 3, 1, 2, 1, 3, 1, 1, 1, 3, 1, 2];
     const behavioralTargets = [1, 2, 2, 2, 2, 2, 2, 2, 2, 3];
-    
+
     const jobAssessmentTargetTotal = jobAssessmentTargets.reduce((a, b) => a + b, 0);
     const behavioralTargetTotal = behavioralTargets.reduce((a, b) => a + b, 0);
-    
+
     return {
       jobAssessmentTotal,
       behavioralTotal,
@@ -199,7 +199,7 @@ export const AjayUpadhyay = () => {
     try {
       // Prepare data according to your column structure
       const currentDate = new Date();
-      
+
       // Format timestamp as dd/mm/yyyy hh:mm:ss
       const day = String(currentDate.getDate()).padStart(2, '0');
       const month = String(currentDate.getMonth() + 1).padStart(2, '0');
@@ -207,7 +207,7 @@ export const AjayUpadhyay = () => {
       const hours = String(currentDate.getHours()).padStart(2, '0');
       const minutes = String(currentDate.getMinutes()).padStart(2, '0');
       const seconds = String(currentDate.getSeconds()).padStart(2, '0');
-      
+
       const timestamp = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
       const currentMonth = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
       const employeeName = "Ajay Upadhyay";
@@ -287,10 +287,10 @@ export const AjayUpadhyay = () => {
       if (response.ok) {
         console.log('Submitted Scores:', scores);
         console.log('Row Data sent to sheet:', rowData);
-        
+
         // Show success message
         toast.success('Scores submitted successfully!');
-        
+
         // Optional: You can also open the sheet URL to verify data was stored
         const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/edit#gid=0`;
         console.log('Check your Google Sheet here:', sheetUrl);
@@ -307,7 +307,7 @@ export const AjayUpadhyay = () => {
   };
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', minHeight: '100vh' }}>      
+    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', minHeight: '100vh' }}>
       <ToastContainer />
       <div style={{ marginBottom: '30px', backgroundColor: 'white', borderRadius: '10px', padding: '20px', boxShadow: '0 6px 10px rgba(0, 0, 0, 0.1)' }}>
         <h2 style={{ color: '#1e3a8a', borderBottom: '3px solid #1e3a8a', paddingBottom: '10px', marginBottom: '20px' }}>JOB ASSESSMENT</h2>
@@ -318,22 +318,22 @@ export const AjayUpadhyay = () => {
               <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #1e40af' }}>KPI</th>
               <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '100px' }}>Out of</th>
               <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '120px' }}>User</th>
-              <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '120px' }}>VP</th>
+              <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '120px' }}>COO</th>
             </tr>
           </thead>
           <tbody>
 
             {/* Financial Strategy & Leadership KRA */}
             <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td rowSpan={3} style={{ padding: '12px', border: '1px solid #e2e8f0',fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Financial Strategy & Leadership</td>
+              <td rowSpan={3} style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Financial Strategy & Leadership</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Develop and implement long-term financial strategy aligned with hospital's mission and growth plans</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
                 {userData.financialStrategy1 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.financialStrategy1}
                   onChange={(e) => handleScoreChange('financialStrategy1', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -350,8 +350,8 @@ export const AjayUpadhyay = () => {
                 {userData.financialStrategy2 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.financialStrategy2}
                   onChange={(e) => handleScoreChange('financialStrategy2', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -368,8 +368,8 @@ export const AjayUpadhyay = () => {
                 {userData.financialStrategy3 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.financialStrategy3}
                   onChange={(e) => handleScoreChange('financialStrategy3', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -389,8 +389,8 @@ export const AjayUpadhyay = () => {
                 {userData.budgeting1 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.budgeting1}
                   onChange={(e) => handleScoreChange('budgeting1', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -407,8 +407,8 @@ export const AjayUpadhyay = () => {
                 {userData.budgeting2 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.budgeting2}
                   onChange={(e) => handleScoreChange('budgeting2', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -425,8 +425,8 @@ export const AjayUpadhyay = () => {
                 {userData.budgeting3 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.budgeting3}
                   onChange={(e) => handleScoreChange('budgeting3', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -439,15 +439,15 @@ export const AjayUpadhyay = () => {
 
             {/* Revenue Cycle Management (RCM) Oversight		 KRA */}
             <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td rowSpan={3} style={{ padding: '12px', border: '1px solid #e2e8f0',fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Revenue Cycle Management (RCM) Oversight		</td>
+              <td rowSpan={3} style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Revenue Cycle Management (RCM) Oversight		</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Oversee entire Billing cycle—from registration, billing, coding, claims submission, to final collection</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
                 {userData.revenueCycle1 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.revenueCycle1}
                   onChange={(e) => handleScoreChange('revenueCycle1', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -464,8 +464,8 @@ export const AjayUpadhyay = () => {
                 {userData.revenueCycle2 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.revenueCycle2}
                   onChange={(e) => handleScoreChange('revenueCycle2', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -482,8 +482,8 @@ export const AjayUpadhyay = () => {
                 {userData.revenueCycle3 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.revenueCycle3}
                   onChange={(e) => handleScoreChange('revenueCycle3', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -496,15 +496,15 @@ export const AjayUpadhyay = () => {
 
             {/* Financial Reporting & Compliance KRA */}
             <tr style={{ backgroundColor: '#ffffff' }}>
-              <td rowSpan={7} style={{ padding: '12px', border: '1px solid #e2e8f0',fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Financial Reporting & Compliance</td>
+              <td rowSpan={7} style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Financial Reporting & Compliance</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Ensure accurate and timely MIS reports, monthly financial statements with senior leadership team and directors</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
                 {userData.financialReporting1 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.financialReporting1}
                   onChange={(e) => handleScoreChange('financialReporting1', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -521,8 +521,8 @@ export const AjayUpadhyay = () => {
                 {userData.financialReporting2 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.financialReporting2}
                   onChange={(e) => handleScoreChange('financialReporting2', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -539,8 +539,8 @@ export const AjayUpadhyay = () => {
                 {userData.financialReporting3 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.financialReporting3}
                   onChange={(e) => handleScoreChange('financialReporting3', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -557,8 +557,8 @@ export const AjayUpadhyay = () => {
                 {userData.financialReporting4 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.financialReporting4}
                   onChange={(e) => handleScoreChange('financialReporting4', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -575,8 +575,8 @@ export const AjayUpadhyay = () => {
                 {userData.financialReporting5 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.financialReporting5}
                   onChange={(e) => handleScoreChange('financialReporting5', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -593,8 +593,8 @@ export const AjayUpadhyay = () => {
                 {userData.financialReporting6 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.financialReporting6}
                   onChange={(e) => handleScoreChange('financialReporting6', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -611,8 +611,8 @@ export const AjayUpadhyay = () => {
                 {userData.financialReporting7 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.financialReporting7}
                   onChange={(e) => handleScoreChange('financialReporting7', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -625,15 +625,15 @@ export const AjayUpadhyay = () => {
 
             {/* Cost Control & Profitability Enhancement KRA */}
             <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td rowSpan={3} style={{ padding: '12px', border: '1px solid #e2e8f0',fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Cost Control & Profitability Enhancement</td>
+              <td rowSpan={3} style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Cost Control & Profitability Enhancement</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Develop cost-reduction plans (consumables, HR productivity, pharmacy, procurement)</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
                 {userData.costControl1 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.costControl1}
                   onChange={(e) => handleScoreChange('costControl1', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -650,8 +650,8 @@ export const AjayUpadhyay = () => {
                 {userData.costControl2 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.costControl2}
                   onChange={(e) => handleScoreChange('costControl2', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -668,8 +668,8 @@ export const AjayUpadhyay = () => {
                 {userData.costControl3 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.costControl3}
                   onChange={(e) => handleScoreChange('costControl3', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -682,15 +682,15 @@ export const AjayUpadhyay = () => {
 
             {/* Cash Flow & Treasury Management KRA */}
             <tr style={{ backgroundColor: '#ffffff' }}>
-              <td rowSpan={3} style={{ padding: '12px', border: '1px solid #e2e8f0',fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Cash Flow & Treasury Management</td>
+              <td rowSpan={3} style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Cash Flow & Treasury Management</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Maintain liquidity to ensure smooth operational functioning</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
                 {userData.cashFlow1 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.cashFlow1}
                   onChange={(e) => handleScoreChange('cashFlow1', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -707,8 +707,8 @@ export const AjayUpadhyay = () => {
                 {userData.cashFlow2 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.cashFlow2}
                   onChange={(e) => handleScoreChange('cashFlow2', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -725,8 +725,8 @@ export const AjayUpadhyay = () => {
                 {userData.cashFlow3 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.cashFlow3}
                   onChange={(e) => handleScoreChange('cashFlow3', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -740,15 +740,15 @@ export const AjayUpadhyay = () => {
 
             {/* Procurement & Vendor Management KRA */}
             <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td rowSpan={3} style={{ padding: '12px', border: '1px solid #e2e8f0',fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Procurement & Vendor Management</td>
+              <td rowSpan={3} style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Procurement & Vendor Management</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Approve high-value purchases for medical equipment and consumables</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
                 {userData.procurementAndVendor1 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.procurementAndVendor1}
                   onChange={(e) => handleScoreChange('procurementAndVendor1', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -765,8 +765,8 @@ export const AjayUpadhyay = () => {
                 {userData.procurementAndVendor2 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.procurementAndVendor2}
                   onChange={(e) => handleScoreChange('procurementAndVendor2', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -783,8 +783,8 @@ export const AjayUpadhyay = () => {
                 {userData.procurementAndVendor3 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.procurementAndVendor3}
                   onChange={(e) => handleScoreChange('procurementAndVendor3', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -798,15 +798,15 @@ export const AjayUpadhyay = () => {
 
             {/* Insurance, TPA & Govt Schemes KRA */}
             <tr style={{ backgroundColor: '#ffffff' }}>
-              <td rowSpan={3} style={{ padding: '12px', border: '1px solid #e2e8f0',fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Insurance, TPA & Govt Schemes</td>
+              <td rowSpan={3} style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Insurance, TPA & Govt Schemes</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Oversee TPA coordination, claim settlement, and package billing</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
                 {userData.insurance1 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.insurance1}
                   onChange={(e) => handleScoreChange('insurance1', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -823,8 +823,8 @@ export const AjayUpadhyay = () => {
                 {userData.insurance2 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.insurance2}
                   onChange={(e) => handleScoreChange('insurance2', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -841,8 +841,8 @@ export const AjayUpadhyay = () => {
                 {userData.insurance3 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.insurance3}
                   onChange={(e) => handleScoreChange('insurance3', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -855,15 +855,15 @@ export const AjayUpadhyay = () => {
 
             {/* Risk Management & Internal Controls */}
             <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td rowSpan={8} style={{ padding: '12px', border: '1px solid #e2e8f0',fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Risk Management & Internal Controls</td>
+              <td rowSpan={8} style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff', verticalAlign: 'top' }}>Risk Management & Internal Controls</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Implement strong internal control systems for:</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
                 {userData.riskManagement1 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.riskManagement1}
                   onChange={(e) => handleScoreChange('riskManagement1', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -880,8 +880,8 @@ export const AjayUpadhyay = () => {
                 {userData.riskManagement2 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.riskManagement2}
                   onChange={(e) => handleScoreChange('riskManagement2', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -898,8 +898,8 @@ export const AjayUpadhyay = () => {
                 {userData.riskManagement3 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.riskManagement3}
                   onChange={(e) => handleScoreChange('riskManagement3', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -916,8 +916,8 @@ export const AjayUpadhyay = () => {
                 {userData.riskManagement4 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.riskManagement4}
                   onChange={(e) => handleScoreChange('riskManagement4', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -934,8 +934,8 @@ export const AjayUpadhyay = () => {
                 {userData.riskManagement5 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.riskManagement5}
                   onChange={(e) => handleScoreChange('riskManagement5', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -952,8 +952,8 @@ export const AjayUpadhyay = () => {
                 {userData.riskManagement6 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.riskManagement6}
                   onChange={(e) => handleScoreChange('riskManagement6', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -970,8 +970,8 @@ export const AjayUpadhyay = () => {
                 {userData.riskManagement7 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.riskManagement7}
                   onChange={(e) => handleScoreChange('riskManagement7', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -988,8 +988,8 @@ export const AjayUpadhyay = () => {
                 {userData.riskManagement8 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.riskManagement8}
                   onChange={(e) => handleScoreChange('riskManagement8', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -1002,15 +1002,15 @@ export const AjayUpadhyay = () => {
 
             {/* Team Leadership */}
             <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td rowSpan={3} style={{ padding: '12px', border: '1px solid #e2e8f0',fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Team Leadership</td>
+              <td rowSpan={3} style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Team Leadership</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Lead and train Finance team , RCM, Billing, Accounts, Audit, and Insurance teams</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
                 {userData.teamLeadership1 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.teamLeadership1}
                   onChange={(e) => handleScoreChange('teamLeadership1', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -1027,8 +1027,8 @@ export const AjayUpadhyay = () => {
                 {userData.teamLeadership2 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.teamLeadership2}
                   onChange={(e) => handleScoreChange('teamLeadership2', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -1045,8 +1045,8 @@ export const AjayUpadhyay = () => {
                 {userData.teamLeadership3 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.teamLeadership3}
                   onChange={(e) => handleScoreChange('teamLeadership3', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -1056,18 +1056,18 @@ export const AjayUpadhyay = () => {
                 />
               </td>
             </tr>
-            
+
             {/* Support to Hospital Operations */}
             <tr style={{ backgroundColor: '#ffffff' }}>
-              <td rowSpan={3} style={{ padding: '12px', border: '1px solid #e2e8f0',fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Support to Hospital Operations</td>
+              <td rowSpan={3} style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Support to Hospital Operations</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Work with Operations, Medical Admin, and HR to align financial decisions</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
                 {userData.supportToHospital1 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.supportToHospital1}
                   onChange={(e) => handleScoreChange('supportToHospital1', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -1084,8 +1084,8 @@ export const AjayUpadhyay = () => {
                 {userData.supportToHospital2 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.supportToHospital2}
                   onChange={(e) => handleScoreChange('supportToHospital2', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -1102,8 +1102,8 @@ export const AjayUpadhyay = () => {
                 {userData.supportToHospital3 || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.supportToHospital3}
                   onChange={(e) => handleScoreChange('supportToHospital3', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -1138,8 +1138,8 @@ export const AjayUpadhyay = () => {
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Effectively and efficiently performs job</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.qualityOfWork}
                   onChange={(e) => handleScoreChange('qualityOfWork', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -1154,8 +1154,8 @@ export const AjayUpadhyay = () => {
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Do Plan in advance and execute without deviation</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.planningExecution}
                   onChange={(e) => handleScoreChange('planningExecution', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -1170,8 +1170,8 @@ export const AjayUpadhyay = () => {
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Conserve Company resources and meet deadlines</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.timeResources}
                   onChange={(e) => handleScoreChange('timeResources', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -1186,8 +1186,8 @@ export const AjayUpadhyay = () => {
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Have healthy work relation with peers and superiors</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.interpersonalRelations}
                   onChange={(e) => handleScoreChange('interpersonalRelations', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -1202,8 +1202,8 @@ export const AjayUpadhyay = () => {
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Flexible in taking additional tasks and adaptable to change</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.flexibilityAdaptability}
                   onChange={(e) => handleScoreChange('flexibilityAdaptability', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -1218,8 +1218,8 @@ export const AjayUpadhyay = () => {
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Exchange of information desired through effective means</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.communication}
                   onChange={(e) => handleScoreChange('communication', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -1234,8 +1234,8 @@ export const AjayUpadhyay = () => {
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>High integrity towards company</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.integrity}
                   onChange={(e) => handleScoreChange('integrity', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -1250,8 +1250,8 @@ export const AjayUpadhyay = () => {
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Ability to Inspire and take initiatives</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.leadership}
                   onChange={(e) => handleScoreChange('leadership', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -1266,8 +1266,8 @@ export const AjayUpadhyay = () => {
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Follow rules and code of conduct</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.discipline}
                   onChange={(e) => handleScoreChange('discipline', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -1282,8 +1282,8 @@ export const AjayUpadhyay = () => {
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Adherence to time and attendance</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.punctuality}
                   onChange={(e) => handleScoreChange('punctuality', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -1323,7 +1323,7 @@ export const AjayUpadhyay = () => {
       </div>
 
       <div style={{ textAlign: 'center', marginTop: '20px' }}>
-        <button 
+        <button
           onClick={handleSubmit}
           disabled={isSubmitting}
           style={{

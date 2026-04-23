@@ -33,7 +33,7 @@ export const PraveenGupta = () => {
     siteVisits: '',
     surveillance: '',
     infrastructureMaintenance: '',
-    
+
     // Behavioral Assessment Scores
     qualityOfWork: '',
     planningExecution: '',
@@ -47,82 +47,82 @@ export const PraveenGupta = () => {
     punctuality: ''
   });
 
-  const [userData, setUserData] =useState({});
+  const [userData, setUserData] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-                      const fetchUserData = async () => {
-                        try {
-                          const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
-                          const sheetId = "162o34BXqnJvmJjjtIoQpcBGo8orn2ZO5Jf0p8MgoUCs";
-                          const sheetName = "Praveen Gupta";
-                    
-                          const response = await fetch(`${scriptURL}?sheetId=${encodeURIComponent(sheetId)}&sheetName=${encodeURIComponent(sheetName)}&action=getData`);
-                          
-                          if (response.ok) {
-                            const data = await response.json();
-                            if (data && data.data && data.data.length > 0) {
-                              // Data starts from row 5, so we slice from index 4 (row 5) onwards
-                              const dataRows = data.data.slice(4);
-                              
-                              // Filter rows where column C (index 2) has "User" value
-                              const userRows = dataRows.filter(row => row[2] === "User");
-                              
-                              if (userRows.length > 0) {
-                                // Find the latest row based on timestamp in Column A (index 0)
-                                const latestUserRow = userRows.reduce((latest, current) => {
-                                  const latestTimestamp = new Date(latest[0]);
-                                  const currentTimestamp = new Date(current[0]);
-                                  return currentTimestamp > latestTimestamp ? current : latest;
-                                });
-                    
-                                setUserData({
-                                  strategicPlanning: latestUserRow[4] || "",
-                                  technologyRoadmapping: latestUserRow[5] || "",
-                                  innovation: latestUserRow[6] || "",
-                                  changeManagement: latestUserRow[7] || "",
-                                  teamLeadership: latestUserRow[8] || "",
-                                  infrastructureManagement: latestUserRow[9] || "",
-                                  dailyOperations: latestUserRow[10] || "",
-                                  projectManagement: latestUserRow[11] || "",
-                                  budgeting: latestUserRow[12] || "",
-                                  vendorRelationships: latestUserRow[13] || "",
-                                  costOptimization: latestUserRow[14] || "",
-                                  cybersecurity: latestUserRow[15] || "",
-                                  dataProtection: latestUserRow[16] || "",
-                                  disasterRecovery: latestUserRow[17] || "",
-                                  riskAssessment: latestUserRow[18] || "",
-                                  stakeholderLiaison: latestUserRow[19] || "",
-                                  reporting: latestUserRow[20] || "",
-                                  stakeholderCommunication: latestUserRow[21] || "",
-                                  myOperator: latestUserRow[22] || "",
-                                  whatsappAPI: latestUserRow[23] || "",
-                                  whatsappPanel: latestUserRow[24] || "",
-                                  crmSoftware: latestUserRow[25] || "",
-                                  voiceCallingPanel: latestUserRow[26] || "",
-                                  trainingMentoring: latestUserRow[27] || "",
-                                  siteVisits: latestUserRow[28] || "",
-                                  surveillance: latestUserRow[29] || "",
-                                  infrastructureMaintenance: latestUserRow[30] || "",
-                                });
-                              } else {
-                                console.log('No row with "User" value found in column C');
-                              }
-                            }
-                          }
-                        } catch (error) {
-                          console.error('Error fetching user data:', error);
-                        }
-                      };
-                    
-                      fetchUserData();
-                    }, []);
+    const fetchUserData = async () => {
+      try {
+        const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
+        const sheetId = "162o34BXqnJvmJjjtIoQpcBGo8orn2ZO5Jf0p8MgoUCs";
+        const sheetName = "Praveen Gupta";
+
+        const response = await fetch(`${scriptURL}?sheetId=${encodeURIComponent(sheetId)}&sheetName=${encodeURIComponent(sheetName)}&action=getData`);
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data && data.data && data.data.length > 0) {
+            // Data starts from row 5, so we slice from index 4 (row 5) onwards
+            const dataRows = data.data.slice(4);
+
+            // Filter rows where column C (index 2) has "User" value
+            const userRows = dataRows.filter(row => row[2] === "User");
+
+            if (userRows.length > 0) {
+              // Find the latest row based on timestamp in Column A (index 0)
+              const latestUserRow = userRows.reduce((latest, current) => {
+                const latestTimestamp = new Date(latest[0]);
+                const currentTimestamp = new Date(current[0]);
+                return currentTimestamp > latestTimestamp ? current : latest;
+              });
+
+              setUserData({
+                strategicPlanning: latestUserRow[4] || "",
+                technologyRoadmapping: latestUserRow[5] || "",
+                innovation: latestUserRow[6] || "",
+                changeManagement: latestUserRow[7] || "",
+                teamLeadership: latestUserRow[8] || "",
+                infrastructureManagement: latestUserRow[9] || "",
+                dailyOperations: latestUserRow[10] || "",
+                projectManagement: latestUserRow[11] || "",
+                budgeting: latestUserRow[12] || "",
+                vendorRelationships: latestUserRow[13] || "",
+                costOptimization: latestUserRow[14] || "",
+                cybersecurity: latestUserRow[15] || "",
+                dataProtection: latestUserRow[16] || "",
+                disasterRecovery: latestUserRow[17] || "",
+                riskAssessment: latestUserRow[18] || "",
+                stakeholderLiaison: latestUserRow[19] || "",
+                reporting: latestUserRow[20] || "",
+                stakeholderCommunication: latestUserRow[21] || "",
+                myOperator: latestUserRow[22] || "",
+                whatsappAPI: latestUserRow[23] || "",
+                whatsappPanel: latestUserRow[24] || "",
+                crmSoftware: latestUserRow[25] || "",
+                voiceCallingPanel: latestUserRow[26] || "",
+                trainingMentoring: latestUserRow[27] || "",
+                siteVisits: latestUserRow[28] || "",
+                surveillance: latestUserRow[29] || "",
+                infrastructureMaintenance: latestUserRow[30] || "",
+              });
+            } else {
+              console.log('No row with "User" value found in column C');
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const handleScoreChange = (kpi, value) => {
     // Ensure value is within range
     const numValue = parseFloat(value);
     if (numValue < 0) return;
-    
+
     setScores(prev => ({
       ...prev,
       [kpi]: value
@@ -133,14 +133,14 @@ export const PraveenGupta = () => {
     const jobAssessmentTotal = Object.values(scores).slice(0, 27).reduce((a, b) => a + (parseFloat(b) || 0), 0);
     const behavioralTotal = Object.values(scores).slice(27).reduce((a, b) => a + (parseFloat(b) || 0), 0);
     const overallTotal = jobAssessmentTotal + behavioralTotal;
-    
+
     // Calculate target totals (out of values)
     const jobAssessmentTargets = [4, 5, 3, 2, 2, 3, 4, 2, 3, 4, 3, 2, 4, 3, 3, 2, 3, 4, 2, 3, 2, 4, 2, 3, 4, 2, 2];
     const behavioralTargets = [1, 2, 2, 2, 2, 2, 2, 2, 2, 3];
-    
+
     const jobAssessmentTargetTotal = jobAssessmentTargets.reduce((a, b) => a + b, 0);
     const behavioralTargetTotal = behavioralTargets.reduce((a, b) => a + b, 0);
-    
+
     return {
       jobAssessmentTotal,
       behavioralTotal,
@@ -170,7 +170,7 @@ export const PraveenGupta = () => {
     try {
       // Prepare data according to your column structure
       const currentDate = new Date();
-      
+
       // Format timestamp as dd/mm/yyyy hh:mm:ss
       const day = String(currentDate.getDate()).padStart(2, '0');
       const month = String(currentDate.getMonth() + 1).padStart(2, '0');
@@ -178,7 +178,7 @@ export const PraveenGupta = () => {
       const hours = String(currentDate.getHours()).padStart(2, '0');
       const minutes = String(currentDate.getMinutes()).padStart(2, '0');
       const seconds = String(currentDate.getSeconds()).padStart(2, '0');
-      
+
       const timestamp = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
       const currentMonth = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
       const employeeName = "Praveen Gupta";
@@ -220,7 +220,7 @@ export const PraveenGupta = () => {
         scores.timeResources || 0, // Column AH (index-33) - Conserve Company resources and meet deadlines
         scores.interpersonalRelations || 0, // Column AI (index-34) - Have healthy work relation with peers and superiors
         scores.flexibilityAdaptability || 0, // Column AJ (index-35) - Flexible in taking additional tasks and adaptable to change
-        scores.communication|| 0, // Column AK (index-36) - Exchange of information desired through effective means
+        scores.communication || 0, // Column AK (index-36) - Exchange of information desired through effective means
         scores.integrity || 0, // Column AL (index-37) - High integrity towards company
         scores.leadership || 0, // Column AM (index-38) - Ability to Inspire and take initiatives
         scores.discipline || 0, // Column AN (index-39) - Follow rules and code of conduct
@@ -238,39 +238,39 @@ export const PraveenGupta = () => {
       formData.append('payload', JSON.stringify(rowData));
 
       const response = await fetch(scriptURL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: `sheetId=${encodeURIComponent(sheetId)}&sheetName=${encodeURIComponent(sheetName)}&payload=${encodeURIComponent(JSON.stringify(rowData))}`
-    });
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `sheetId=${encodeURIComponent(sheetId)}&sheetName=${encodeURIComponent(sheetName)}&payload=${encodeURIComponent(JSON.stringify(rowData))}`
+      });
 
-    // Check if the response is successful
-    if (response.ok) {
-      console.log('Submitted Scores:', scores);
-      console.log('Row Data sent to sheet:', rowData);
-      
-      // Show success message
-      toast.success('Scores submitted successfully!');
-      
-      // Optional: You can also open the sheet URL to verify data was stored
-      const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/edit#gid=0`;
-      console.log('Check your Google Sheet here:', sheetUrl);
-    } else {
-      throw new Error(`Server responded with status: ${response.status}`);
+      // Check if the response is successful
+      if (response.ok) {
+        console.log('Submitted Scores:', scores);
+        console.log('Row Data sent to sheet:', rowData);
+
+        // Show success message
+        toast.success('Scores submitted successfully!');
+
+        // Optional: You can also open the sheet URL to verify data was stored
+        const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/edit#gid=0`;
+        console.log('Check your Google Sheet here:', sheetUrl);
+      } else {
+        throw new Error(`Server responded with status: ${response.status}`);
+      }
+
+    } catch (error) {
+      console.error('Error submitting scores:', error);
+      toast.error('Failed to submit scores. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
-
-  } catch (error) {
-    console.error('Error submitting scores:', error);
-    toast.error('Failed to submit scores. Please try again.');
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+  };
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', minHeight: '100vh' }}>     
-    <ToastContainer /> 
+    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', minHeight: '100vh' }}>
+      <ToastContainer />
       <div style={{ marginBottom: '30px', backgroundColor: 'white', borderRadius: '10px', padding: '20px', boxShadow: '0 6px 10px rgba(0, 0, 0, 0.1)' }}>
         <h2 style={{ color: '#1e3a8a', borderBottom: '3px solid #1e3a8a', paddingBottom: '10px', marginBottom: '20px' }}>JOB ASSESSMENT</h2>
         <table style={{ width: '100%', borderCollapse: 'collapse', borderRadius: '8px', overflow: 'hidden' }}>
@@ -280,7 +280,7 @@ export const PraveenGupta = () => {
               <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #1e40af' }}>KPI</th>
               <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '100px' }}>Out of</th>
               <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '100px' }}>User</th>
-              <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '120px' }}>VP</th>
+              <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '120px' }}>COO</th>
             </tr>
           </thead>
           <tbody>
@@ -293,8 +293,8 @@ export const PraveenGupta = () => {
                 {userData.strategicPlanning || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.strategicPlanning}
                   onChange={(e) => handleScoreChange('strategicPlanning', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -312,8 +312,8 @@ export const PraveenGupta = () => {
                 {userData.technologyRoadmapping || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.technologyRoadmapping}
                   onChange={(e) => handleScoreChange('technologyRoadmapping', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -331,8 +331,8 @@ export const PraveenGupta = () => {
                 {userData.innovation || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.innovation}
                   onChange={(e) => handleScoreChange('innovation', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -350,8 +350,8 @@ export const PraveenGupta = () => {
                 {userData.changeManagement || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.changeManagement}
                   onChange={(e) => handleScoreChange('changeManagement', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -372,8 +372,8 @@ export const PraveenGupta = () => {
                 {userData.teamLeadership || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.teamLeadership}
                   onChange={(e) => handleScoreChange('teamLeadership', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -391,8 +391,8 @@ export const PraveenGupta = () => {
                 {userData.infrastructureManagement || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.infrastructureManagement}
                   onChange={(e) => handleScoreChange('infrastructureManagement', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -410,8 +410,8 @@ export const PraveenGupta = () => {
                 {userData.dailyOperations || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.dailyOperations}
                   onChange={(e) => handleScoreChange('dailyOperations', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -429,8 +429,8 @@ export const PraveenGupta = () => {
                 {userData.projectManagement || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.projectManagement}
                   onChange={(e) => handleScoreChange('projectManagement', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -451,8 +451,8 @@ export const PraveenGupta = () => {
                 {userData.budgeting || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.budgeting}
                   onChange={(e) => handleScoreChange('budgeting', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -470,8 +470,8 @@ export const PraveenGupta = () => {
                 {userData.vendorRelationships || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.vendorRelationships}
                   onChange={(e) => handleScoreChange('vendorRelationships', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -489,8 +489,8 @@ export const PraveenGupta = () => {
                 {userData.costOptimization || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.costOptimization}
                   onChange={(e) => handleScoreChange('costOptimization', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -511,8 +511,8 @@ export const PraveenGupta = () => {
                 {userData.cybersecurity || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.cybersecurity}
                   onChange={(e) => handleScoreChange('cybersecurity', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -530,8 +530,8 @@ export const PraveenGupta = () => {
                 {userData.dataProtection || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.dataProtection}
                   onChange={(e) => handleScoreChange('dataProtection', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -549,8 +549,8 @@ export const PraveenGupta = () => {
                 {userData.disasterRecovery || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.disasterRecovery}
                   onChange={(e) => handleScoreChange('disasterRecovery', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -568,8 +568,8 @@ export const PraveenGupta = () => {
                 {userData.riskAssessment || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.riskAssessment}
                   onChange={(e) => handleScoreChange('riskAssessment', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -590,8 +590,8 @@ export const PraveenGupta = () => {
                 {userData.stakeholderLiaison || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.stakeholderLiaison}
                   onChange={(e) => handleScoreChange('stakeholderLiaison', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -609,8 +609,8 @@ export const PraveenGupta = () => {
                 {userData.reporting || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.reporting}
                   onChange={(e) => handleScoreChange('reporting', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -628,8 +628,8 @@ export const PraveenGupta = () => {
                 {userData.stakeholderCommunication || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.stakeholderCommunication}
                   onChange={(e) => handleScoreChange('stakeholderCommunication', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -650,8 +650,8 @@ export const PraveenGupta = () => {
                 {userData.myOperator || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.myOperator}
                   onChange={(e) => handleScoreChange('myOperator', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -669,8 +669,8 @@ export const PraveenGupta = () => {
                 {userData.whatsappAPI || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.whatsappAPI}
                   onChange={(e) => handleScoreChange('whatsappAPI', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -688,8 +688,8 @@ export const PraveenGupta = () => {
                 {userData.whatsappPanel || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.whatsappPanel}
                   onChange={(e) => handleScoreChange('whatsappPanel', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -707,8 +707,8 @@ export const PraveenGupta = () => {
                 {userData.crmSoftware || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.crmSoftware}
                   onChange={(e) => handleScoreChange('crmSoftware', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -726,8 +726,8 @@ export const PraveenGupta = () => {
                 {userData.voiceCallingPanel || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.voiceCallingPanel}
                   onChange={(e) => handleScoreChange('voiceCallingPanel', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -745,8 +745,8 @@ export const PraveenGupta = () => {
                 {userData.trainingMentoring || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.trainingMentoring}
                   onChange={(e) => handleScoreChange('trainingMentoring', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -764,8 +764,8 @@ export const PraveenGupta = () => {
                 {userData.siteVisits || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.siteVisits}
                   onChange={(e) => handleScoreChange('siteVisits', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -783,8 +783,8 @@ export const PraveenGupta = () => {
                 {userData.surveillance || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.surveillance}
                   onChange={(e) => handleScoreChange('surveillance', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -802,8 +802,8 @@ export const PraveenGupta = () => {
                 {userData.infrastructureMaintenance || '-'}
               </td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.infrastructureMaintenance}
                   onChange={(e) => handleScoreChange('infrastructureMaintenance', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -839,8 +839,8 @@ export const PraveenGupta = () => {
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Effectively and efficiently performs job</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>1</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.qualityOfWork}
                   onChange={(e) => handleScoreChange('qualityOfWork', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -855,8 +855,8 @@ export const PraveenGupta = () => {
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Do Plan in advance and execute without deviation</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.planningExecution}
                   onChange={(e) => handleScoreChange('planningExecution', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -871,8 +871,8 @@ export const PraveenGupta = () => {
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Conserve Company resources and meet deadlines</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.timeResources}
                   onChange={(e) => handleScoreChange('timeResources', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -887,8 +887,8 @@ export const PraveenGupta = () => {
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Have healthy work relation with peers and superiors</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.interpersonalRelations}
                   onChange={(e) => handleScoreChange('interpersonalRelations', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -903,8 +903,8 @@ export const PraveenGupta = () => {
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Flexible in taking additional tasks and adaptable to change</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.flexibilityAdaptability}
                   onChange={(e) => handleScoreChange('flexibilityAdaptability', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -919,8 +919,8 @@ export const PraveenGupta = () => {
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Exchange of information desired through effective means</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.communication}
                   onChange={(e) => handleScoreChange('communication', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -935,8 +935,8 @@ export const PraveenGupta = () => {
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>High integrity towards company</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.integrity}
                   onChange={(e) => handleScoreChange('integrity', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -951,8 +951,8 @@ export const PraveenGupta = () => {
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Ability to Inspire and take initiatives</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.leadership}
                   onChange={(e) => handleScoreChange('leadership', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -967,8 +967,8 @@ export const PraveenGupta = () => {
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Follow rules and code of conduct</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>2</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.discipline}
                   onChange={(e) => handleScoreChange('discipline', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -983,8 +983,8 @@ export const PraveenGupta = () => {
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Adherence to time and attendance</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={scores.punctuality}
                   onChange={(e) => handleScoreChange('punctuality', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
@@ -1024,7 +1024,7 @@ export const PraveenGupta = () => {
       </div>
 
       <div style={{ textAlign: 'center', marginTop: '20px' }}>
-        <button 
+        <button
           onClick={handleSubmit}
           disabled={isSubmitting}
           style={{
