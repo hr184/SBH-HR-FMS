@@ -34,7 +34,7 @@ const Employee = () => {
 
     try {
       const response = await fetch(
-        "https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec?sheet=JOINING&action=fetch"
+        "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec?sheet=JOINING&action=fetch"
       );
 
       if (!response.ok) {
@@ -125,7 +125,7 @@ const Employee = () => {
 
     try {
       const response = await fetch(
-        "https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec?sheet=LEAVING&action=fetch"
+        "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec?sheet=LEAVING&action=fetch"
       );
 
       if (!response.ok) {

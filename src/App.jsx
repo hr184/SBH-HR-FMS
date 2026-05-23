@@ -33,6 +33,7 @@ import { BalanceScoreCard } from './pages/BalanceScoreCard/BalanceScoreCard';
 import { UserBalanceScoreCard } from './pages/BalanceScoreCard/UserBalanceScoreCard';
 // import GatePass from './pages/GatePass';
 // import GatePassRequest from './pages/GatePassRequest';
+import AdminRoute from './components/AdminRoute';
 
 function App() {
   return (
@@ -70,7 +71,11 @@ function App() {
               {/* <Route path="report" element={<Report />} /> */}
               {/* <Route path="payroll" element={<Payroll />} /> */}
               <Route path="misreport" element={<MisReport />} />
-              <Route path='balanceScoreCard' element={<BalanceScoreCard />} />
+              <Route path='balanceScoreCard' element={
+                <AdminRoute>
+                  <BalanceScoreCard />
+                </AdminRoute>
+              } />
               <Route path='userBalanceScoreCard' element={<UserBalanceScoreCard />} />
               <Route path="license" element={<License/>} />
               <Route path="jobPoster" element={<JobPoster/>} />

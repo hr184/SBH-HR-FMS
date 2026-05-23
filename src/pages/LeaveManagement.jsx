@@ -151,7 +151,7 @@ const LeaveManagement = () => {
   const fetchHodNames = async () => {
     try {
       const response = await fetch(
-        "https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec?sheet=Master&action=fetch"
+        "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec?sheet=Master&action=fetch"
       );
 
       if (!response.ok) {
@@ -233,7 +233,7 @@ const fetchEmployees = async () => {
   try {
     // Using a different approach - add timestamp to prevent caching issues
     const timestamp = new Date().getTime();
-    const url = `https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec?sheet=JOINING&action=fetch&t=${timestamp}`;
+    const url = `https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec?sheet=JOINING&action=fetch&t=${timestamp}`;
     
     console.log("Fetching employees from:", url);
 
@@ -459,7 +459,7 @@ const fetchEmployees = async () => {
     });
 
     const response = await fetch(
-      "https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec",
+      "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec",
       {
         method: "POST",
         body: new URLSearchParams({
@@ -531,7 +531,7 @@ const fetchEmployees = async () => {
     };
 
     const timestampResponse = await fetch(
-      "https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec",
+      "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec",
       {
         method: "POST",
         headers: {
@@ -559,7 +559,7 @@ const fetchEmployees = async () => {
       };
 
       const startDateResponse = await fetch(
-        "https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec",
+        "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec",
         {
           method: "POST",
           headers: {
@@ -585,7 +585,7 @@ const fetchEmployees = async () => {
       };
 
       const endDateResponse = await fetch(
-        "https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec",
+        "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec",
         {
           method: "POST",
           headers: {
@@ -635,7 +635,7 @@ const fetchEmployees = async () => {
       };
 
       const leaveDaysResponse = await fetch(
-        "https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec",
+        "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec",
         {
           method: "POST",
           headers: {
@@ -659,7 +659,7 @@ const fetchEmployees = async () => {
     };
 
     const statusResponse = await fetch(
-      "https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec",
+      "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec",
       {
         method: "POST",
         headers: {
@@ -699,7 +699,7 @@ const fetchEmployees = async () => {
 
     try {
       const response = await fetch(
-        "https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec?sheet=Leave Management&action=fetch"
+        "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec?sheet=Leave Management&action=fetch"
       );
 
       if (!response.ok) {

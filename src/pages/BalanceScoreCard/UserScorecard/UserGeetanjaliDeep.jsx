@@ -11,11 +11,9 @@ export const UserGeetanjaliDeep = () => {
     talenntAquisation3: '',
     talenntAquisation4: '',
     talenntAquisation5: '',
-    talenntAquisation6: '',
     hrPolicy1: '',
     hrPolicy2: '',
     hrPolicy3: '',
-    hrPolicy4: '',
     hrPolicy5: '',
     hrPolicy6: '',
     hrPolicy7: '',
@@ -42,10 +40,15 @@ export const UserGeetanjaliDeep = () => {
   };
 
   const calculateTotals = () => {
-    const jobAssessmentTotal = Object.values(scores).reduce((a, b) => a + (parseFloat(b) || 0), 0);
+    const jobAssessmentKeys = [
+      'talenntAquisation1', 'talenntAquisation2', 'talenntAquisation3', 'talenntAquisation4', 'talenntAquisation5',
+      'hrPolicy1', 'hrPolicy2', 'hrPolicy3', 'hrPolicy5', 'hrPolicy6', 'hrPolicy7',
+      'strategyAndRoadmap1', 'strategyAndRoadmap2', 'strategyAndRoadmap3', 'strategyAndRoadmap4', 'strategyAndRoadmap5', 'strategyAndRoadmap6', 'strategyAndRoadmap7'
+    ];
+    const jobAssessmentTotal = jobAssessmentKeys.reduce((sum, key) => sum + (parseFloat(scores[key]) || 0), 0);
     
     // Calculate target totals (out of values) - Updated targets
-    const jobAssessmentTargets = [3, 4, 4, 5, 3, 4, 4, 5, 4, 4, 3, 5, 4, 4, 4, 4, 4, 4, 4, 4];
+    const jobAssessmentTargets = [3, 4, 4, 5, 3, 4, 5, 4, 3, 5, 4, 4, 4, 4, 4, 4, 4, 4];
     
     const jobAssessmentTargetTotal = jobAssessmentTargets.reduce((a, b) => a + b, 0);
     
@@ -97,11 +100,11 @@ export const UserGeetanjaliDeep = () => {
         scores.talenntAquisation3 || 0, // Column G (index-6) - Employee Relations and Engagement
         scores.talenntAquisation4 || 0, // Column H (index-7) - Performance Management
         scores.talenntAquisation5 || 0, // Column I (index-8) - Training and Development
-        scores.talenntAquisation6 || 0, // Column J (index-9) - Compensation and Benefits Strategy and Administration
+        0, // Column J (index-9) - Compensation and Benefits Strategy and Administration (Removed)
         scores.hrPolicy1 || 0, // Column K (index-10) - HR Policies and Compliance
         scores.hrPolicy2 || 0, // Column L (index-11) - HR Analytics and Reporting
         scores.hrPolicy3 || 0, // Column M (index-12) - Change Management and Organizational Effectiveness
-        scores.hrPolicy4 || 0, // Column N (index-13) - Stakeholder Management and Leadership
+        0, // Column N (index-13) - Stakeholder Management and Leadership (Removed)
         scores.hrPolicy5 || 0, // Column O (index-14) - HR SOP training should be provided to the new joiners
         scores.hrPolicy6 || 0, // Column P (index-15) - HR SOP refreshment training to be provided to all employees across the board
         scores.hrPolicy7 || 0, // Column Q (index-16) - HR Documentation in alignment with the Quality Management System standards
@@ -174,7 +177,7 @@ export const UserGeetanjaliDeep = () => {
 
             {/* Talennt Aquisation KRA */}
             <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td rowSpan={6} style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Talennt Aquisation</td>
+              <td rowSpan={5} style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Talennt Aquisation</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Talent Acquisition and Management.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
@@ -249,25 +252,10 @@ export const UserGeetanjaliDeep = () => {
                 />
               </td>
             </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Compensation and Benefits Strategy and Administration.</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.talenntAquisation6}
-                  onChange={(e) => handleScoreChange('talenntAquisation6', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-4"
-                  min="0"
-                  max="4"
-                />
-              </td>
-            </tr>
 
             {/* Hr Policy & SOP KRA */}
             <tr style={{ backgroundColor: '#ffffff' }}>
-              <td rowSpan={7} style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Hr Policy & SOP</td>
+              <td rowSpan={6} style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Hr Policy & SOP</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>HR Policies and Compliance.</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
               <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
@@ -305,21 +293,6 @@ export const UserGeetanjaliDeep = () => {
                   type="number" 
                   value={scores.hrPolicy3}
                   onChange={(e) => handleScoreChange('hrPolicy3', e.target.value)}
-                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-4"
-                  min="0"
-                  max="4"
-                />
-              </td>
-            </tr>
-            <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Stakeholder Management and Leadership.</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
-              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                <input 
-                  type="number" 
-                  value={scores.hrPolicy4}
-                  onChange={(e) => handleScoreChange('hrPolicy4', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
                   placeholder="0-4"
                   min="0"

@@ -1,15 +1,16 @@
 import { Activity } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { UserAjayUpadhyay } from './UserScorecard/UserAjayUpadhyay';
 import { UserAlokPandey } from './UserScorecard/UserAlokUpadhyay';
 import { UserDeepmalaPatil } from './UserScorecard/UserDeepmalaPatil';
 import { UserDeepuMourya } from './UserScorecard/UserDeepuMourya';
 import { UserGeetanjaliDeep } from './UserScorecard/UserGeetanjaliDeep';
-import { UserHansrajSingh } from './UserScorecard/UserHansraj';
-// import { UserIshaShrivastava } from './UserScorecard/UserIshaShrivastava';
+import { UserUgrasenNayak } from './UserScorecard/UserUgrasenNayak';
+import { UserIshaShrivastava } from './UserScorecard/UserIshaShrivastava';
 import { UserHarshRai } from './UserScorecard/UserHarshRai';
 import { UserJharnaAmbulkar } from './UserScorecard/UserJharnaAmbulkar';
-import { UserLalitMohanBisht } from './UserScorecard/UserLalitMohanBisht';
+//import { UserLalitMohanBisht } from './UserScorecard/UserLalitMohanBisht';
 import { UserMangeshSahu } from './UserScorecard/UserMangeshSahu';
 import { UserNeeluSahu } from './UserScorecard/UserNeeluSahu';
 import { UserNighatParveen } from './UserScorecard/UserNighatParveen';
@@ -22,19 +23,40 @@ import { UserSumanBalaSahu } from './UserScorecard/UserSumanBalaSahu';
 import { UserUmeshDhakkad } from './UserScorecard/UserUmeshDhakkad';
 // import { UserSumanGoud } from './UserScorecard/UserSumanGoud';   
 import { UserNikhileshDavda } from './UserScorecard/UserNikhileshDavda';
+import { UserAlkaDas } from './UserScorecard/UserAlkaDas';
+import { AjayUpadhyayScorecardHistory } from './ScorecardHistory/AjayUpadhyayScorecardHistory'
+import { AlokPandeyScorecardHistory } from './ScorecardHistory/AlokPandeyScorecardHistory'
+import { DeepmalaPatilScorecardHistory } from './ScorecardHistory/DeepmalaPatilScorecardHistory'
+import { DeepuMouryaScorecardHistory } from './ScorecardHistory/DeepuMouryaScorecardHistory'
+import { GeetanjaliDeepScorecardHistory } from './ScorecardHistory/GeetanjaliDeepScorecardHistory'
+import { UgrasenNayakScorecardHistory } from './ScorecardHistory/UgrasenNayakScorecardHistory'
+import { HarshRaiScorecardHistory } from './ScorecardHistory/HarshRaiScorecardHistory';
+import { JharnaAmbulkarScorecardHistory } from './ScorecardHistory/JharnaAmbulkarScorecardHistory'
+import { AlkaDasScorecardHistory } from './ScorecardHistory/AlkaDasScorecardHistory';
+import { NeeluSahuScorecardHistory } from './ScorecardHistory/NeeluSahuScorecardHistory'
+import { PoorwaGajbhiyeScorecardHistory } from './ScorecardHistory/PoorwaGajbhiyeScorecardHistory'
+import { PratimaVarthiScorecardHistory } from './ScorecardHistory/PratimaVarthiScorecardHistory'
+import { PraveenGuptaScorecardHistory } from './ScorecardHistory/PraveenGuptaScorecardHistory'
+import { SumanBalaSahuScorecardHistory } from './ScorecardHistory/SumanBalaSahuScorecardHistory'
+import { UmeshDhakkadScorecardHistory } from './ScorecardHistory/UmeshDhakkadScorecardHistory'
+import { MangeshSahuScorecardHistory } from './ScorecardHistory/MangeshSahuScorecardHistory';
+import { NighatParveenScorecardHistory } from './ScorecardHistory/NighatParveenScorecardHistory';
+import { PannaSenaniScorecardHistory } from './ScorecardHistory/PannaSenaniScorecardHistory';
+import { NikhileshDavdaScorecardHistory } from './ScorecardHistory/NikhileshDavdaScorecardHistory';
 
 export const UserBalanceScoreCard = () => {
+  const navigate = useNavigate();
   const [employees] = useState([
     { id: 1, name: "Ajay Upadhyay", department: "Account" },
     { id: 2, name: "Alok Pandey", department: "Marketing" },
     { id: 3, name: "Deepmala Patil", department: "OPD" },
     { id: 4, name: "Deepu Mourya", department: "TPA" },
     { id: 5, name: "Geetanjali Deep", department: "HR" },
-    { id: 6, name: "Hansraj Singh", department: "Housekeeping" },
+    { id: 6, name: "Ugrasen Nayak", department: "Housekeeping" },
     { id: 7, name: "Harsh Rai", department: "Marketing" },
-    // { id: 8, name: "Isha Shrivastava", department: "Marketing" },
+    { id: 8, name: "Isha Shrivastava", department: "Marketing" },
     { id: 9, name: "Jharna Ambulkar", department: "Admin" },
-    { id: 10, name: "Lalit Mohan Bisht", department: "Operations" },
+    { id: 10, name: "Alka Das", department: "Operations" },
     { id: 11, name: "Mangesh Sahu", department: "Marketing" },
     { id: 12, name: "Neelu Sahu", department: "Operation" },
     { id: 13, name: "Nighat Parveen", department: "Marketing" },
@@ -43,47 +65,95 @@ export const UserBalanceScoreCard = () => {
     { id: 16, name: "Pratima Varthi", department: "Store" },
     { id: 17, name: "Praveen Gupta", department: "IT" },
     { id: 18, name: "Suman Bala Sahu", department: "Admin" },
-    // { id: 19, name: "Suman Goud Kuntla", department: "COO- Operations" },
     { id: 19, name: "Nikhilesh Davda", department: "COO" },
-    // { id: 20, name: "Surbhi Netam", department: "Marketing" },
-    { id: 20, name: "Umesh Dhakkad", department: "Pharmacy" }
+    // { id: 20, name: "Suman Goud Kuntla", department: "COO- Operations" },
+    // { id: 21, name: "Surbhi Netam", department: "Marketing" },
+    { id: 22, name: "Umesh Dhakkad", department: "Pharmacy" }
   ]);
 
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [viewType, setViewType] = useState(''); // 'scorecard' or 'history'
-  const [filteredEmployees, setFilteredEmployees] = useState(employees);
+  const [filteredEmployees, setFilteredEmployees] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Get logged-in user from localStorage
-    const userData = localStorage.getItem('user');
-    if (userData) {
-      try {
-        const user = JSON.parse(userData);
-        const loggedInUserName = user.Name || user.Username || '';
+    const fetchData = async () => {
+      setIsLoading(true);
+      setError(null);
 
-        // Find matching employee with case-insensitive comparison
-        const matchedEmployee = employees.find(emp =>
-          emp.name.toLowerCase() === loggedInUserName.toLowerCase()
+      // Get logged-in user from localStorage
+      const userDataString = localStorage.getItem('user');
+      if (!userDataString) {
+        setError("Please log in to view your scorecard.");
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const user = JSON.parse(userDataString);
+        
+        // Find admin property case-insensitively
+        const adminKey = Object.keys(user).find(k => k.toLowerCase() === 'admin');
+        const isAdmin = user[adminKey]?.toString().toLowerCase() === 'yes';
+
+        // If user is admin, redirect to admin scorecard view
+        if (isAdmin) {
+          navigate('/balanceScoreCard', { replace: true });
+          return;
+        }
+
+        // Find the name property dynamically (look for "Name", "User", "Employee", etc.)
+        const nameKey = Object.keys(user).find(k => 
+          k.toLowerCase().includes('name') || 
+          k.toLowerCase().includes('user')
+        );
+        const loggedInUserName = nameKey ? user[nameKey] : (user.Name || user.Username || '');
+
+        if (!loggedInUserName) {
+          setError("Could not identify your name from your profile. Please contact HR.");
+          setIsLoading(false);
+          return;
+        }
+
+        // Find matching employee with flexible comparison
+        const sheetName = loggedInUserName.toString().toLowerCase().trim();
+        
+        // 1. Try exact match first
+        let matchedEmployee = employees.find(emp =>
+          emp.name.toLowerCase().trim() === sheetName
         );
 
+        // 2. If no exact match, try partial match (fuzzy)
+        if (!matchedEmployee && sheetName.length > 3) {
+          matchedEmployee = employees.find(emp => {
+            const registryName = emp.name.toLowerCase().trim();
+            return registryName.includes(sheetName) || sheetName.includes(registryName);
+          });
+        }
+
         if (matchedEmployee) {
-          // Auto-select the user's scorecard
-          setSelectedEmployee(matchedEmployee.name);
-          setViewType('scorecard');
-          // Filter to show only this employee
+          // Filter to show only this employee in the list
           setFilteredEmployees([matchedEmployee]);
+          // Reset selection so the user sees the list first
+          setSelectedEmployee(null);
+          setViewType('');
+          setError(null);
         } else {
-          // User not found in employee list, show all employees
-          setFilteredEmployees(employees);
+          // User not found in employee list
+          setFilteredEmployees([]);
+          setError(`Your employee profile ("${loggedInUserName}") was not found in the scorecard registry. Please contact HR to ensure your name matches.`);
         }
       } catch (error) {
-        console.error('Error parsing user data:', error);
-        setFilteredEmployees(employees);
+        console.error('Error processing user data:', error);
+        setError("Session error. Please log in again.");
+      } finally {
+        setIsLoading(false);
       }
-    } else {
-      setFilteredEmployees(employees);
-    }
-  }, [employees]);
+    };
+
+    fetchData();
+  }, [employees, navigate]);
 
   const handleEmployeeClick = (employeeName, type) => {
     setSelectedEmployee(employeeName);
@@ -94,6 +164,36 @@ export const UserBalanceScoreCard = () => {
     setSelectedEmployee(null);
     setViewType('');
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-800"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-4 md:p-6 bg-gray-50 min-h-screen flex items-center justify-center">
+        <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center border-t-4 border-red-500">
+          <div className="text-red-500 mb-4">
+            <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Access Denied</h2>
+          <p className="text-gray-600 mb-6">{error}</p>
+          <button 
+            onClick={() => window.location.href = '/'}
+            className="px-6 py-2 bg-blue-800 text-white rounded-md hover:bg-blue-700 transition-colors"
+          >
+            Return to Dashboard
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-4 md:p-6 bg-gray-50 min-h-screen">
@@ -173,15 +273,17 @@ export const UserBalanceScoreCard = () => {
             {viewType === "scorecard" &&
               selectedEmployee === "Geetanjali Deep" && <UserGeetanjaliDeep />}
             {viewType === "scorecard" &&
-              selectedEmployee === "Hansraj Singh" && <UserHansrajSingh />}
+              selectedEmployee === "Ugrasen Nayak" && <UserUgrasenNayak />}
             {viewType === "scorecard" &&
               selectedEmployee === "Harsh Rai" && <UserHarshRai />}
-            {viewType === "scorecard" &&
-              selectedEmployee === "Isha Shrivastava" && <UserIshaShrivastava />}
+            {/* {viewType === "scorecard" &&
+              selectedEmployee === "Isha Shrivastava" && <UserIshaShrivastava />} */}
             {viewType === "scorecard" &&
               selectedEmployee === "Jharna Ambulkar" && <UserJharnaAmbulkar />}
+            {/* {viewType === "scorecard" &&
+              selectedEmployee === "Lalit Mohan Bisht" && <UserLalitMohanBisht />} */}
             {viewType === "scorecard" &&
-              selectedEmployee === "Lalit Mohan Bisht" && <UserLalitMohanBisht />}
+              selectedEmployee === "Alka Das" && <UserAlkaDas />}
             {viewType === "scorecard" &&
               selectedEmployee === "Mangesh Sahu" && <UserMangeshSahu />}
             {viewType === "scorecard" &&
@@ -202,21 +304,42 @@ export const UserBalanceScoreCard = () => {
               selectedEmployee === "Suman Goud Kuntla" && <UserSumanGoud />} */}
             {viewType === "scorecard" &&
               selectedEmployee === "Nikhilesh Davda" && <UserNikhileshDavda />}
-            {viewType === "scorecard" &&
-              selectedEmployee === "Surbhi Netam" && <UserSurbhiNetam />}
+            {/* {viewType === "scorecard" &&
+              selectedEmployee === "Surbhi Netam" && <UserSurbhiNetam />} */}
             {viewType === "scorecard" &&
               selectedEmployee === "Umesh Dhakkad" && <UserUmeshDhakkad />}
+            
+            {/* History Views */}
+            {viewType === "history" && selectedEmployee === "Ajay Upadhyay" && <AjayUpadhyayScorecardHistory />}
+            {viewType === "history" && selectedEmployee === "Alok Pandey" && <AlokPandeyScorecardHistory />}
+            {viewType === "history" && selectedEmployee === "Deepmala Patil" && <DeepmalaPatilScorecardHistory />}
+            {viewType === "history" && selectedEmployee === "Deepu Mourya" && <DeepuMouryaScorecardHistory />}
+            {viewType === "history" && selectedEmployee === "Geetanjali Deep" && <GeetanjaliDeepScorecardHistory />}
+            {viewType === "history" && selectedEmployee === "Ugrasen Nayak" && <UgrasenNayakScorecardHistory />}
+            {viewType === "history" && selectedEmployee === "Harsh Rai" && <HarshRaiScorecardHistory />}
+            {viewType === "history" && selectedEmployee === "Jharna Ambulkar" && <JharnaAmbulkarScorecardHistory />}
+            {viewType === "history" && selectedEmployee === "Alka Das" && <AlkaDasScorecardHistory />}
+            {viewType === "history" && selectedEmployee === "Mangesh Sahu" && <MangeshSahuScorecardHistory />}
+            {viewType === "history" && selectedEmployee === "Neelu Sahu" && <NeeluSahuScorecardHistory />}
+            {viewType === "history" && selectedEmployee === "Nighat Parveen" && <NighatParveenScorecardHistory />}
+            {viewType === "history" && selectedEmployee === "Panna Senani" && <PannaSenaniScorecardHistory />}
+            {viewType === "history" && selectedEmployee === "Poorwa Gajbhiye" && <PoorwaGajbhiyeScorecardHistory />}
+            {viewType === "history" && selectedEmployee === "Pratima Varthi" && <PratimaVarthiScorecardHistory />}
+            {viewType === "history" && selectedEmployee === "Praveen Gupta" && <PraveenGuptaScorecardHistory />}
+            {viewType === "history" && selectedEmployee === "Suman Bala Sahu" && <SumanBalaSahuScorecardHistory />}
+            {viewType === "history" && selectedEmployee === "Umesh Dhakkad" && <UmeshDhakkadScorecardHistory />}
+            {viewType === "history" && selectedEmployee === "Nikhilesh Davda" && <NikhileshDavdaScorecardHistory />}
             {![
               "Ajay Upadhyay",
               "Alok Pandey",
               "Deepmala Patil",
               "Deepu Mourya",
               "Geetanjali Deep",
-              "Hansraj Singh",
+              "Ugrasen Nayak",
               "Harsh Rai",
-              "Isha Shrivastava",
+              //"Isha Shrivastava",
               "Jharna Ambulkar",
-              "Lalit Mohan Bisht",
+              "Alka Das",
               "Mangesh Sahu",
               "Neelu Sahu",
               "Nighat Parveen",
@@ -227,7 +350,7 @@ export const UserBalanceScoreCard = () => {
               "Suman Bala Sahu",
               // "Suman Goud Kuntla",
               "Nikhilesh Davda",
-              "Surbhi Netam",
+              //"Surbhi Netam",
               "Umesh Dhakkad",
             ].includes(selectedEmployee) && (
                 <div className="bg-white rounded-lg shadow p-4 md:p-6">
@@ -275,12 +398,22 @@ export const UserBalanceScoreCard = () => {
                           }
                         >
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
-                            {employee.id}
+                            {index + 1}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center justify-center">
                               <div className="ml-4">
-                                {employee.name}
+                                <button
+                                  onClick={() =>
+                                    handleEmployeeClick(
+                                      employee.name,
+                                      "history"
+                                    )
+                                  }
+                                  className="text-sm font-medium text-blue-600 hover:text-blue-800 focus:outline-none"
+                                >
+                                  {employee.name}
+                                </button>
                               </div>
                             </div>
                           </td>
@@ -335,7 +468,7 @@ export const UserBalanceScoreCard = () => {
                         <div className="flex justify-between items-start mb-3">
                           <div className="flex items-center">
                             <span className="text-sm font-medium text-gray-500 mr-3">
-                              {employee.id}.
+                              {index + 1}.
                             </span>
                             <button
                               onClick={() =>

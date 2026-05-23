@@ -39,12 +39,12 @@ const Layout = () => {
           <div className="container mx-auto text-center text-sm text-gray-700">
             Powered by{' '}
             <a 
-              href="https://www.botivate.in" 
+              href="https://www.linkedin.com/in/ignamanmishra" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-indigo-600 hover:text-indigo-800 font-medium underline"
             >
-              Botivate
+              Naman Mishra
             </a>
           </div>
         </footer>

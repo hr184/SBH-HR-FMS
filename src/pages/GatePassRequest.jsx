@@ -35,7 +35,7 @@ const GatePassRequest = () => {
     gatePassImage: null
   });
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
 
   useEffect(() => {
     if (currentUserName) {

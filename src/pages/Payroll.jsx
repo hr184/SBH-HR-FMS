@@ -26,7 +26,7 @@ const Payroll = () => {
       try {
         // Fetch data from Google Sheets using the provided AppScript URL
         const response = await fetch(
-          "https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec?sheet=Payroll&action=fetch"
+          "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec?sheet=Payroll&action=fetch"
         );
         const data = await response.json();
 

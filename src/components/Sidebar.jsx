@@ -53,7 +53,7 @@ const Sidebar = ({ onClose }) => {
 
       try {
         // Fetch employee data to check Column G
-        const response = await fetch(`https://script.google.com/macros/s/AKfycbwZ96aXBp4sNGMzHjLf1iq98Pj1u6agtAb02Qv2KvdYYf7bzqrXAxWRxJ2LJIXVyN453g/exec?sheet=USER&action=fetch`);
+        const response = await fetch(`https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec?sheet=USER&action=fetch`);
         const result = await response.json();
 
         if (result.success && result.data) {
@@ -97,7 +97,7 @@ const Sidebar = ({ onClose }) => {
       } catch (error) {
         console.error('Error checking leave management access:', error);
         // Default to showing for admins, hiding for others if fetch fails
-        setShowLeaveManagement(user?.Admin === 'Yes');
+        setShowLeaveManagement(user?.Admin?.toString().toLowerCase() === 'yes');
         setShowBalancedScoreCard(false);
       }
     };
@@ -121,7 +121,8 @@ const Sidebar = ({ onClose }) => {
 
   const hiddenScorecardUsers = ["surbhi netam", "isha shrivastava", "harsh rai", "nighat parveen", "anusuiya", "kusum", "jyoti kumbaj", "sunita", "neha", "pratima sethi", "dr .pushpa", "dr poonam", "ajay jaiswal", "mangesh sahu", "naman mishra", "kishor ot day", "AMITA, POONIYA", "satish", "narayan", "indrajeet", "dr akriti", "shraddha", "bhumika", "priyanka", "archana day"];
   const currentUsername = (user?.Name || user?.Username || "").toLowerCase();
-  const hideBalanceScoreCard = hiddenScorecardUsers.includes(currentUsername);
+  const isAdmin = user?.Admin?.toString().toLowerCase() === 'yes';
+  const hideBalanceScoreCard = !isAdmin && hiddenScorecardUsers.includes(currentUsername);
 
   const adminMenuItems = [
     { path: '/', icon: LayoutDashboard, label: 'Dashboard' },
@@ -139,7 +140,7 @@ const Sidebar = ({ onClose }) => {
     { path: '/company-calendar', icon: Calendar, label: 'Company Calendar' },
     { path: '/jobPoster', icon: Brain, label: 'Creative' },
     { path: '/hrPolicy', icon: NotepadText, label: 'HR Policy' },
-    { path: '/license', icon: AlarmClockCheck, label: 'License' },
+    // { path: '/license', icon: AlarmClockCheck, label: 'License' },
   ];
 
   const employeeMenuItems = [
@@ -148,10 +149,10 @@ const Sidebar = ({ onClose }) => {
     ...(hideBalanceScoreCard ? [] : [{ path: '/userBalanceScoreCard', icon: LeaveIcon, label: 'Balance Scorecard' }]),
     ...(showBalancedScoreCard ? [{ path: '/misreport', icon: AlarmClockCheck, label: 'Delegation Score Card' }] : []),
     { path: '/company-calendar', icon: Calendar, label: 'Company Calendar' },
-    { path: '/license', icon: Copyright, label: 'License' },
+    // { path: '/license', icon: Copyright, label: 'License' },
   ];
 
-  const menuItems = user?.Admin === 'Yes' ? adminMenuItems : employeeMenuItems;
+  const menuItems = user?.Admin?.toString().toLowerCase() === 'yes' ? adminMenuItems : employeeMenuItems;
 
   const SidebarContent = ({ onClose, isCollapsed = false }) => (
     <div className={`flex flex-col h-full ${isCollapsed ? 'w-16' : 'w-64'} bg-indigo-900 text-white`}>
@@ -255,7 +256,7 @@ const Sidebar = ({ onClose }) => {
             {/* Show user info in mobile view regardless of collapsed state */}
             <div className={`${isCollapsed ? 'hidden' : 'block'} md:block`}>
               <p className="text-sm font-medium text-white">{user?.Name || user?.Username || 'Guest'}</p>
-              <p className="text-xs text-white">{user?.Admin === 'Yes' ? 'Admin' : 'User'}</p>
+              <p className="text-xs text-white">{user?.Admin?.toString().toLowerCase() === 'yes' ? 'Admin' : 'User'}</p>
             </div>
           </div>
         </div>
