@@ -51,10 +51,13 @@ export const UmeshDhakkad = () => {
         const sheetId = "162o34BXqnJvmJjjtIoQpcBGo8orn2ZO5Jf0p8MgoUCs";
         const sheetName = "Umesh Dhakkad";
 
+        const currentDate = new Date();
+        const currentMonthStr = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+
         const response = await fetch(
           `${scriptURL}?sheetId=${encodeURIComponent(
             sheetId
-          )}&sheetName=${encodeURIComponent(sheetName)}&action=getData`
+          )}&sheetName=${encodeURIComponent(sheetName)}&action=getData&filterMonth=${encodeURIComponent(currentMonthStr)}`
         );
 
         if (response.ok) {
@@ -97,9 +100,14 @@ export const UmeshDhakkad = () => {
                 managementTraining: latestUserRow[23] || "",
               });
             } else {
+              setUserData({});
               console.log('No row with "User" value found in column C');
             }
+          } else {
+            setUserData({});
           }
+        } else {
+          setUserData({});
         }
       } catch (error) {
         console.error("Error fetching user data:", error);

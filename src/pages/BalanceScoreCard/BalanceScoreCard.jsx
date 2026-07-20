@@ -1,6 +1,7 @@
 import { Activity } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import * as XLSX from 'xlsx';
 import { AjayUpadhyay } from './Scorecard/AjayUpadhyay';
 import { AjayUpadhyayScorecardHistory } from './ScorecardHistory/AjayUpadhyayScorecardHistory'
 import { AlokPandey } from './Scorecard/AlokPandey';
@@ -101,6 +102,171 @@ export const BalanceScoreCard = () => {
 
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [viewType, setViewType] = useState(''); // 'scorecard' or 'history'
+  const [isDownloadingAll, setIsDownloadingAll] = useState(false);
+
+  // Date Range selections
+  const years = ["2025", "2026", "2027"];
+  const monthsList = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+
+  const [startMonth, setStartMonth] = useState("January");
+  const [startYear, setStartYear] = useState("2026");
+  const [endMonth, setEndMonth] = useState("December");
+  const [endYear, setEndYear] = useState("2026");
+
+  const downloadAllReports = async () => {
+    setIsDownloadingAll(true);
+    try {
+      const sheetId = '162o34BXqnJvmJjjtIoQpcBGo8orn2ZO5Jf0p8MgoUCs';
+      const appScriptUrl = 'https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec';
+      const workbook = XLSX.utils.book_new();
+
+      // Generate selected range of months
+      const startIndex = monthsList.indexOf(startMonth);
+      const endIndex = monthsList.indexOf(endMonth);
+      const startYearVal = parseInt(startYear);
+      const endYearVal = parseInt(endYear);
+
+      const allMonths = [];
+      for (let y = startYearVal; y <= endYearVal; y++) {
+        const mStart = (y === startYearVal) ? startIndex : 0;
+        const mEnd = (y === endYearVal) ? endIndex : 11;
+        for (let m = mStart; m <= mEnd; m++) {
+          allMonths.push(`${monthsList[m]} ${y}`);
+        }
+      }
+
+      if (allMonths.length === 0) {
+        alert("Invalid Date Range Selected!");
+        setIsDownloadingAll(false);
+        return;
+      }
+
+      // Fetch in parallel with limit or sequentially
+      for (const emp of employees) {
+        try {
+          const response = await fetch(
+            `${appScriptUrl}?sheetId=${sheetId}&sheetName=${encodeURIComponent(emp.name)}`
+          );
+          if (!response.ok) continue;
+          const result = await response.json();
+          if (result.success && result.data && result.data.length > 5) {
+            const dataRows = result.data.slice(5); // skip header rows
+            
+            // Separate COO and User rows
+            const cooRows = dataRows.filter(row => row[2] !== "User");
+            const userRows = dataRows.filter(row => row[2] === "User");
+
+            // Map filled months
+            const cooFilledMonths = cooRows.map(row => row[1] ? row[1].trim() : "");
+            const userFilledMonths = userRows.map(row => row[1] ? row[1].trim() : "");
+
+            // Build month-wise/year-wise sheet structure matching the dashboard
+            const reportRows = [
+              [`Employee Balance Scorecard Report (${startMonth} ${startYear} to ${endMonth} ${endYear})`],
+              ["Employee Name:", emp.name, "Department:", emp.department],
+              [],
+              ["Timestamp", "Month", "Employee Name", "Target Score", "Actual Score", "Opportunity Loss", "Overall Target", "Overall Actual", "Overall Opportunity Loss", "Overall Percentage", "Submission Status"]
+            ];
+
+            allMonths.forEach(month => {
+              // Check if filled
+              const userIdx = userRows.findIndex(row => row[1] && row[1].trim() === month);
+              const cooIdx = cooRows.findIndex(row => row[1] && row[1].trim() === month);
+
+              const userFilled = userIdx !== -1;
+              const cooFilled = cooIdx !== -1;
+
+              let timestampVal = "-";
+              let targetScore = "-";
+              let actualScore = "-";
+              let oppLoss = "-";
+              let overallTarget = "-";
+              let overallActual = "-";
+              let overallOppLoss = "-";
+              let overallPercentage = "-";
+
+              if (cooFilled) {
+                const cooRow = cooRows[cooIdx];
+                timestampVal = cooRow[0] || "-";
+                // Target Score is generally row[row.length - 10] or similar, let's read the exact mapping indices dynamically based on length
+                // Since row layouts differ by employee, we read from the end:
+                // last = percentage (index: length-1)
+                // length-2 = overall opp loss
+                // length-3 = overall actual
+                // length-4 = overall target
+                // length-7 = job opp loss
+                // length-8 = job actual
+                // length-9 = job target
+                
+                const len = cooRow.length;
+                overallPercentage = cooRow[len - 1] !== undefined ? cooRow[len - 1] : "-";
+                overallOppLoss = cooRow[len - 2] !== undefined ? cooRow[len - 2] : "-";
+                overallActual = cooRow[len - 3] !== undefined ? cooRow[len - 3] : "-";
+                overallTarget = cooRow[len - 4] !== undefined ? cooRow[len - 4] : "-";
+                
+                // Job specific (under Target/Actual/Opp Loss headers)
+                oppLoss = cooRow[len - 7] !== undefined ? cooRow[len - 7] : "-";
+                actualScore = cooRow[len - 8] !== undefined ? cooRow[len - 8] : "-";
+                targetScore = cooRow[len - 9] !== undefined ? cooRow[len - 9] : "-";
+              }
+
+              let status = "Not Filled";
+              if (userFilled && cooFilled) {
+                status = "Fully Completed";
+              } else if (userFilled) {
+                status = "Pending COO Evaluation";
+              } else if (cooFilled) {
+                status = "Completed by COO only";
+              }
+
+              reportRows.push([
+                timestampVal,
+                month,
+                emp.name,
+                targetScore,
+                actualScore,
+                oppLoss,
+                overallTarget,
+                overallActual,
+                overallOppLoss,
+                typeof overallPercentage === 'number' ? `${overallPercentage}%` : overallPercentage,
+                status
+              ]);
+            });
+
+            const worksheet = XLSX.utils.aoa_to_sheet(reportRows);
+            const safeSheetName = emp.name.substring(0, 31);
+            XLSX.utils.book_append_sheet(workbook, worksheet, safeSheetName);
+          } else {
+            const reportRows = [
+              [`Employee Balance Scorecard Report (${startMonth} ${startYear} to ${endMonth} ${endYear})`],
+              ["Employee Name:", emp.name, "Department:", emp.department],
+              [],
+              ["Month", "User Status", "COO Status", "Overall Target", "Overall Actual", "Overall Percentage", "Submission Status"]
+            ];
+            allMonths.forEach(month => {
+              reportRows.push([month, "Pending", "Pending", "-", "-", "-", "Not Filled"]);
+            });
+            const worksheet = XLSX.utils.aoa_to_sheet(reportRows);
+            XLSX.utils.book_append_sheet(workbook, worksheet, emp.name.substring(0, 31));
+          }
+        } catch (error) {
+          console.error(`Error generating report for ${emp.name}:`, error);
+        }
+      }
+
+      XLSX.writeFile(workbook, `All_Employees_Balance_Scorecard_Report_${startYear}_${endYear}.xlsx`);
+      alert("Consolidated reports downloaded successfully!");
+    } catch (error) {
+      console.error("Error downloading consolidated reports:", error);
+      alert("Failed to download reports.");
+    } finally {
+      setIsDownloadingAll(false);
+    }
+  };
 
   const handleEmployeeClick = (employeeName, type) => {
     setSelectedEmployee(employeeName);
@@ -149,23 +315,64 @@ export const BalanceScoreCard = () => {
                 Back
               </button>
             )}
-            <div className="flex-1"></div> {/* Spacer */}
-            <button className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 flex items-center text-sm md:text-base">
-              <svg
-                className="w-4 h-4 mr-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="flex items-center gap-1 bg-white p-1 rounded border shadow-sm text-xs">
+                <span className="text-gray-500 font-medium px-1">From:</span>
+                <select 
+                  value={startMonth} 
+                  onChange={(e) => setStartMonth(e.target.value)}
+                  className="bg-transparent outline-none cursor-pointer text-gray-700 font-semibold"
+                >
+                  {monthsList.map(m => <option key={m} value={m}>{m}</option>)}
+                </select>
+                <select 
+                  value={startYear} 
+                  onChange={(e) => setStartYear(e.target.value)}
+                  className="bg-transparent outline-none cursor-pointer text-gray-700 font-semibold border-l pl-1"
+                >
+                  {years.map(y => <option key={y} value={y}>{y}</option>)}
+                </select>
+              </div>
+
+              <div className="flex items-center gap-1 bg-white p-1 rounded border shadow-sm text-xs">
+                <span className="text-gray-500 font-medium px-1">To:</span>
+                <select 
+                  value={endMonth} 
+                  onChange={(e) => setEndMonth(e.target.value)}
+                  className="bg-transparent outline-none cursor-pointer text-gray-700 font-semibold"
+                >
+                  {monthsList.map(m => <option key={m} value={m}>{m}</option>)}
+                </select>
+                <select 
+                  value={endYear} 
+                  onChange={(e) => setEndYear(e.target.value)}
+                  className="bg-transparent outline-none cursor-pointer text-gray-700 font-semibold border-l pl-1"
+                >
+                  {years.map(y => <option key={y} value={y}>{y}</option>)}
+                </select>
+              </div>
+
+              <button 
+                onClick={downloadAllReports}
+                disabled={isDownloadingAll}
+                className={`px-4 py-2 text-white rounded flex items-center text-sm md:text-base font-semibold shadow-md ${isDownloadingAll ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'}`}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                />
-              </svg>
-              <span>Download</span>
-            </button>
+                <svg
+                  className="w-4 h-4 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                  />
+                </svg>
+                <span>{isDownloadingAll ? 'Downloading...' : 'Download Report'}</span>
+              </button>
+            </div>
           </div>
 
           {/* Bottom Row - Title and View Type */}

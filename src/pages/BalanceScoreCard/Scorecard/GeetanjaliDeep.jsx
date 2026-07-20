@@ -11,6 +11,7 @@ export const GeetanjaliDeep = () => {
     talenntAquisation3: '',
     talenntAquisation4: '',
     talenntAquisation5: '',
+    talenntAquisation6: '',
     hrPolicy1: '',
     hrPolicy2: '',
     hrPolicy3: '',
@@ -56,8 +57,12 @@ export const GeetanjaliDeep = () => {
             // Data starts from row 5, so we slice from index 4 (row 5) onwards
             const dataRows = data.data.slice(4);
 
-            // Filter rows where column C (index 2) has "User" value
-            const userRows = dataRows.filter(row => row[2] === "User");
+            // Get current month string
+            const currentDate = new Date();
+            const currentMonthStr = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+            // Filter rows where column C (index 2) has "User" value and column B (index 1) is the current month
+            const userRows = dataRows.filter(row => row[2] === "User" && row[1] && row[1].trim() === currentMonthStr);
 
             if (userRows.length > 0) {
               // Find the latest row based on timestamp in Column A (index 0)
@@ -73,19 +78,20 @@ export const GeetanjaliDeep = () => {
                 talenntAquisation3: latestUserRow[6] || "",
                 talenntAquisation4: latestUserRow[7] || "",
                 talenntAquisation5: latestUserRow[8] || "",
-                hrPolicy1: latestUserRow[10] || "",
-                hrPolicy2: latestUserRow[11] || "",
-                hrPolicy3: latestUserRow[12] || "",
-                hrPolicy5: latestUserRow[14] || "",
-                hrPolicy6: latestUserRow[15] || "",
-                hrPolicy7: latestUserRow[16] || "",
-                strategyAndRoadmap1: latestUserRow[17] || "",
-                strategyAndRoadmap2: latestUserRow[18] || "",
-                strategyAndRoadmap3: latestUserRow[19] || "",
-                strategyAndRoadmap4: latestUserRow[20] || "",
-                strategyAndRoadmap5: latestUserRow[21] || "",
-                strategyAndRoadmap6: latestUserRow[22] || "",
-                strategyAndRoadmap7: latestUserRow[23] || "",
+                talenntAquisation6: latestUserRow[9] || "",
+                hrPolicy1: latestUserRow[11] || "",
+                hrPolicy2: latestUserRow[12] || "",
+                hrPolicy3: latestUserRow[13] || "",
+                hrPolicy5: latestUserRow[15] || "",
+                hrPolicy6: latestUserRow[16] || "",
+                hrPolicy7: latestUserRow[17] || "",
+                strategyAndRoadmap1: latestUserRow[18] || "",
+                strategyAndRoadmap2: latestUserRow[19] || "",
+                strategyAndRoadmap3: latestUserRow[20] || "",
+                strategyAndRoadmap4: latestUserRow[21] || "",
+                strategyAndRoadmap5: latestUserRow[22] || "",
+                strategyAndRoadmap6: latestUserRow[23] || "",
+                strategyAndRoadmap7: latestUserRow[24] || "",
               });
             } else {
               console.log('No row with "User" value found in column C');
@@ -113,7 +119,7 @@ export const GeetanjaliDeep = () => {
 
   const calculateTotals = () => {
     const jobAssessmentKeys = [
-      'talenntAquisation1', 'talenntAquisation2', 'talenntAquisation3', 'talenntAquisation4', 'talenntAquisation5',
+      'talenntAquisation1', 'talenntAquisation2', 'talenntAquisation3', 'talenntAquisation4', 'talenntAquisation5', 'talenntAquisation6',
       'hrPolicy1', 'hrPolicy2', 'hrPolicy3', 'hrPolicy5', 'hrPolicy6', 'hrPolicy7',
       'strategyAndRoadmap1', 'strategyAndRoadmap2', 'strategyAndRoadmap3', 'strategyAndRoadmap4', 'strategyAndRoadmap5', 'strategyAndRoadmap6', 'strategyAndRoadmap7'
     ];
@@ -127,7 +133,7 @@ export const GeetanjaliDeep = () => {
     const overallTotal = jobAssessmentTotal + behavioralTotal;
 
     // Calculate target totals (out of values) - Updated targets
-    const jobAssessmentTargets = [3, 4, 4, 5, 3, 4, 5, 4, 3, 5, 4, 4, 4, 4, 4, 4, 4, 4];
+    const jobAssessmentTargets = [4, 4, 4, 5, 3, 4, 4, 5, 4, 3, 5, 4, 4, 4, 4, 4, 4, 4, 4];
     const behavioralTargets = [1, 2, 2, 2, 2, 2, 2, 2, 2, 3];
 
     const jobAssessmentTargetTotal = jobAssessmentTargets.reduce((a, b) => a + b, 0);
@@ -185,7 +191,7 @@ export const GeetanjaliDeep = () => {
         scores.talenntAquisation3 || 0, // Column G (index-6) - Employee Relations and Engagement
         scores.talenntAquisation4 || 0, // Column H (index-7) - Performance Management
         scores.talenntAquisation5 || 0, // Column I (index-8) - Training and Development
-        0, // Column J (index-9) - Compensation and Benefits Strategy and Administration (Removed)
+        scores.talenntAquisation6 || 0, // Column J (index-9) - Employee Engagement
         scores.hrPolicy1 || 0, // Column K (index-10) - HR Policies and Compliance
         scores.hrPolicy2 || 0, // Column L (index-11) - HR Analytics and Reporting
         scores.hrPolicy3 || 0, // Column M (index-12) - Change Management and Organizational Effectiveness
@@ -273,9 +279,9 @@ export const GeetanjaliDeep = () => {
 
             {/* Talennt Aquisation KRA */}
             <tr style={{ backgroundColor: '#f8fafc' }}>
-              <td rowSpan={5} style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Talennt Aquisation</td>
+              <td rowSpan={6} style={{ padding: '12px', border: '1px solid #e2e8f0', fontFamily: 'Poppins Regular', fontWeight: 'bold', backgroundColor: '#eff6ff' }}>Talennt Aquisation</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Talent Acquisition and Management.</td>
-              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>3</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
               <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
                 {userData.talenntAquisation1 || '-'}
               </td>
@@ -285,9 +291,9 @@ export const GeetanjaliDeep = () => {
                   value={scores.talenntAquisation1}
                   onChange={(e) => handleScoreChange('talenntAquisation1', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
-                  placeholder="0-3"
+                  placeholder="0-4"
                   min="0"
-                  max="3"
+                  max="4"
                 />
               </td>
             </tr>
@@ -320,6 +326,24 @@ export const GeetanjaliDeep = () => {
                   type="number"
                   value={scores.talenntAquisation3}
                   onChange={(e) => handleScoreChange('talenntAquisation3', e.target.value)}
+                  style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
+                  placeholder="0-4"
+                  min="0"
+                  max="4"
+                />
+              </td>
+            </tr>
+            <tr style={{ backgroundColor: '#ffffff' }}>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0' }}>Employee Engagement.</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', fontWeight: 'bold' }}>4</td>
+              <td style={{ padding: '12px', border: '1px solid #e2e8f0', textAlign: 'center', color: '#666' }}>
+                {userData.talenntAquisation6 || '-'}
+              </td>
+              <td style={{ padding: '8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                <input
+                  type="number"
+                  value={scores.talenntAquisation6}
+                  onChange={(e) => handleScoreChange('talenntAquisation6', e.target.value)}
                   style={{ width: '80px', padding: '6px', border: '1px solid #cbd5e1', borderRadius: '4px', textAlign: 'center' }}
                   placeholder="0-4"
                   min="0"

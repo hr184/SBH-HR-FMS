@@ -1,11 +1,9 @@
 function doGet(e) {
   try {
-    var params = e.parameter;
+    var params = e.parameter || {};
     var sheet = params.sheet || params.sheetName;
-    if (sheet && (params.action === 'fetch' || params.action === 'getData')) {
-      return fetchSheetData(sheet, params.sheetId);
-    } else if (sheet) {
-      return fetchSheetData(sheet, params.sheetId);
+    if (sheet) {
+      return fetchSheetData(sheet, params.sheetId, params.filterMonth);
     }
     return ContentService.createTextOutput(JSON.stringify({
       status: "ready",
@@ -20,7 +18,7 @@ function doGet(e) {
   }
 }
 
-function fetchSheetData(sheetName, sheetId) {
+function fetchSheetData(sheetName, sheetId, filterMonth) {
   try {
     var ss = sheetId ? SpreadsheetApp.openById(sheetId) : SpreadsheetApp.openById("1hA6J-3UNuvz82EJLDJFmtTRwRT9oGa4SsLpw2o3TvAo");
     var sheet = ss.getSheetByName(sheetName);
@@ -45,6 +43,15 @@ function fetchSheetData(sheetName, sheetId) {
         }
       }
     }
+
+    if (filterMonth) {
+      var headerRows = data.slice(0, 5);
+      var matchingDataRows = data.slice(5).filter(function(row) {
+        return row[1] && row[1].toString().trim().toLowerCase() === filterMonth.toString().trim().toLowerCase();
+      });
+      data = headerRows.concat(matchingDataRows);
+    }
+
     return ContentService.createTextOutput(JSON.stringify({
       success: true,
       data: data

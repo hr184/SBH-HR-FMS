@@ -51,7 +51,10 @@ export const UgrasenNayak = () => {
         const sheetId = "162o34BXqnJvmJjjtIoQpcBGo8orn2ZO5Jf0p8MgoUCs";
         const sheetName = "Ugrasen Nayak";
 
-        const response = await fetch(`${scriptURL}?sheetId=${encodeURIComponent(sheetId)}&sheetName=${encodeURIComponent(sheetName)}&action=getData`);
+        const currentDate = new Date();
+        const currentMonthStr = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+        const response = await fetch(`${scriptURL}?sheetId=${encodeURIComponent(sheetId)}&sheetName=${encodeURIComponent(sheetName)}&action=getData&filterMonth=${encodeURIComponent(currentMonthStr)}`);
 
         if (response.ok) {
           const data = await response.json();
@@ -94,9 +97,14 @@ export const UgrasenNayak = () => {
                 additionalWorks: latestUserRow[24] || "",
               });
             } else {
+              setUserData({});
               console.log('No row with "User" value found in column C');
             }
+          } else {
+            setUserData({});
           }
+        } else {
+          setUserData({});
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
