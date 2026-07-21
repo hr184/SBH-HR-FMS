@@ -153,17 +153,95 @@ export const BalanceScoreCard = () => {
           if (!response.ok) continue;
           const result = await response.json();
           if (result.success && result.data && result.data.length > 5) {
-            const dataRows = result.data.slice(5); // skip header rows
+            const dataRows = result.data.slice(5);
+
+            // Let's find the header row index
+            let headerRowIdx = 5;
+            for (let i = 0; i < Math.min(result.data.length, 10); i++) {
+              if (result.data[i] && result.data[i][0] && result.data[i][0].toString().toLowerCase().trim() === 'timestamp') {
+                headerRowIdx = i;
+                break;
+              }
+            }
+            const headers = result.data[headerRowIdx] || [];
             
-            // Separate COO and User rows
-            const cooRows = dataRows.filter(row => row[2] !== "User");
-            const userRows = dataRows.filter(row => row[2] === "User");
+            // Helper variable to find indices dynamically
+            let targetScoreIdx = -1;
+            let actualScoreIdx = -1;
+            let oppLossIdx = -1;
+            let overallTargetIdx = -1;
+            let overallActualIdx = -1;
+            let overallOppLossIdx = -1;
+            let overallPercentageIdx = -1;
 
-            // Map filled months
-            const cooFilledMonths = cooRows.map(row => row[1] ? row[1].trim() : "");
-            const userFilledMonths = userRows.map(row => row[1] ? row[1].trim() : "");
+            headers.forEach((h, idx) => {
+              const txt = h.toString().toLowerCase().trim();
+              if (txt === 'target score') {
+                targetScoreIdx = idx;
+              } else if (txt === 'actual score') {
+                actualScoreIdx = idx;
+              } else if (txt === 'overall target') {
+                overallTargetIdx = idx;
+              } else if (txt === 'overall actual') {
+                overallActualIdx = idx;
+              } else if (txt === 'overall opportunity loss' || txt === 'overall opp loss' || txt === 'overall opp. loss') {
+                overallOppLossIdx = idx;
+              } else if (txt === 'overall percentage') {
+                overallPercentageIdx = idx;
+              }
+            });
 
-            // Build month-wise/year-wise sheet structure matching the dashboard
+            // Opportunity loss column is trickier because there might be multiple (job opp loss and delegation opp loss).
+            // Usually, job opp loss is the first "opportunity loss" column.
+            for (let idx = 0; idx < headers.length; idx++) {
+              const txt = headers[idx].toString().toLowerCase().trim();
+              if (txt === 'opportunity loss') {
+                oppLossIdx = idx;
+                break;
+              }
+            }
+
+            // Fallback to end-of-row offsets if not found dynamically
+            const len = headers.length || 72; // default length
+            if (targetScoreIdx === -1) {
+              const hasDelegation = headers.some(h => h.toString().toLowerCase().includes('delegation'));
+              if (hasDelegation) {
+                targetScoreIdx = len - 10;
+                actualScoreIdx = len - 9;
+                oppLossIdx = len - 8;
+              } else {
+                targetScoreIdx = len - 9;
+                actualScoreIdx = len - 8;
+                oppLossIdx = len - 7;
+              }
+            }
+            if (overallTargetIdx === -1) overallTargetIdx = len - 4;
+            if (overallActualIdx === -1) overallActualIdx = len - 3;
+            if (overallOppLossIdx === -1) overallOppLossIdx = len - 2;
+            if (overallPercentageIdx === -1) overallPercentageIdx = len - 1;
+
+            // Helper function to normalize month formatting (handling strings like 'November 2025' and Dates alike)
+            const normalizeMonth = (monthString) => {
+              if (!monthString) return "";
+              try {
+                const str = monthString.toString().trim();
+                if (str.match(/^[A-Za-z]+\s\d{4}$/)) {
+                  return str.toLowerCase();
+                }
+                const date = new Date(str);
+                if (!isNaN(date.getTime())) {
+                  return date.toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                  }).toLowerCase();
+                }
+                return str.toLowerCase();
+              } catch {
+                return monthString.toString().toLowerCase();
+              }
+            };
+
+            // Build history sheet structure matching the dashboard history view
             const reportRows = [
               [`Employee Balance Scorecard Report (${startMonth} ${startYear} to ${endMonth} ${endYear})`],
               ["Employee Name:", emp.name, "Department:", emp.department],
@@ -172,83 +250,55 @@ export const BalanceScoreCard = () => {
             ];
 
             allMonths.forEach(month => {
-              // Check if filled
-              const userIdx = userRows.findIndex(row => row[1] && row[1].trim() === month);
-              const cooIdx = cooRows.findIndex(row => row[1] && row[1].trim() === month);
-
-              const userFilled = userIdx !== -1;
-              const cooFilled = cooIdx !== -1;
-
-              let timestampVal = "-";
-              let targetScore = "-";
-              let actualScore = "-";
-              let oppLoss = "-";
-              let overallTarget = "-";
-              let overallActual = "-";
-              let overallOppLoss = "-";
-              let overallPercentage = "-";
-
-              if (cooFilled) {
-                const cooRow = cooRows[cooIdx];
-                timestampVal = cooRow[0] || "-";
-                // Target Score is generally row[row.length - 10] or similar, let's read the exact mapping indices dynamically based on length
-                // Since row layouts differ by employee, we read from the end:
-                // last = percentage (index: length-1)
-                // length-2 = overall opp loss
-                // length-3 = overall actual
-                // length-4 = overall target
-                // length-7 = job opp loss
-                // length-8 = job actual
-                // length-9 = job target
-                
-                const len = cooRow.length;
-                overallPercentage = cooRow[len - 1] !== undefined ? cooRow[len - 1] : "-";
-                overallOppLoss = cooRow[len - 2] !== undefined ? cooRow[len - 2] : "-";
-                overallActual = cooRow[len - 3] !== undefined ? cooRow[len - 3] : "-";
-                overallTarget = cooRow[len - 4] !== undefined ? cooRow[len - 4] : "-";
-                
-                // Job specific (under Target/Actual/Opp Loss headers)
-                oppLoss = cooRow[len - 7] !== undefined ? cooRow[len - 7] : "-";
-                actualScore = cooRow[len - 8] !== undefined ? cooRow[len - 8] : "-";
-                targetScore = cooRow[len - 9] !== undefined ? cooRow[len - 9] : "-";
+              const matchingRows = dataRows.filter(row => row[1] && normalizeMonth(row[1]) === month.toLowerCase());
+              
+              if (matchingRows.length > 0) {
+                matchingRows.forEach(row => {
+                  const submittedBy = row[2] === "User" ? "User" : "COO";
+                  const status = submittedBy === "User" ? "Pending COO Evaluation" : "Fully Completed";
+                  
+                  reportRows.push([
+                    row[0] || "-", // Timestamp
+                    month, // Month
+                    emp.name, // Employee Name
+                    row[targetScoreIdx] !== undefined && row[targetScoreIdx] !== "" ? row[targetScoreIdx] : "-",
+                    row[actualScoreIdx] !== undefined && row[actualScoreIdx] !== "" ? row[actualScoreIdx] : "-",
+                    row[oppLossIdx] !== undefined && row[oppLossIdx] !== "" ? row[oppLossIdx] : "-",
+                    row[overallTargetIdx] !== undefined && row[overallTargetIdx] !== "" ? row[overallTargetIdx] : "-",
+                    row[overallActualIdx] !== undefined && row[overallActualIdx] !== "" ? row[overallActualIdx] : "-",
+                    row[overallOppLossIdx] !== undefined && row[overallOppLossIdx] !== "" ? row[overallOppLossIdx] : "-",
+                    row[overallPercentageIdx] !== undefined && row[overallPercentageIdx] !== "" ? (typeof row[overallPercentageIdx] === 'number' ? `${row[overallPercentageIdx]}%` : row[overallPercentageIdx]) : "-",
+                    status
+                  ]);
+                });
+              } else {
+                reportRows.push([
+                  "-", // Timestamp
+                  month, // Month
+                  emp.name, // Employee Name
+                  "-", // Target Score
+                  "-", // Actual Score
+                  "-", // Opportunity Loss
+                  "-", // Overall Target
+                  "-", // Overall Actual
+                  "-", // Overall Opportunity Loss
+                  "-", // Overall Percentage
+                  "Not Filled" // Submission Status
+                ]);
               }
-
-              let status = "Not Filled";
-              if (userFilled && cooFilled) {
-                status = "Fully Completed";
-              } else if (userFilled) {
-                status = "Pending COO Evaluation";
-              } else if (cooFilled) {
-                status = "Completed by COO only";
-              }
-
-              reportRows.push([
-                timestampVal,
-                month,
-                emp.name,
-                targetScore,
-                actualScore,
-                oppLoss,
-                overallTarget,
-                overallActual,
-                overallOppLoss,
-                typeof overallPercentage === 'number' ? `${overallPercentage}%` : overallPercentage,
-                status
-              ]);
             });
 
             const worksheet = XLSX.utils.aoa_to_sheet(reportRows);
-            const safeSheetName = emp.name.substring(0, 31);
-            XLSX.utils.book_append_sheet(workbook, worksheet, safeSheetName);
+            XLSX.utils.book_append_sheet(workbook, worksheet, emp.name.substring(0, 31));
           } else {
             const reportRows = [
               [`Employee Balance Scorecard Report (${startMonth} ${startYear} to ${endMonth} ${endYear})`],
               ["Employee Name:", emp.name, "Department:", emp.department],
               [],
-              ["Month", "User Status", "COO Status", "Overall Target", "Overall Actual", "Overall Percentage", "Submission Status"]
+              ["Month", "Status", "Overall Target", "Overall Actual", "Overall Percentage", "Submission Status"]
             ];
             allMonths.forEach(month => {
-              reportRows.push([month, "Pending", "Pending", "-", "-", "-", "Not Filled"]);
+              reportRows.push([month, "Pending", "-", "-", "-", "Not Filled"]);
             });
             const worksheet = XLSX.utils.aoa_to_sheet(reportRows);
             XLSX.utils.book_append_sheet(workbook, worksheet, emp.name.substring(0, 31));
