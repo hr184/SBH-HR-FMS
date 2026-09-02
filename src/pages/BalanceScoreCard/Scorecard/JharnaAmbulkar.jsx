@@ -1,11 +1,11 @@
-import React from 'react'
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { MonthSelectorBanner } from '../MonthSelectorBanner';
+import { fetchScorecardSheetData, extractDataRows, extractAvailableMonths, getDefaultSelectedMonth, findUserSubmission, findCooEvaluation } from '../scorecardHelper';
 
 export const JharnaAmbulkar = () => {
-  const [scores, setScores] = useState({
-    // Job Assessment Scores - Updated based on provided data
+  const initialScores = {
     dataCleansingValidation: '',
     misMaintenance: '',
     dataQualityIssues: '',
@@ -28,8 +28,6 @@ export const JharnaAmbulkar = () => {
     financialPlanning: '',
     monthlyConsolidation: '',
     globalCollaboration: '',
-
-    // Behavioral Assessment Scores
     qualityOfWork: '',
     planningExecution: '',
     timeResources: '',
@@ -40,76 +38,134 @@ export const JharnaAmbulkar = () => {
     leadership: '',
     discipline: '',
     punctuality: ''
-  });
+  };
 
+  const [scores, setScores] = useState(initialScores);
   const [userData, setUserData] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [allDataRows, setAllDataRows] = useState([]);
+  const [availableMonths, setAvailableMonths] = useState([]);
+  const [selectedMonth, setSelectedMonth] = useState('');
+  const [userSubmissionInfo, setUserSubmissionInfo] = useState(null);
+
+  const sheetName = "Jharna Ambulkar";
+
+  const parseJobScores = (row) => {
+    if (!row) return {};
+    return {
+      dataCleansingValidation: row[4] || "",
+      misMaintenance: row[5] || "",
+      dataQualityIssues: row[6] || "",
+      misRequirements: row[7] || "",
+      monthlyMISPreparation: row[8] || "",
+      revenueReview: row[9] || "",
+      debtorsAnalysis: row[10] || "",
+      statisticalDataPreparation: row[11] || "",
+      prepareMarketing: row[12] || "",
+      misCollaboration: row[13] || "",
+      statisticalDataReview: row[14] || "",
+      misActivities: row[15] || "",
+      sapEntries: row[16] || "",
+      overheadsReview: row[17] || "",
+      provisionsAnalysis: row[18] || "",
+      plBalanceSheet: row[19] || "",
+      headcountReview: row[20] || "",
+      prepareMonthly: row[21] || "",
+      checkSocial: row[22] || "",
+      financialPlanning: row[23] || "",
+      monthlyConsolidation: row[24] || "",
+      globalCollaboration: row[25] || "",
+    };
+  };
+
+  const applyMonthData = (targetMonth, rows) => {
+    const userRow = findUserSubmission(rows, targetMonth);
+    if (userRow) {
+      const parsed = parseJobScores(userRow);
+      setUserData(parsed);
+
+      const totalScore = parseFloat(userRow[36]) || Object.values(parsed).reduce((a, b) => a + (parseFloat(b) || 0), 0);
+      const targetScore = parseFloat(userRow[35]) || 80;
+      const percentage = parseFloat(userRow[44]) || (targetScore > 0 ? (totalScore / targetScore) * 100 : 0);
+
+      setUserSubmissionInfo({
+        timestamp: userRow[0],
+        month: userRow[1],
+        totalScore,
+        targetScore,
+        percentage
+      });
+    } else {
+      setUserData({});
+      setUserSubmissionInfo(null);
+    }
+
+    const cooRow = findCooEvaluation(rows, targetMonth);
+    if (cooRow) {
+      setScores({
+        ...parseJobScores(cooRow),
+        qualityOfWork: cooRow[26] || '',
+        planningExecution: cooRow[27] || '',
+        timeResources: cooRow[28] || '',
+        interpersonalRelations: cooRow[29] || '',
+        flexibilityAdaptability: cooRow[30] || '',
+        communication: cooRow[31] || '',
+        integrity: cooRow[32] || '',
+        leadership: cooRow[33] || '',
+        discipline: cooRow[34] || '',
+        punctuality: cooRow[35] || ''
+      });
+    } else {
+      setScores(initialScores);
+    }
+  };
+
+  const loadData = async () => {
+    setIsLoading(true);
+    try {
+      const result = await fetchScorecardSheetData(sheetName);
+      if (result && result.data && result.data.length > 0) {
+        const dataRows = extractDataRows(result.data);
+        setAllDataRows(dataRows);
+
+        const months = extractAvailableMonths(dataRows);
+        setAvailableMonths(months);
+
+        const defaultMonth = getDefaultSelectedMonth(dataRows, months);
+        setSelectedMonth(defaultMonth);
+        applyMonthData(defaultMonth, dataRows);
+      }
+    } catch (err) {
+      console.error('Error loading data:', err);
+      toast.error('Failed to load scorecard data');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
-        const sheetId = "162o34BXqnJvmJjjtIoQpcBGo8orn2ZO5Jf0p8MgoUCs";
-        const sheetName = "Jharna Ambulkar";
-
-        const response = await fetch(`${scriptURL}?sheetId=${encodeURIComponent(sheetId)}&sheetName=${encodeURIComponent(sheetName)}&action=getData`);
-
-        if (response.ok) {
-          const data = await response.json();
-          if (data && data.data && data.data.length > 0) {
-            // Data starts from row 5, so we slice from index 4 (row 5) onwards
-            const dataRows = data.data.slice(4);
-
-            // Filter rows where column C (index 2) has "User" value
-            const userRows = dataRows.filter(row => row[2] === "User");
-
-            if (userRows.length > 0) {
-              // Find the latest row based on timestamp in Column A (index 0)
-              const latestUserRow = userRows.reduce((latest, current) => {
-                const latestTimestamp = new Date(latest[0]);
-                const currentTimestamp = new Date(current[0]);
-                return currentTimestamp > latestTimestamp ? current : latest;
-              });
-
-              setUserData({
-                dataCleansingValidation: latestUserRow[4] || "",
-                misMaintenance: latestUserRow[5] || "",
-                dataQualityIssues: latestUserRow[6] || "",
-                misRequirements: latestUserRow[7] || "",
-                monthlyMISPreparation: latestUserRow[8] || "",
-                revenueReview: latestUserRow[9] || "",
-                debtorsAnalysis: latestUserRow[10] || "",
-                statisticalDataPreparation: latestUserRow[11] || "",
-                prepareMarketing: latestUserRow[12] || "",
-                misCollaboration: latestUserRow[13] || "",
-                statisticalDataReview: latestUserRow[14] || "",
-                misActivities: latestUserRow[15] || "",
-                sapEntries: latestUserRow[16] || "",
-                overheadsReview: latestUserRow[17] || "",
-                provisionsAnalysis: latestUserRow[18] || "",
-                plBalanceSheet: latestUserRow[19] || "",
-                headcountReview: latestUserRow[20] || "",
-                prepareMonthly: latestUserRow[21] || "",
-                checkSocial: latestUserRow[22] || "",
-                financialPlanning: latestUserRow[23] || "",
-                monthlyConsolidation: latestUserRow[24] || "",
-                globalCollaboration: latestUserRow[25] || "",
-              });
-            } else {
-              console.log('No row with "User" value found in column C');
-            }
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
-
-    fetchUserData();
+    loadData();
   }, []);
 
+  const handleMonthChange = (month) => {
+    setSelectedMonth(month);
+    applyMonthData(month, allDataRows);
+  };
+
+  const handleCopyUserScores = () => {
+    if (!userData || Object.keys(userData).length === 0) {
+      toast.warning('No user scores available to copy for this month.');
+      return;
+    }
+    setScores(prev => ({
+      ...prev,
+      ...userData
+    }));
+    toast.success('User scores copied into COO fields!');
+  };
+
   const handleScoreChange = (kpi, value) => {
-    // Ensure value is within range
     const numValue = parseFloat(value);
     if (numValue < 0) return;
 
@@ -124,7 +180,6 @@ export const JharnaAmbulkar = () => {
     const behavioralTotal = Object.values(scores).slice(22).reduce((a, b) => a + (parseFloat(b) || 0), 0);
     const overallTotal = jobAssessmentTotal + behavioralTotal;
 
-    // Calculate target totals (out of values) - Updated based on provided data
     const jobAssessmentTargets = [6, 4, 3, 6, 4, 2, 3, 4, 3, 5, 4, 3, 2, 4, 4, 2, 3, 3, 3, 4, 5, 3];
     const behavioralTargets = [1, 2, 2, 2, 2, 2, 2, 2, 2, 3];
 
@@ -147,7 +202,6 @@ export const JharnaAmbulkar = () => {
   const handleSubmit = async () => {
     if (isSubmitting) return;
 
-    // Validate if all required scores are filled
     const requiredScores = Object.values(scores).filter(score => score === '');
     if (requiredScores.length > 0) {
       if (!confirm('Some scores are empty. Do you want to submit anyway?')) {
@@ -158,10 +212,7 @@ export const JharnaAmbulkar = () => {
     setIsSubmitting(true);
 
     try {
-      // Prepare data according to your column structure
       const currentDate = new Date();
-
-      // Format timestamp as dd/mm/yyyy hh:mm:ss
       const day = String(currentDate.getDate()).padStart(2, '0');
       const month = String(currentDate.getMonth() + 1).padStart(2, '0');
       const year = currentDate.getFullYear();
@@ -170,15 +221,24 @@ export const JharnaAmbulkar = () => {
       const seconds = String(currentDate.getSeconds()).padStart(2, '0');
 
       const timestamp = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
-      const currentMonth = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
-      const employeeName = "Jharna Ambulkar";
+      const evaluationMonth = selectedMonth || currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+      let evaluatorName = "Hansraj Singh";
+      try {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+          const parsed = JSON.parse(storedUser);
+          evaluatorName = parsed.Name || parsed.Username || "Hansraj Singh";
+        }
+      } catch (e) {
+        console.error(e);
+      }
 
       const rowData = [
         timestamp,
-        currentMonth,
-        employeeName,
+        evaluationMonth,
+        evaluatorName,
         "",
-        // Job Assessment Scores
         scores.dataCleansingValidation || 0,
         scores.misMaintenance || 0,
         scores.dataQualityIssues || 0,
@@ -201,8 +261,6 @@ export const JharnaAmbulkar = () => {
         scores.financialPlanning || 0,
         scores.monthlyConsolidation || 0,
         scores.globalCollaboration || 0,
-
-        // Behavioral Assessment Scores
         scores.qualityOfWork || 0,
         scores.planningExecution || 0,
         scores.timeResources || 0,
@@ -217,7 +275,6 @@ export const JharnaAmbulkar = () => {
 
       const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
       const sheetId = "162o34BXqnJvmJjjtIoQpcBGo8orn2ZO5Jf0p8MgoUCs";
-      const sheetName = "Jharna Ambulkar";
 
       const response = await fetch(scriptURL, {
         method: 'POST',
@@ -227,17 +284,9 @@ export const JharnaAmbulkar = () => {
         body: `sheetId=${encodeURIComponent(sheetId)}&sheetName=${encodeURIComponent(sheetName)}&payload=${encodeURIComponent(JSON.stringify(rowData))}`
       });
 
-      // Check if the response is successful
       if (response.ok) {
-        console.log('Submitted Scores:', scores);
-        console.log('Row Data sent to sheet:', rowData);
-
-        // Show success message
-        toast.success('Scores submitted successfully!');
-
-        // Optional: You can also open the sheet URL to verify data was stored
-        const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/edit#gid=0`;
-        console.log('Check your Google Sheet here:', sheetUrl);
+        toast.success(`Scores for ${evaluationMonth} submitted successfully!`);
+        loadData();
       } else {
         throw new Error(`Server responded with status: ${response.status}`);
       }
@@ -253,6 +302,19 @@ export const JharnaAmbulkar = () => {
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', minHeight: '100vh' }}>
       <ToastContainer />
+
+      <MonthSelectorBanner
+        selectedMonth={selectedMonth}
+        onMonthChange={handleMonthChange}
+        availableMonths={availableMonths}
+        onRefresh={loadData}
+        isLoading={isLoading}
+        submissionInfo={userSubmissionInfo}
+        isUserView={false}
+        onCopyUserScores={handleCopyUserScores}
+        employeeName="Jharna Ambulkar"
+      />
+
       <div style={{ marginBottom: '30px', backgroundColor: 'white', borderRadius: '10px', padding: '20px', boxShadow: '0 6px 10px rgba(0, 0, 0, 0.1)' }}>
         <h2 style={{ color: '#1e3a8a', borderBottom: '3px solid #1e3a8a', paddingBottom: '10px', marginBottom: '20px' }}>JOB ASSESSMENT</h2>
         <table style={{ width: '100%', borderCollapse: 'collapse', borderRadius: '8px', overflow: 'hidden' }}>

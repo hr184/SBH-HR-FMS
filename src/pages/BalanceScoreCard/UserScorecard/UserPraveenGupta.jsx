@@ -1,10 +1,11 @@
-import React from 'react'
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { MonthSelectorBanner } from '../MonthSelectorBanner';
+import { fetchScorecardSheetData, extractDataRows, extractAvailableMonths, getDefaultSelectedMonth, findUserSubmission } from '../scorecardHelper';
 
 export const UserPraveenGupta = () => {
-  const [scores, setScores] = useState({
+  const initialScores = {
     // Job Assessment Scores
     strategicPlanning: '',
     technologyRoadmapping: '',
@@ -33,12 +34,106 @@ export const UserPraveenGupta = () => {
     siteVisits: '',
     surveillance: '',
     infrastructureMaintenance: '',
-  });
+  };
 
+  const [scores, setScores] = useState(initialScores);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [allDataRows, setAllDataRows] = useState([]);
+  const [availableMonths, setAvailableMonths] = useState([]);
+  const [selectedMonth, setSelectedMonth] = useState('');
+  const [existingSubmissionInfo, setExistingSubmissionInfo] = useState(null);
+
+  const sheetName = "Praveen Gupta";
+
+  const parseScoresFromRow = (row) => {
+    return {
+      strategicPlanning: row[4] !== undefined && row[4] !== "" ? row[4] : "",
+      technologyRoadmapping: row[5] !== undefined && row[5] !== "" ? row[5] : "",
+      innovation: row[6] !== undefined && row[6] !== "" ? row[6] : "",
+      changeManagement: row[7] !== undefined && row[7] !== "" ? row[7] : "",
+      teamLeadership: row[8] !== undefined && row[8] !== "" ? row[8] : "",
+      infrastructureManagement: row[9] !== undefined && row[9] !== "" ? row[9] : "",
+      dailyOperations: row[10] !== undefined && row[10] !== "" ? row[10] : "",
+      projectManagement: row[11] !== undefined && row[11] !== "" ? row[11] : "",
+      budgeting: row[12] !== undefined && row[12] !== "" ? row[12] : "",
+      vendorRelationships: row[13] !== undefined && row[13] !== "" ? row[13] : "",
+      costOptimization: row[14] !== undefined && row[14] !== "" ? row[14] : "",
+      cybersecurity: row[15] !== undefined && row[15] !== "" ? row[15] : "",
+      dataProtection: row[16] !== undefined && row[16] !== "" ? row[16] : "",
+      disasterRecovery: row[17] !== undefined && row[17] !== "" ? row[17] : "",
+      riskAssessment: row[18] !== undefined && row[18] !== "" ? row[18] : "",
+      stakeholderLiaison: row[19] !== undefined && row[19] !== "" ? row[19] : "",
+      reporting: row[20] !== undefined && row[20] !== "" ? row[20] : "",
+      stakeholderCommunication: row[21] !== undefined && row[21] !== "" ? row[21] : "",
+      myOperator: row[22] !== undefined && row[22] !== "" ? row[22] : "",
+      whatsappAPI: row[23] !== undefined && row[23] !== "" ? row[23] : "",
+      whatsappPanel: row[24] !== undefined && row[24] !== "" ? row[24] : "",
+      crmSoftware: row[25] !== undefined && row[25] !== "" ? row[25] : "",
+      voiceCallingPanel: row[26] !== undefined && row[26] !== "" ? row[26] : "",
+      trainingMentoring: row[27] !== undefined && row[27] !== "" ? row[27] : "",
+      siteVisits: row[28] !== undefined && row[28] !== "" ? row[28] : "",
+      surveillance: row[29] !== undefined && row[29] !== "" ? row[29] : "",
+      infrastructureMaintenance: row[30] !== undefined && row[30] !== "" ? row[30] : "",
+    };
+  };
+
+  const applyMonthData = (targetMonth, rows) => {
+    const userRow = findUserSubmission(rows, targetMonth);
+    if (userRow) {
+      const parsed = parseScoresFromRow(userRow);
+      setScores(parsed);
+
+      const totalScore = parseFloat(userRow[36]) || Object.values(parsed).reduce((a, b) => a + (parseFloat(b) || 0), 0);
+      const targetScore = parseFloat(userRow[35]) || 80;
+      const percentage = parseFloat(userRow[44]) || (targetScore > 0 ? (totalScore / targetScore) * 100 : 0);
+
+      setExistingSubmissionInfo({
+        timestamp: userRow[0],
+        month: userRow[1],
+        totalScore,
+        targetScore,
+        percentage
+      });
+    } else {
+      setScores(initialScores);
+      setExistingSubmissionInfo(null);
+    }
+  };
+
+  const loadUserData = async () => {
+    setIsLoading(true);
+    try {
+      const result = await fetchScorecardSheetData(sheetName);
+      if (result && result.data && result.data.length > 0) {
+        const dataRows = extractDataRows(result.data);
+        setAllDataRows(dataRows);
+
+        const months = extractAvailableMonths(dataRows);
+        setAvailableMonths(months);
+
+        const defaultMonth = getDefaultSelectedMonth(dataRows, months);
+        setSelectedMonth(defaultMonth);
+        applyMonthData(defaultMonth, dataRows);
+      }
+    } catch (error) {
+      console.error('Error loading data:', error);
+      toast.error('Failed to load previous scorecard data');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadUserData();
+  }, []);
+
+  const handleMonthChange = (month) => {
+    setSelectedMonth(month);
+    applyMonthData(month, allDataRows);
+  };
 
   const handleScoreChange = (kpi, value) => {
-    // Ensure value is within range
     const numValue = parseFloat(value);
     if (numValue < 0) return;
     
@@ -50,10 +145,7 @@ export const UserPraveenGupta = () => {
 
   const calculateTotals = () => {
     const jobAssessmentTotal = Object.values(scores).reduce((a, b) => a + (parseFloat(b) || 0), 0);
-    
-    // Calculate target totals (out of values)
     const jobAssessmentTargets = [4, 5, 3, 2, 2, 3, 4, 2, 3, 4, 3, 2, 4, 3, 3, 2, 3, 4, 2, 3, 2, 4, 2, 3, 4, 2, 2];
-    
     const jobAssessmentTargetTotal = jobAssessmentTargets.reduce((a, b) => a + b, 0);
     
     return {
@@ -68,7 +160,6 @@ export const UserPraveenGupta = () => {
   const handleSubmit = async () => {
     if (isSubmitting) return;
 
-    // Validate if all required scores are filled
     const requiredScores = Object.values(scores).filter(score => score === '');
     if (requiredScores.length > 0) {
       if (!confirm('Some scores are empty. Do you want to submit anyway?')) {
@@ -79,10 +170,7 @@ export const UserPraveenGupta = () => {
     setIsSubmitting(true);
 
     try {
-      // Prepare data according to your column structure
       const currentDate = new Date();
-      
-      // Format timestamp as dd/mm/yyyy hh:mm:ss
       const day = String(currentDate.getDate()).padStart(2, '0');
       const month = String(currentDate.getMonth() + 1).padStart(2, '0');
       const year = currentDate.getFullYear();
@@ -91,87 +179,82 @@ export const UserPraveenGupta = () => {
       const seconds = String(currentDate.getSeconds()).padStart(2, '0');
       
       const timestamp = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
-      const currentMonth = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+      const submissionMonth = selectedMonth || currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
       const employeeName = "User";
 
       const rowData = [
-        timestamp, // Column A (index-0) - Timestamp
-        currentMonth, // Column B (index-1) - Current Month
-        employeeName, // Column C (index-2) - Employee Name
-        "", // Column D (index-3) - Empty column
-        scores.strategicPlanning || 0, // Column E (index-4) - Strategic Planning and Leadership
-        scores.technologyRoadmapping || 0, // Column F (index-5) - Technology Roadmapping
-        scores.innovation || 0, // Column G (index-6) - Driving Innovation
-        scores.changeManagement || 0, // Column H (index-7) - Change Management
-        scores.teamLeadership || 0, // Column I (index-8) - Team Leadership
-        scores.infrastructureManagement || 0, // Column J (index-9) - Infrastructure Management
-        scores.dailyOperations || 0, // Column K (index-10) - Daily Operations
-        scores.projectManagement || 0, // Column L (index-11) - Project Management
-        scores.budgeting || 0, // Column M (index-12) - Budgeting and Financial Planning
-        scores.vendorRelationships || 0, // Column N (index-13) - Vendor Relationships
-        scores.costOptimization || 0, // Column O (index-14) - Cost Optimization
-        scores.cybersecurity || 0, // Column P (index-15) - Cybersecurity
-        scores.dataProtection || 0, // Column Q (index-16) - Data Protection and Compliance
-        scores.disasterRecovery || 0, // Column R (index-17) - Disaster Recovery and Business Continuity
-        scores.riskAssessment || 0, // Column S (index-18) - Risk Assessment
-        scores.stakeholderLiaison || 0, // Column T (index-19) - Stakeholder Liaison
-        scores.reporting || 0, // Column U (index-20) - Reporting
-        scores.stakeholderCommunication || 0, // Column V (index-21) - Communication
-        scores.myOperator || 0, // Column W (index-22) - My Operator
-        scores.whatsappAPI || 0, // Column X (index-23) - WhatsApp API
-        scores.whatsappPanel || 0, // Column Y (index-24) - WhatsApp Panel
-        scores.crmSoftware || 0, // Column Z (index-25) - CRM Software
-        scores.voiceCallingPanel || 0, // Column AA (index-26) - Voice Calling Marketing Panel
-        scores.trainingMentoring || 0, // Column AB (index-27) - Training and mentoring
-        scores.siteVisits || 0, // Column AC (index-28) - Site visits
-        scores.surveillance || 0, // Column AD (index-29) - Surveillance systems
-        scores.infrastructureMaintenance || 0, // Column AE (index-30) - Infrastructure maintenance
+        timestamp,
+        submissionMonth,
+        employeeName,
+        "",
+        scores.strategicPlanning || 0,
+        scores.technologyRoadmapping || 0,
+        scores.innovation || 0,
+        scores.changeManagement || 0,
+        scores.teamLeadership || 0,
+        scores.infrastructureManagement || 0,
+        scores.dailyOperations || 0,
+        scores.projectManagement || 0,
+        scores.budgeting || 0,
+        scores.vendorRelationships || 0,
+        scores.costOptimization || 0,
+        scores.cybersecurity || 0,
+        scores.dataProtection || 0,
+        scores.disasterRecovery || 0,
+        scores.riskAssessment || 0,
+        scores.stakeholderLiaison || 0,
+        scores.reporting || 0,
+        scores.stakeholderCommunication || 0,
+        scores.myOperator || 0,
+        scores.whatsappAPI || 0,
+        scores.whatsappPanel || 0,
+        scores.crmSoftware || 0,
+        scores.voiceCallingPanel || 0,
+        scores.trainingMentoring || 0,
+        scores.siteVisits || 0,
+        scores.surveillance || 0,
+        scores.infrastructureMaintenance || 0,
       ];
 
       const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
       const sheetId = "162o34BXqnJvmJjjtIoQpcBGo8orn2ZO5Jf0p8MgoUCs";
-      const sheetName = "Praveen Gupta";
-
-      // Use fetch with form data to properly submit to Google Apps Script
-      const formData = new FormData();
-      formData.append('sheetId', sheetId);
-      formData.append('sheetName', sheetName);
-      formData.append('payload', JSON.stringify(rowData));
 
       const response = await fetch(scriptURL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: `sheetId=${encodeURIComponent(sheetId)}&sheetName=${encodeURIComponent(sheetName)}&payload=${encodeURIComponent(JSON.stringify(rowData))}`
-    });
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `sheetId=${encodeURIComponent(sheetId)}&sheetName=${encodeURIComponent(sheetName)}&payload=${encodeURIComponent(JSON.stringify(rowData))}`
+      });
 
-    // Check if the response is successful
-    if (response.ok) {
-      console.log('Submitted Scores:', scores);
-      console.log('Row Data sent to sheet:', rowData);
-      
-      // Show success message
-      toast.success('Scores submitted successfully!');
-      
-      // Optional: You can also open the sheet URL to verify data was stored
-      const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/edit#gid=0`;
-      console.log('Check your Google Sheet here:', sheetUrl);
-    } else {
-      throw new Error(`Server responded with status: ${response.status}`);
+      if (response.ok) {
+        toast.success(`Scores for ${submissionMonth} submitted successfully!`);
+        loadUserData();
+      } else {
+        throw new Error(`Server responded with status: ${response.status}`);
+      }
+
+    } catch (error) {
+      console.error('Error submitting scores:', error);
+      toast.error('Failed to submit scores. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
-
-  } catch (error) {
-    console.error('Error submitting scores:', error);
-    toast.error('Failed to submit scores. Please try again.');
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+  };
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', minHeight: '100vh' }}>     
-    <ToastContainer /> 
+    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', minHeight: '100vh' }}>
+      <ToastContainer />
+      <MonthSelectorBanner
+        selectedMonth={selectedMonth}
+        onMonthChange={handleMonthChange}
+        availableMonths={availableMonths}
+        onRefresh={loadUserData}
+        isLoading={isLoading}
+        submissionInfo={existingSubmissionInfo}
+        isUserView={true}
+        employeeName="Praveen Gupta"
+      />
       <div style={{ marginBottom: '30px', backgroundColor: 'white', borderRadius: '10px', padding: '20px', boxShadow: '0 6px 10px rgba(0, 0, 0, 0.1)' }}>
         <h2 style={{ color: '#1e3a8a', borderBottom: '3px solid #1e3a8a', paddingBottom: '10px', marginBottom: '20px' }}>JOB ASSESSMENT</h2>
         <table style={{ width: '100%', borderCollapse: 'collapse', borderRadius: '8px', overflow: 'hidden' }}>
@@ -670,7 +753,7 @@ export const UserPraveenGupta = () => {
             fontWeight: '600'
           }}
         >
-          {isSubmitting ? 'Submitting...' : 'Submit Scores'}
+          {isSubmitting ? 'Submitting...' : existingSubmissionInfo ? `Update & Re-Submit for ${selectedMonth}` : `Submit Scores for ${selectedMonth}`}
         </button>
       </div>
     </div>

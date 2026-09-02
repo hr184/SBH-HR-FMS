@@ -1,11 +1,11 @@
-import React from 'react'
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { MonthSelectorBanner } from '../MonthSelectorBanner';
+import { fetchScorecardSheetData, extractDataRows, extractAvailableMonths, getDefaultSelectedMonth, findUserSubmission } from '../scorecardHelper';
 
 export const UserGeetanjaliDeep = () => {
-  const [scores, setScores] = useState({
-    // Job Assessment Scores - Updated KPIs
+  const initialScores = {
     talenntAquisation1: '',
     talenntAquisation2: '',
     talenntAquisation3: '',
@@ -25,12 +25,98 @@ export const UserGeetanjaliDeep = () => {
     strategyAndRoadmap5: '',
     strategyAndRoadmap6: '',
     strategyAndRoadmap7: ''
-  });
+  };
 
+  const [scores, setScores] = useState(initialScores);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [allDataRows, setAllDataRows] = useState([]);
+  const [availableMonths, setAvailableMonths] = useState([]);
+  const [selectedMonth, setSelectedMonth] = useState('');
+  const [existingSubmissionInfo, setExistingSubmissionInfo] = useState(null);
+
+  const sheetName = "Geetanjali Deep";
+
+  const parseScoresFromRow = (row) => {
+    return {
+      talenntAquisation1: row[4] !== undefined && row[4] !== "" ? row[4] : "",
+      talenntAquisation2: row[5] !== undefined && row[5] !== "" ? row[5] : "",
+      talenntAquisation3: row[6] !== undefined && row[6] !== "" ? row[6] : "",
+      talenntAquisation4: row[7] !== undefined && row[7] !== "" ? row[7] : "",
+      talenntAquisation5: row[8] !== undefined && row[8] !== "" ? row[8] : "",
+      talenntAquisation6: row[9] !== undefined && row[9] !== "" ? row[9] : "",
+      hrPolicy1: row[10] !== undefined && row[10] !== "" ? row[10] : "",
+      hrPolicy2: row[11] !== undefined && row[11] !== "" ? row[11] : "",
+      hrPolicy3: row[12] !== undefined && row[12] !== "" ? row[12] : "",
+      hrPolicy5: row[14] !== undefined && row[14] !== "" ? row[14] : "",
+      hrPolicy6: row[15] !== undefined && row[15] !== "" ? row[15] : "",
+      hrPolicy7: row[16] !== undefined && row[16] !== "" ? row[16] : "",
+      strategyAndRoadmap1: row[17] !== undefined && row[17] !== "" ? row[17] : "",
+      strategyAndRoadmap2: row[18] !== undefined && row[18] !== "" ? row[18] : "",
+      strategyAndRoadmap3: row[19] !== undefined && row[19] !== "" ? row[19] : "",
+      strategyAndRoadmap4: row[20] !== undefined && row[20] !== "" ? row[20] : "",
+      strategyAndRoadmap5: row[21] !== undefined && row[21] !== "" ? row[21] : "",
+      strategyAndRoadmap6: row[22] !== undefined && row[22] !== "" ? row[22] : "",
+      strategyAndRoadmap7: row[23] !== undefined && row[23] !== "" ? row[23] : "",
+    };
+  };
+
+  const applyMonthData = (targetMonth, rows) => {
+    const userRow = findUserSubmission(rows, targetMonth);
+    if (userRow) {
+      const parsed = parseScoresFromRow(userRow);
+      setScores(parsed);
+
+      const totalScore = parseFloat(userRow[36]) || Object.values(parsed).reduce((a, b) => a + (parseFloat(b) || 0), 0);
+      const targetScore = parseFloat(userRow[35]) || 80;
+      const percentage = parseFloat(userRow[44]) || (targetScore > 0 ? (totalScore / targetScore) * 100 : 0);
+
+      setExistingSubmissionInfo({
+        timestamp: userRow[0],
+        month: userRow[1],
+        totalScore,
+        targetScore,
+        percentage
+      });
+    } else {
+      setScores(initialScores);
+      setExistingSubmissionInfo(null);
+    }
+  };
+
+  const loadUserData = async () => {
+    setIsLoading(true);
+    try {
+      const result = await fetchScorecardSheetData(sheetName);
+      if (result && result.data && result.data.length > 0) {
+        const dataRows = extractDataRows(result.data);
+        setAllDataRows(dataRows);
+
+        const months = extractAvailableMonths(dataRows);
+        setAvailableMonths(months);
+
+        const defaultMonth = getDefaultSelectedMonth(dataRows, months);
+        setSelectedMonth(defaultMonth);
+        applyMonthData(defaultMonth, dataRows);
+      }
+    } catch (error) {
+      console.error('Error loading data:', error);
+      toast.error('Failed to load previous scorecard data');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadUserData();
+  }, []);
+
+  const handleMonthChange = (month) => {
+    setSelectedMonth(month);
+    applyMonthData(month, allDataRows);
+  };
 
   const handleScoreChange = (kpi, value) => {
-    // Ensure value is within range
     const numValue = parseFloat(value);
     if (numValue < 0) return;
     
@@ -47,16 +133,13 @@ export const UserGeetanjaliDeep = () => {
       'strategyAndRoadmap1', 'strategyAndRoadmap2', 'strategyAndRoadmap3', 'strategyAndRoadmap4', 'strategyAndRoadmap5', 'strategyAndRoadmap6', 'strategyAndRoadmap7'
     ];
     const jobAssessmentTotal = jobAssessmentKeys.reduce((sum, key) => sum + (parseFloat(scores[key]) || 0), 0);
-    
-    // Calculate target totals (out of values) - Updated targets
-    const jobAssessmentTargets = [4, 4, 4, 5, 3, 4, 4, 5, 4, 3, 5, 4, 4, 4, 4, 4, 4, 4, 4];
-    
+    const jobAssessmentTargets = [5, 4, 3, 5, 5, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 4, 3, 3, 3];
     const jobAssessmentTargetTotal = jobAssessmentTargets.reduce((a, b) => a + b, 0);
     
     return {
       jobAssessmentTotal,
       jobAssessmentTargetTotal,
-      overallPercentage: jobAssessmentTotal > 0 ? (jobAssessmentTotal / jobAssessmentTargetTotal) * 100 : 0
+      overallPercentage: jobAssessmentTargetTotal > 0 ? (jobAssessmentTotal / jobAssessmentTargetTotal) * 100 : 0
     };
   };
 
@@ -65,7 +148,6 @@ export const UserGeetanjaliDeep = () => {
   const handleSubmit = async () => {
     if (isSubmitting) return;
 
-    // Validate if all required scores are filled
     const requiredScores = Object.values(scores).filter(score => score === '');
     if (requiredScores.length > 0) {
       if (!confirm('Some scores are empty. Do you want to submit anyway?')) {
@@ -76,10 +158,7 @@ export const UserGeetanjaliDeep = () => {
     setIsSubmitting(true);
 
     try {
-      // Prepare data according to your column structure
       const currentDate = new Date();
-      
-      // Format timestamp as dd/mm/yyyy hh:mm:ss
       const day = String(currentDate.getDate()).padStart(2, '0');
       const month = String(currentDate.getMonth() + 1).padStart(2, '0');
       const year = currentDate.getFullYear();
@@ -88,80 +167,75 @@ export const UserGeetanjaliDeep = () => {
       const seconds = String(currentDate.getSeconds()).padStart(2, '0');
       
       const timestamp = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
-      const currentMonth = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+      const submissionMonth = selectedMonth || currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
       const employeeName = "User";
 
       const rowData = [
-        timestamp, // Column A (index-0) - Timestamp
-        currentMonth, // Column B (index-1) - Current Month
-        employeeName, // Column C (index-2) - Employee Name
-        "", // Column D (index-3) - Empty column
-        scores.talenntAquisation1 || 0, // Column E (index-4) - Talent Acquisition and Management
-        scores.talenntAquisation2 || 0, // Column F (index-5) - Onboarding and Offboarding
-        scores.talenntAquisation3 || 0, // Column G (index-6) - Employee Relations and Engagement
-        scores.talenntAquisation4 || 0, // Column H (index-7) - Performance Management
-        scores.talenntAquisation5 || 0, // Column I (index-8) - Training and Development
-        scores.talenntAquisation6 || 0, // Column J (index-9) - Employee Engagement
-        scores.hrPolicy1 || 0, // Column K (index-10) - HR Policies and Compliance
-        scores.hrPolicy2 || 0, // Column L (index-11) - HR Analytics and Reporting
-        scores.hrPolicy3 || 0, // Column M (index-12) - Change Management and Organizational Effectiveness
-        0, // Column N (index-13) - Stakeholder Management and Leadership (Removed)
-        scores.hrPolicy5 || 0, // Column O (index-14) - HR SOP training should be provided to the new joiners
-        scores.hrPolicy6 || 0, // Column P (index-15) - HR SOP refreshment training to be provided to all employees across the board
-        scores.hrPolicy7 || 0, // Column Q (index-16) - HR Documentation in alignment with the Quality Management System standards
-        scores.strategyAndRoadmap1 || 0, // Column R (index-17) - Design and implement organization structure, HR frameworks, and SOPs
-        scores.strategyAndRoadmap2 || 0, // Column S (index-18) - Oversee talent acquisition, employee engagement, learning & development, and performance management
-        scores.strategyAndRoadmap3 || 0, // Column T (index-19) - Build a service excellence and customer-focused culture across all levels
-        scores.strategyAndRoadmap4 || 0, // Column U (index-20) - Manage payroll, compliance, and HR operations efficiently
-        scores.strategyAndRoadmap5 || 0, // Column V (index-21) - Partner with leadership to align HR strategy with business goals and expansion plans
-        scores.strategyAndRoadmap6 || 0, // Column W (index-22) - Act as a trusted advisor to management, balancing empathy with accountability
-        scores.strategyAndRoadmap7 || 0 // Column X (index-23) - Drive change initiatives and lead by example in implementing modern HR best practices
+        timestamp,
+        submissionMonth,
+        employeeName,
+        "",
+        scores.talenntAquisation1 || 0,
+        scores.talenntAquisation2 || 0,
+        scores.talenntAquisation3 || 0,
+        scores.talenntAquisation4 || 0,
+        scores.talenntAquisation5 || 0,
+        scores.talenntAquisation6 || 0,
+        scores.hrPolicy1 || 0,
+        scores.hrPolicy2 || 0,
+        scores.hrPolicy3 || 0,
+        0,
+        scores.hrPolicy5 || 0,
+        scores.hrPolicy6 || 0,
+        scores.hrPolicy7 || 0,
+        scores.strategyAndRoadmap1 || 0,
+        scores.strategyAndRoadmap2 || 0,
+        scores.strategyAndRoadmap3 || 0,
+        scores.strategyAndRoadmap4 || 0,
+        scores.strategyAndRoadmap5 || 0,
+        scores.strategyAndRoadmap6 || 0,
+        scores.strategyAndRoadmap7 || 0
       ];
 
       const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
       const sheetId = "162o34BXqnJvmJjjtIoQpcBGo8orn2ZO5Jf0p8MgoUCs";
-      const sheetName = "Geetanjali Deep";
-
-      // Use fetch with form data to properly submit to Google Apps Script
-      const formData = new FormData();
-      formData.append('sheetId', sheetId);
-      formData.append('sheetName', sheetName);
-      formData.append('payload', JSON.stringify(rowData));
 
       const response = await fetch(scriptURL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: `sheetId=${encodeURIComponent(sheetId)}&sheetName=${encodeURIComponent(sheetName)}&payload=${encodeURIComponent(JSON.stringify(rowData))}`
-    });
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `sheetId=${encodeURIComponent(sheetId)}&sheetName=${encodeURIComponent(sheetName)}&payload=${encodeURIComponent(JSON.stringify(rowData))}`
+      });
 
-    // Check if the response is successful
-    if (response.ok) {
-      console.log('Submitted Scores:', scores);
-      console.log('Row Data sent to sheet:', rowData);
-      
-      // Show success message
-      toast.success('Scores submitted successfully!');
-      
-      // Optional: You can also open the sheet URL to verify data was stored
-      const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/edit#gid=0`;
-      console.log('Check your Google Sheet here:', sheetUrl);
-    } else {
-      throw new Error(`Server responded with status: ${response.status}`);
+      if (response.ok) {
+        toast.success(`Scores for ${submissionMonth} submitted successfully!`);
+        loadUserData();
+      } else {
+        throw new Error(`Server responded with status: ${response.status}`);
+      }
+
+    } catch (error) {
+      console.error('Error submitting scores:', error);
+      toast.error('Failed to submit scores. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
-
-  } catch (error) {
-    console.error('Error submitting scores:', error);
-    toast.error('Failed to submit scores. Please try again.');
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+  };
 
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', minHeight: '100vh' }}>      
-    <ToastContainer />
+      <ToastContainer />
+      <MonthSelectorBanner
+        selectedMonth={selectedMonth}
+        onMonthChange={handleMonthChange}
+        availableMonths={availableMonths}
+        onRefresh={loadUserData}
+        isLoading={isLoading}
+        submissionInfo={existingSubmissionInfo}
+        isUserView={true}
+        employeeName="Geetanjali Deep"
+      />
       <div style={{ marginBottom: '30px', backgroundColor: 'white', borderRadius: '10px', padding: '20px', boxShadow: '0 6px 10px rgba(0, 0, 0, 0.1)' }}>
         <h2 style={{ color: '#1e3a8a', borderBottom: '3px solid #1e3a8a', paddingBottom: '10px', marginBottom: '20px' }}>JOB ASSESSMENT</h2>
         <table style={{ width: '100%', borderCollapse: 'collapse', borderRadius: '8px', overflow: 'hidden' }}>
@@ -506,7 +580,7 @@ export const UserGeetanjaliDeep = () => {
             fontWeight: '600'
           }}
         >
-          {isSubmitting ? 'Submitting...' : 'Submit Scores'}
+          {isSubmitting ? 'Submitting...' : existingSubmissionInfo ? `Update & Re-Submit for ${selectedMonth}` : `Submit Scores for ${selectedMonth}`}
         </button>
       </div>
     </div>

@@ -27,9 +27,17 @@ export const UmeshDhakkadScorecardHistory = () => {
                       
                       const result = await response.json();
                       
-                      if (result.success) {
-                        // Skip header row if needed, or use all data
-                        setData(result.data.slice(5));
+                      if (result.success && result.data && result.data.length > 0) {
+                        let headerRowIdx = 3;
+                        for (let i = 0; i < Math.min(result.data.length, 10); i++) {
+                          if (result.data[i] && result.data[i][0] && result.data[i][0].toString().toLowerCase().trim() === 'timestamp') {
+                            headerRowIdx = i;
+                            break;
+                          }
+                        }
+                        const validRows = result.data.slice(headerRowIdx + 1).filter(r => r[0] && r[1]);
+                        validRows.sort((a, b) => (new Date(b[0]).getTime() || 0) - (new Date(a[0]).getTime() || 0));
+                        setData(validRows);
                       } else {
                         throw new Error(result.message || 'Failed to fetch data');
                       }

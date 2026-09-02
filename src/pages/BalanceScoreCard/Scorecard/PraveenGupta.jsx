@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react'
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { MonthSelectorBanner } from '../MonthSelectorBanner';
+import { fetchScorecardSheetData, extractDataRows, extractAvailableMonths, getDefaultSelectedMonth, findUserSubmission, findCooEvaluation } from '../scorecardHelper';
 
 export const PraveenGupta = () => {
-  const [scores, setScores] = useState({
-    // Job Assessment Scores
+  const initialScores = {
     strategicPlanning: '',
     technologyRoadmapping: '',
     innovation: '',
@@ -33,8 +33,6 @@ export const PraveenGupta = () => {
     siteVisits: '',
     surveillance: '',
     infrastructureMaintenance: '',
-
-    // Behavioral Assessment Scores
     qualityOfWork: '',
     planningExecution: '',
     timeResources: '',
@@ -45,81 +43,139 @@ export const PraveenGupta = () => {
     leadership: '',
     discipline: '',
     punctuality: ''
-  });
+  };
 
+  const [scores, setScores] = useState(initialScores);
   const [userData, setUserData] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [allDataRows, setAllDataRows] = useState([]);
+  const [availableMonths, setAvailableMonths] = useState([]);
+  const [selectedMonth, setSelectedMonth] = useState('');
+  const [userSubmissionInfo, setUserSubmissionInfo] = useState(null);
+
+  const sheetName = "Praveen Gupta";
+
+  const parseJobScores = (row) => {
+    if (!row) return {};
+    return {
+      strategicPlanning: row[4] || "",
+      technologyRoadmapping: row[5] || "",
+      innovation: row[6] || "",
+      changeManagement: row[7] || "",
+      teamLeadership: row[8] || "",
+      infrastructureManagement: row[9] || "",
+      dailyOperations: row[10] || "",
+      projectManagement: row[11] || "",
+      budgeting: row[12] || "",
+      vendorRelationships: row[13] || "",
+      costOptimization: row[14] || "",
+      cybersecurity: row[15] || "",
+      dataProtection: row[16] || "",
+      disasterRecovery: row[17] || "",
+      riskAssessment: row[18] || "",
+      stakeholderLiaison: row[19] || "",
+      reporting: row[20] || "",
+      stakeholderCommunication: row[21] || "",
+      myOperator: row[22] || "",
+      whatsappAPI: row[23] || "",
+      whatsappPanel: row[24] || "",
+      crmSoftware: row[25] || "",
+      voiceCallingPanel: row[26] || "",
+      trainingMentoring: row[27] || "",
+      siteVisits: row[28] || "",
+      surveillance: row[29] || "",
+      infrastructureMaintenance: row[30] || "",
+    };
+  };
+
+  const applyMonthData = (targetMonth, rows) => {
+    const userRow = findUserSubmission(rows, targetMonth);
+    if (userRow) {
+      const parsed = parseJobScores(userRow);
+      setUserData(parsed);
+
+      const totalScore = parseFloat(userRow[36]) || Object.values(parsed).reduce((a, b) => a + (parseFloat(b) || 0), 0);
+      const targetScore = parseFloat(userRow[35]) || 80;
+      const percentage = parseFloat(userRow[44]) || (targetScore > 0 ? (totalScore / targetScore) * 100 : 0);
+
+      setUserSubmissionInfo({
+        timestamp: userRow[0],
+        month: userRow[1],
+        totalScore,
+        targetScore,
+        percentage
+      });
+    } else {
+      setUserData({});
+      setUserSubmissionInfo(null);
+    }
+
+    const cooRow = findCooEvaluation(rows, targetMonth);
+    if (cooRow) {
+      setScores({
+        ...parseJobScores(cooRow),
+        qualityOfWork: cooRow[31] || '',
+        planningExecution: cooRow[32] || '',
+        timeResources: cooRow[33] || '',
+        interpersonalRelations: cooRow[34] || '',
+        flexibilityAdaptability: cooRow[35] || '',
+        communication: cooRow[36] || '',
+        integrity: cooRow[37] || '',
+        leadership: cooRow[38] || '',
+        discipline: cooRow[39] || '',
+        punctuality: cooRow[40] || ''
+      });
+    } else {
+      setScores(initialScores);
+    }
+  };
+
+  const loadData = async () => {
+    setIsLoading(true);
+    try {
+      const result = await fetchScorecardSheetData(sheetName);
+      if (result && result.data && result.data.length > 0) {
+        const dataRows = extractDataRows(result.data);
+        setAllDataRows(dataRows);
+
+        const months = extractAvailableMonths(dataRows);
+        setAvailableMonths(months);
+
+        const defaultMonth = getDefaultSelectedMonth(dataRows, months);
+        setSelectedMonth(defaultMonth);
+        applyMonthData(defaultMonth, dataRows);
+      }
+    } catch (err) {
+      console.error('Error loading data:', err);
+      toast.error('Failed to load scorecard data');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
-        const sheetId = "162o34BXqnJvmJjjtIoQpcBGo8orn2ZO5Jf0p8MgoUCs";
-        const sheetName = "Praveen Gupta";
-
-        const response = await fetch(`${scriptURL}?sheetId=${encodeURIComponent(sheetId)}&sheetName=${encodeURIComponent(sheetName)}&action=getData`);
-
-        if (response.ok) {
-          const data = await response.json();
-          if (data && data.data && data.data.length > 0) {
-            // Data starts from row 5, so we slice from index 4 (row 5) onwards
-            const dataRows = data.data.slice(4);
-
-            // Filter rows where column C (index 2) has "User" value
-            const userRows = dataRows.filter(row => row[2] === "User");
-
-            if (userRows.length > 0) {
-              // Find the latest row based on timestamp in Column A (index 0)
-              const latestUserRow = userRows.reduce((latest, current) => {
-                const latestTimestamp = new Date(latest[0]);
-                const currentTimestamp = new Date(current[0]);
-                return currentTimestamp > latestTimestamp ? current : latest;
-              });
-
-              setUserData({
-                strategicPlanning: latestUserRow[4] || "",
-                technologyRoadmapping: latestUserRow[5] || "",
-                innovation: latestUserRow[6] || "",
-                changeManagement: latestUserRow[7] || "",
-                teamLeadership: latestUserRow[8] || "",
-                infrastructureManagement: latestUserRow[9] || "",
-                dailyOperations: latestUserRow[10] || "",
-                projectManagement: latestUserRow[11] || "",
-                budgeting: latestUserRow[12] || "",
-                vendorRelationships: latestUserRow[13] || "",
-                costOptimization: latestUserRow[14] || "",
-                cybersecurity: latestUserRow[15] || "",
-                dataProtection: latestUserRow[16] || "",
-                disasterRecovery: latestUserRow[17] || "",
-                riskAssessment: latestUserRow[18] || "",
-                stakeholderLiaison: latestUserRow[19] || "",
-                reporting: latestUserRow[20] || "",
-                stakeholderCommunication: latestUserRow[21] || "",
-                myOperator: latestUserRow[22] || "",
-                whatsappAPI: latestUserRow[23] || "",
-                whatsappPanel: latestUserRow[24] || "",
-                crmSoftware: latestUserRow[25] || "",
-                voiceCallingPanel: latestUserRow[26] || "",
-                trainingMentoring: latestUserRow[27] || "",
-                siteVisits: latestUserRow[28] || "",
-                surveillance: latestUserRow[29] || "",
-                infrastructureMaintenance: latestUserRow[30] || "",
-              });
-            } else {
-              console.log('No row with "User" value found in column C');
-            }
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
-
-    fetchUserData();
+    loadData();
   }, []);
 
+  const handleMonthChange = (month) => {
+    setSelectedMonth(month);
+    applyMonthData(month, allDataRows);
+  };
+
+  const handleCopyUserScores = () => {
+    if (!userData || Object.keys(userData).length === 0) {
+      toast.warning('No user scores available to copy for this month.');
+      return;
+    }
+    setScores(prev => ({
+      ...prev,
+      ...userData
+    }));
+    toast.success('User scores copied into COO fields!');
+  };
+
   const handleScoreChange = (kpi, value) => {
-    // Ensure value is within range
     const numValue = parseFloat(value);
     if (numValue < 0) return;
 
@@ -134,8 +190,7 @@ export const PraveenGupta = () => {
     const behavioralTotal = Object.values(scores).slice(27).reduce((a, b) => a + (parseFloat(b) || 0), 0);
     const overallTotal = jobAssessmentTotal + behavioralTotal;
 
-    // Calculate target totals (out of values)
-    const jobAssessmentTargets = [4, 5, 3, 2, 2, 3, 4, 2, 3, 4, 3, 2, 4, 3, 3, 2, 3, 4, 2, 3, 2, 4, 2, 3, 4, 2, 2];
+    const jobAssessmentTargets = [2, 2, 2, 2, 2, 3, 3, 3, 2, 2, 2, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
     const behavioralTargets = [1, 2, 2, 2, 2, 2, 2, 2, 2, 3];
 
     const jobAssessmentTargetTotal = jobAssessmentTargets.reduce((a, b) => a + b, 0);
@@ -157,7 +212,6 @@ export const PraveenGupta = () => {
   const handleSubmit = async () => {
     if (isSubmitting) return;
 
-    // Validate if all required scores are filled
     const requiredScores = Object.values(scores).filter(score => score === '');
     if (requiredScores.length > 0) {
       if (!confirm('Some scores are empty. Do you want to submit anyway?')) {
@@ -168,10 +222,7 @@ export const PraveenGupta = () => {
     setIsSubmitting(true);
 
     try {
-      // Prepare data according to your column structure
       const currentDate = new Date();
-
-      // Format timestamp as dd/mm/yyyy hh:mm:ss
       const day = String(currentDate.getDate()).padStart(2, '0');
       const month = String(currentDate.getMonth() + 1).padStart(2, '0');
       const year = currentDate.getFullYear();
@@ -180,62 +231,65 @@ export const PraveenGupta = () => {
       const seconds = String(currentDate.getSeconds()).padStart(2, '0');
 
       const timestamp = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
-      const currentMonth = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
-      const employeeName = "Praveen Gupta";
+      const evaluationMonth = selectedMonth || currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+      let evaluatorName = "Hansraj Singh";
+      try {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+          const parsed = JSON.parse(storedUser);
+          evaluatorName = parsed.Name || parsed.Username || "Hansraj Singh";
+        }
+      } catch (e) {
+        console.error(e);
+      }
 
       const rowData = [
-        timestamp, // Column A (index-0) - Timestamp
-        currentMonth, // Column B (index-1) - Current Month
-        employeeName, // Column C (index-2) - Employee Name
-        "", // Column D (index-3) - Empty column
-        scores.strategicPlanning || 0, // Column E (index-4) - Strategic Planning and Leadership
-        scores.technologyRoadmapping || 0, // Column F (index-5) - Technology Roadmapping
-        scores.innovation || 0, // Column G (index-6) - Driving Innovation
-        scores.changeManagement || 0, // Column H (index-7) - Change Management
-        scores.teamLeadership || 0, // Column I (index-8) - Team Leadership
-        scores.infrastructureManagement || 0, // Column J (index-9) - Infrastructure Management
-        scores.dailyOperations || 0, // Column K (index-10) - Daily Operations
-        scores.projectManagement || 0, // Column L (index-11) - Project Management
-        scores.budgeting || 0, // Column M (index-12) - Budgeting and Financial Planning
-        scores.vendorRelationships || 0, // Column N (index-13) - Vendor Relationships
-        scores.costOptimization || 0, // Column O (index-14) - Cost Optimization
-        scores.cybersecurity || 0, // Column P (index-15) - Cybersecurity
-        scores.dataProtection || 0, // Column Q (index-16) - Data Protection and Compliance
-        scores.disasterRecovery || 0, // Column R (index-17) - Disaster Recovery and Business Continuity
-        scores.riskAssessment || 0, // Column S (index-18) - Risk Assessment
-        scores.stakeholderLiaison || 0, // Column T (index-19) - Stakeholder Liaison
-        scores.reporting || 0, // Column U (index-20) - Reporting
-        scores.stakeholderCommunication || 0, // Column V (index-21) - Communication
-        scores.myOperator || 0, // Column W (index-22) - My Operator
-        scores.whatsappAPI || 0, // Column X (index-23) - WhatsApp API
-        scores.whatsappPanel || 0, // Column Y (index-24) - WhatsApp Panel
-        scores.crmSoftware || 0, // Column Z (index-25) - CRM Software
-        scores.voiceCallingPanel || 0, // Column AA (index-26) - Voice Calling Marketing Panel
-        scores.trainingMentoring || 0, // Column AB (index-27) - Training and mentoring
-        scores.siteVisits || 0, // Column AC (index-28) - Site visits
-        scores.surveillance || 0, // Column AD (index-29) - Surveillance systems
-        scores.infrastructureMaintenance || 0, // Column AE (index-30) - Infrastructure maintenance
-        scores.qualityOfWork || 0, // Column AF (index-31) - Effectively and efficiently performs job
-        scores.planningExecution || 0, // Column AG (index-32) - Do Plan in advance and execute without deviation
-        scores.timeResources || 0, // Column AH (index-33) - Conserve Company resources and meet deadlines
-        scores.interpersonalRelations || 0, // Column AI (index-34) - Have healthy work relation with peers and superiors
-        scores.flexibilityAdaptability || 0, // Column AJ (index-35) - Flexible in taking additional tasks and adaptable to change
-        scores.communication || 0, // Column AK (index-36) - Exchange of information desired through effective means
-        scores.integrity || 0, // Column AL (index-37) - High integrity towards company
-        scores.leadership || 0, // Column AM (index-38) - Ability to Inspire and take initiatives
-        scores.discipline || 0, // Column AN (index-39) - Follow rules and code of conduct
-        scores.punctuality || 0 // Column AO (index-40) - Adherence to time and attendance
+        timestamp,
+        evaluationMonth,
+        evaluatorName,
+        "",
+        scores.strategicPlanning || 0,
+        scores.technologyRoadmapping || 0,
+        scores.innovation || 0,
+        scores.changeManagement || 0,
+        scores.teamLeadership || 0,
+        scores.infrastructureManagement || 0,
+        scores.dailyOperations || 0,
+        scores.projectManagement || 0,
+        scores.budgeting || 0,
+        scores.vendorRelationships || 0,
+        scores.costOptimization || 0,
+        scores.cybersecurity || 0,
+        scores.dataProtection || 0,
+        scores.disasterRecovery || 0,
+        scores.riskAssessment || 0,
+        scores.stakeholderLiaison || 0,
+        scores.reporting || 0,
+        scores.stakeholderCommunication || 0,
+        scores.myOperator || 0,
+        scores.whatsappAPI || 0,
+        scores.whatsappPanel || 0,
+        scores.crmSoftware || 0,
+        scores.voiceCallingPanel || 0,
+        scores.trainingMentoring || 0,
+        scores.siteVisits || 0,
+        scores.surveillance || 0,
+        scores.infrastructureMaintenance || 0,
+        scores.qualityOfWork || 0,
+        scores.planningExecution || 0,
+        scores.timeResources || 0,
+        scores.interpersonalRelations || 0,
+        scores.flexibilityAdaptability || 0,
+        scores.communication || 0,
+        scores.integrity || 0,
+        scores.leadership || 0,
+        scores.discipline || 0,
+        scores.punctuality || 0
       ];
 
       const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
       const sheetId = "162o34BXqnJvmJjjtIoQpcBGo8orn2ZO5Jf0p8MgoUCs";
-      const sheetName = "Praveen Gupta";
-
-      // Use fetch with form data to properly submit to Google Apps Script
-      const formData = new FormData();
-      formData.append('sheetId', sheetId);
-      formData.append('sheetName', sheetName);
-      formData.append('payload', JSON.stringify(rowData));
 
       const response = await fetch(scriptURL, {
         method: 'POST',
@@ -245,17 +299,9 @@ export const PraveenGupta = () => {
         body: `sheetId=${encodeURIComponent(sheetId)}&sheetName=${encodeURIComponent(sheetName)}&payload=${encodeURIComponent(JSON.stringify(rowData))}`
       });
 
-      // Check if the response is successful
       if (response.ok) {
-        console.log('Submitted Scores:', scores);
-        console.log('Row Data sent to sheet:', rowData);
-
-        // Show success message
-        toast.success('Scores submitted successfully!');
-
-        // Optional: You can also open the sheet URL to verify data was stored
-        const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/edit#gid=0`;
-        console.log('Check your Google Sheet here:', sheetUrl);
+        toast.success(`Scores for ${evaluationMonth} submitted successfully!`);
+        loadData();
       } else {
         throw new Error(`Server responded with status: ${response.status}`);
       }
@@ -271,6 +317,19 @@ export const PraveenGupta = () => {
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', minHeight: '100vh' }}>
       <ToastContainer />
+
+      <MonthSelectorBanner
+        selectedMonth={selectedMonth}
+        onMonthChange={handleMonthChange}
+        availableMonths={availableMonths}
+        onRefresh={loadData}
+        isLoading={isLoading}
+        submissionInfo={userSubmissionInfo}
+        isUserView={false}
+        onCopyUserScores={handleCopyUserScores}
+        employeeName="Praveen Gupta"
+      />
+
       <div style={{ marginBottom: '30px', backgroundColor: 'white', borderRadius: '10px', padding: '20px', boxShadow: '0 6px 10px rgba(0, 0, 0, 0.1)' }}>
         <h2 style={{ color: '#1e3a8a', borderBottom: '3px solid #1e3a8a', paddingBottom: '10px', marginBottom: '20px' }}>JOB ASSESSMENT</h2>
         <table style={{ width: '100%', borderCollapse: 'collapse', borderRadius: '8px', overflow: 'hidden' }}>

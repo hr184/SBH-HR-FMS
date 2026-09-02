@@ -1,11 +1,11 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { MonthSelectorBanner } from '../MonthSelectorBanner';
+import { fetchScorecardSheetData, extractDataRows, extractAvailableMonths, getDefaultSelectedMonth, findUserSubmission } from '../scorecardHelper';
 
 export function UserPannaSenani() {
-  const [scores, setScores] = useState({
-    // Job Assessment Scores - Updated according to your data
+  const initialScores = {
     costControl1: '',
     costControl2: '',
     costControl3: '',
@@ -31,12 +31,104 @@ export function UserPannaSenani() {
     compliances: '',
     developSecondLine: '',
     trainings: '',
-  });
+  };
 
+  const [scores, setScores] = useState(initialScores);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [allDataRows, setAllDataRows] = useState([]);
+  const [availableMonths, setAvailableMonths] = useState([]);
+  const [selectedMonth, setSelectedMonth] = useState('');
+  const [existingSubmissionInfo, setExistingSubmissionInfo] = useState(null);
+
+  const sheetName = "Panna Senani";
+
+  const parseScoresFromRow = (row) => {
+    return {
+      costControl1: row[4] !== undefined && row[4] !== "" ? row[4] : "",
+      costControl2: row[5] !== undefined && row[5] !== "" ? row[5] : "",
+      costControl3: row[6] !== undefined && row[6] !== "" ? row[6] : "",
+      riskAssessment: row[7] !== undefined && row[7] !== "" ? row[7] : "",
+      budgeting1: row[8] !== undefined && row[8] !== "" ? row[8] : "",
+      budgeting2: row[9] !== undefined && row[9] !== "" ? row[9] : "",
+      reporting1: row[10] !== undefined && row[10] !== "" ? row[10] : "",
+      banking1: row[11] !== undefined && row[11] !== "" ? row[11] : "",
+      commercial1: row[12] !== undefined && row[12] !== "" ? row[12] : "",
+      commercial2: row[13] !== undefined && row[13] !== "" ? row[13] : "",
+      commercial3: row[14] !== undefined && row[14] !== "" ? row[14] : "",
+      financialExcellence1: row[15] !== undefined && row[15] !== "" ? row[15] : "",
+      financialExcellence2: row[16] !== undefined && row[16] !== "" ? row[16] : "",
+      financialExcellence3: row[17] !== undefined && row[17] !== "" ? row[17] : "",
+      financialExcellence4: row[18] !== undefined && row[18] !== "" ? row[18] : "",
+      financialExcellence5: row[19] !== undefined && row[19] !== "" ? row[19] : "",
+      financialExcellence6: row[20] !== undefined && row[20] !== "" ? row[20] : "",
+      financialExcellence7: row[21] !== undefined && row[21] !== "" ? row[21] : "",
+      financialExcellence8: row[22] !== undefined && row[22] !== "" ? row[22] : "",
+      assetManagement: row[23] !== undefined && row[23] !== "" ? row[23] : "",
+      audit: row[24] !== undefined && row[24] !== "" ? row[24] : "",
+      salary: row[25] !== undefined && row[25] !== "" ? row[25] : "",
+      compliances: row[26] !== undefined && row[26] !== "" ? row[26] : "",
+      developSecondLine: row[27] !== undefined && row[27] !== "" ? row[27] : "",
+      trainings: row[28] !== undefined && row[28] !== "" ? row[28] : "",
+    };
+  };
+
+  const applyMonthData = (targetMonth, rows) => {
+    const userRow = findUserSubmission(rows, targetMonth);
+    if (userRow) {
+      const parsed = parseScoresFromRow(userRow);
+      setScores(parsed);
+
+      const totalScore = parseFloat(userRow[36]) || Object.values(parsed).reduce((a, b) => a + (parseFloat(b) || 0), 0);
+      const targetScore = parseFloat(userRow[35]) || 80;
+      const percentage = parseFloat(userRow[44]) || (targetScore > 0 ? (totalScore / targetScore) * 100 : 0);
+
+      setExistingSubmissionInfo({
+        timestamp: userRow[0],
+        month: userRow[1],
+        totalScore,
+        targetScore,
+        percentage
+      });
+    } else {
+      setScores(initialScores);
+      setExistingSubmissionInfo(null);
+    }
+  };
+
+  const loadUserData = async () => {
+    setIsLoading(true);
+    try {
+      const result = await fetchScorecardSheetData(sheetName);
+      if (result && result.data && result.data.length > 0) {
+        const dataRows = extractDataRows(result.data);
+        setAllDataRows(dataRows);
+
+        const months = extractAvailableMonths(dataRows);
+        setAvailableMonths(months);
+
+        const defaultMonth = getDefaultSelectedMonth(dataRows, months);
+        setSelectedMonth(defaultMonth);
+        applyMonthData(defaultMonth, dataRows);
+      }
+    } catch (error) {
+      console.error('Error loading data:', error);
+      toast.error('Failed to load previous scorecard data');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadUserData();
+  }, []);
+
+  const handleMonthChange = (month) => {
+    setSelectedMonth(month);
+    applyMonthData(month, allDataRows);
+  };
 
   const handleScoreChange = (kpi, value) => {
-    // Ensure value is within range
     const numValue = parseFloat(value);
     if (numValue < 0) return;
     
@@ -48,10 +140,7 @@ export function UserPannaSenani() {
 
   const calculateTotals = () => {
     const jobAssessmentTotal = Object.values(scores).reduce((a, b) => a + (parseFloat(b) || 0), 0);
-    
-    // Calculate target totals (out of values) - Updated according to your data
     const jobAssessmentTargets = [5,5,5,4,4,4,3,3,3,3,3,3,4,4,2,2,3,2,2,3,3,3,3,2,2];
-    
     const jobAssessmentTargetTotal = jobAssessmentTargets.reduce((a, b) => a + b, 0);
     
     return {
@@ -66,7 +155,6 @@ export function UserPannaSenani() {
   const handleSubmit = async () => {
     if (isSubmitting) return;
 
-    // Validate if all required scores are filled
     const requiredScores = Object.values(scores).filter(score => score === '');
     if (requiredScores.length > 0) {
       if (!confirm('Some scores are empty. Do you want to submit anyway?')) {
@@ -77,10 +165,7 @@ export function UserPannaSenani() {
     setIsSubmitting(true);
 
     try {
-      // Prepare data according to your column structure
       const currentDate = new Date();
-      
-      // Format timestamp as dd/mm/yyyy hh:mm:ss
       const day = String(currentDate.getDate()).padStart(2, '0');
       const month = String(currentDate.getMonth() + 1).padStart(2, '0');
       const year = currentDate.getFullYear();
@@ -89,44 +174,43 @@ export function UserPannaSenani() {
       const seconds = String(currentDate.getSeconds()).padStart(2, '0');
       
       const timestamp = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
-      const currentMonth = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+      const submissionMonth = selectedMonth || currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
       const employeeName = "User";
 
       const rowData = [
-        timestamp, // Column A (index-0) - Timestamp
-        currentMonth, // Column B (index-1) - Current Month
-        employeeName, // Column C (index-2) - Employee Name
-        "", // Column D (index-3) - Empty column
-        scores.costControl1 || 0, // Column E
-        scores.costControl2 || 0, // Column F
-        scores.costControl3 || 0, // Column G
-        scores.riskAssessment || 0, // Column H
-        scores.budgeting1 || 0, // Column I
-        scores.budgeting2 || 0, // Column J
-        scores.reporting1 || 0, // Column K
-        scores.banking1 || 0, // Column L
-        scores.commercial1 || 0, // Column M
-        scores.commercial2 || 0, // Column N
-        scores.commercial3 || 0, // Column O
-        scores.financialExcellence1 || 0, // Column P
-        scores.financialExcellence2 || 0, // Column Q
-        scores.financialExcellence3 || 0, // Column R
-        scores.financialExcellence4 || 0, // Column S
-        scores.financialExcellence5 || 0, // Column T
-        scores.financialExcellence6 || 0, // Column U
-        scores.financialExcellence7 || 0, // Column V
-        scores.financialExcellence8 || 0, // Column W
-        scores.assetManagement || 0, // Column X
-        scores.audit || 0, // Column Y
-        scores.salary || 0, // Column Z
-        scores.compliances || 0, // Column AA
-        scores.developSecondLine || 0, // Column AB
-        scores.trainings || 0, // Column AC
+        timestamp,
+        submissionMonth,
+        employeeName,
+        "",
+        scores.costControl1 || 0,
+        scores.costControl2 || 0,
+        scores.costControl3 || 0,
+        scores.riskAssessment || 0,
+        scores.budgeting1 || 0,
+        scores.budgeting2 || 0,
+        scores.reporting1 || 0,
+        scores.banking1 || 0,
+        scores.commercial1 || 0,
+        scores.commercial2 || 0,
+        scores.commercial3 || 0,
+        scores.financialExcellence1 || 0,
+        scores.financialExcellence2 || 0,
+        scores.financialExcellence3 || 0,
+        scores.financialExcellence4 || 0,
+        scores.financialExcellence5 || 0,
+        scores.financialExcellence6 || 0,
+        scores.financialExcellence7 || 0,
+        scores.financialExcellence8 || 0,
+        scores.assetManagement || 0,
+        scores.audit || 0,
+        scores.salary || 0,
+        scores.compliances || 0,
+        scores.developSecondLine || 0,
+        scores.trainings || 0,
       ];
 
       const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
       const sheetId = "162o34BXqnJvmJjjtIoQpcBGo8orn2ZO5Jf0p8MgoUCs";
-      const sheetName = "Panna Senani";
 
       const response = await fetch(scriptURL, {
         method: 'POST',
@@ -137,13 +221,8 @@ export function UserPannaSenani() {
       });
 
       if (response.ok) {
-        console.log('Submitted Scores:', scores);
-        console.log('Row Data sent to sheet:', rowData);
-        
-        toast.success('Scores submitted successfully!');
-        
-        const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/edit#gid=0`;
-        console.log('Check your Google Sheet here:', sheetUrl);
+        toast.success(`Scores for ${submissionMonth} submitted successfully!`);
+        loadUserData();
       } else {
         throw new Error(`Server responded with status: ${response.status}`);
       }
@@ -159,8 +238,16 @@ export function UserPannaSenani() {
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', minHeight: '100vh' }}>      
       <ToastContainer />
-      
-      {/* Updated Job Assessment Section */}
+      <MonthSelectorBanner
+        selectedMonth={selectedMonth}
+        onMonthChange={handleMonthChange}
+        availableMonths={availableMonths}
+        onRefresh={loadUserData}
+        isLoading={isLoading}
+        submissionInfo={existingSubmissionInfo}
+        isUserView={true}
+        employeeName="Panna Senani"
+      />
       <div style={{ marginBottom: '30px', backgroundColor: 'white', borderRadius: '10px', padding: '20px', boxShadow: '0 6px 10px rgba(0, 0, 0, 0.1)' }}>
         <h2 style={{ color: '#1e3a8a', borderBottom: '3px solid #1e3a8a', paddingBottom: '10px', marginBottom: '20px' }}>JOB ASSESSMENT</h2>
         <table style={{ width: '100%', borderCollapse: 'collapse', borderRadius: '8px', overflow: 'hidden' }}>
@@ -631,7 +718,7 @@ export function UserPannaSenani() {
             fontWeight: '600'
           }}
         >
-          {isSubmitting ? 'Submitting...' : 'Submit Scores'}
+          {isSubmitting ? 'Submitting...' : existingSubmissionInfo ? `Update & Re-Submit for ${selectedMonth}` : `Submit Scores for ${selectedMonth}`}
         </button>
       </div>
     </div>

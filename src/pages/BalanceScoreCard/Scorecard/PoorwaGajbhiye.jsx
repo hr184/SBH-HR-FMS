@@ -49,7 +49,7 @@ export const PoorwaGajbhiye = () => {
         const currentDate = new Date();
         const currentMonthStr = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
 
-        const response = await fetch(`${scriptURL}?sheetId=${encodeURIComponent(sheetId)}&sheetName=${encodeURIComponent(sheetName)}&action=getData&filterMonth=${encodeURIComponent(currentMonthStr)}`);
+        const response = await fetch(`${scriptURL}?sheetId=${encodeURIComponent(sheetId)}&sheetName=${encodeURIComponent(sheetName)}&action=getData`);
 
         if (response.ok) {
           const data = await response.json();

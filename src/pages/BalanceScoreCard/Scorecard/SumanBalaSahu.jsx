@@ -1,11 +1,11 @@
-import React from 'react'
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { MonthSelectorBanner } from '../MonthSelectorBanner';
+import { fetchScorecardSheetData, extractDataRows, extractAvailableMonths, getDefaultSelectedMonth, findUserSubmission, findCooEvaluation } from '../scorecardHelper';
 
 export const SumanBalaSahu = () => {
-  const [scores, setScores] = useState({
-    // Job Assessment Scores - Updated for new KRAs
+  const initialScores = {
     calendarManagement: '',
     stakeholderContact: '',
     correspondenceManagement: '',
@@ -26,13 +26,8 @@ export const SumanBalaSahu = () => {
     discountAndCorrection4: '',
     discountAndCorrection5: '',
     discountAndCorrection6: '',
-    // otherWork: '',
-    // appointmentScheduling: '',
     directorsRecidancy: '',
     dailyRevanueDataShare: '',
-    // meetingSchedule: '',
-
-    // Behavioral Assessment Scores (unchanged)
     qualityOfWork: '',
     planningExecution: '',
     timeResources: '',
@@ -43,81 +38,134 @@ export const SumanBalaSahu = () => {
     leadership: '',
     discipline: '',
     punctuality: ''
-  });
+  };
 
+  const [scores, setScores] = useState(initialScores);
   const [userData, setUserData] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [allDataRows, setAllDataRows] = useState([]);
+  const [availableMonths, setAvailableMonths] = useState([]);
+  const [selectedMonth, setSelectedMonth] = useState('');
+  const [userSubmissionInfo, setUserSubmissionInfo] = useState(null);
+
+  const sheetName = "SumanBala Sahu";
+
+  const parseJobScores = (row) => {
+    if (!row) return {};
+    return {
+      calendarManagement: row[4] || "",
+      stakeholderContact: row[5] || "",
+      correspondenceManagement: row[6] || "",
+      meetingAgendasMinutes: row[7] || "",
+      followUpActions: row[8] || "",
+      businessPlanning: row[9] || "",
+      dataAnalysis: row[10] || "",
+      projectCoordination: row[11] || "",
+      confidentiality: row[12] || "",
+      communicationProfessionalism: row[13] || "",
+      pptFollowUp: row[14] || "",
+      allComplince: row[15] || "",
+      procedureRegisterVerification: row[16] || "",
+      ratingSheet: row[17] || "",
+      discountAndCorrection1: row[18] || "",
+      discountAndCorrection2: row[19] || "",
+      discountAndCorrection3: row[20] || "",
+      discountAndCorrection4: row[21] || "",
+      discountAndCorrection5: row[22] || "",
+      discountAndCorrection6: row[23] || "",
+      directorsRecidancy: row[24] || "",
+      dailyRevanueDataShare: row[25] || "",
+    };
+  };
+
+  const applyMonthData = (targetMonth, rows) => {
+    const userRow = findUserSubmission(rows, targetMonth);
+    if (userRow) {
+      const parsed = parseJobScores(userRow);
+      setUserData(parsed);
+
+      const totalScore = parseFloat(userRow[36]) || Object.values(parsed).reduce((a, b) => a + (parseFloat(b) || 0), 0);
+      const targetScore = parseFloat(userRow[35]) || 80;
+      const percentage = parseFloat(userRow[44]) || (targetScore > 0 ? (totalScore / targetScore) * 100 : 0);
+
+      setUserSubmissionInfo({
+        timestamp: userRow[0],
+        month: userRow[1],
+        totalScore,
+        targetScore,
+        percentage
+      });
+    } else {
+      setUserData({});
+      setUserSubmissionInfo(null);
+    }
+
+    const cooRow = findCooEvaluation(rows, targetMonth);
+    if (cooRow) {
+      setScores({
+        ...parseJobScores(cooRow),
+        qualityOfWork: cooRow[26] || '',
+        planningExecution: cooRow[27] || '',
+        timeResources: cooRow[28] || '',
+        interpersonalRelations: cooRow[29] || '',
+        flexibilityAdaptability: cooRow[30] || '',
+        communication: cooRow[31] || '',
+        integrity: cooRow[32] || '',
+        leadership: cooRow[33] || '',
+        discipline: cooRow[34] || '',
+        punctuality: cooRow[35] || ''
+      });
+    } else {
+      setScores(initialScores);
+    }
+  };
+
+  const loadData = async () => {
+    setIsLoading(true);
+    try {
+      const result = await fetchScorecardSheetData(sheetName);
+      if (result && result.data && result.data.length > 0) {
+        const dataRows = extractDataRows(result.data);
+        setAllDataRows(dataRows);
+
+        const months = extractAvailableMonths(dataRows);
+        setAvailableMonths(months);
+
+        const defaultMonth = getDefaultSelectedMonth(dataRows, months);
+        setSelectedMonth(defaultMonth);
+        applyMonthData(defaultMonth, dataRows);
+      }
+    } catch (err) {
+      console.error('Error loading data:', err);
+      toast.error('Failed to load scorecard data');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const scriptURL =
-          "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
-        const sheetId = "162o34BXqnJvmJjjtIoQpcBGo8orn2ZO5Jf0p8MgoUCs";
-        const sheetName = "SumanBala Sahu";
-
-        const response = await fetch(
-          `${scriptURL}?sheetId=${encodeURIComponent(
-            sheetId
-          )}&sheetName=${encodeURIComponent(sheetName)}&action=getData`
-        );
-
-        if (response.ok) {
-          const data = await response.json();
-          if (data && data.data && data.data.length > 0) {
-            // Data starts from row 5, so we slice from index 4 (row 5) onwards
-            const dataRows = data.data.slice(4);
-
-            // Filter rows where column C (index 2) has "User" value
-            const userRows = dataRows.filter((row) => row[2] === "User");
-
-            if (userRows.length > 0) {
-              // Find the latest row based on timestamp in Column A (index 0)
-              const latestUserRow = userRows.reduce((latest, current) => {
-                const latestTimestamp = new Date(latest[0]);
-                const currentTimestamp = new Date(current[0]);
-                return currentTimestamp > latestTimestamp ? current : latest;
-              });
-
-              setUserData({
-                calendarManagement: latestUserRow[4] || "",
-                stakeholderContact: latestUserRow[5] || "",
-                correspondenceManagement: latestUserRow[6] || "",
-                meetingAgendasMinutes: latestUserRow[7] || "",
-                followUpActions: latestUserRow[8] || "",
-                businessPlanning: latestUserRow[9] || "",
-                dataAnalysis: latestUserRow[10] || "",
-                projectCoordination: latestUserRow[11] || "",
-                confidentiality: latestUserRow[12] || "",
-                communicationProfessionalism: latestUserRow[13] || "",
-                pptFollowUp: latestUserRow[14] || "",
-                allComplince: latestUserRow[15] || "",
-                procedureRegisterVerification: latestUserRow[16] || "",
-                ratingSheet: latestUserRow[17] || "",
-                discountAndCorrection1: latestUserRow[18] || "",
-                discountAndCorrection2: latestUserRow[19] || "",
-                discountAndCorrection3: latestUserRow[20] || "",
-                discountAndCorrection4: latestUserRow[21] || "",
-                discountAndCorrection5: latestUserRow[22] || "",
-                discountAndCorrection6: latestUserRow[23] || "",
-                directorsRecidancy: latestUserRow[24] || "",
-                dailyRevanueDataShare: latestUserRow[25] || "",
-              });
-            } else {
-              console.log('No row with "User" value found in column C');
-            }
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-
-    fetchUserData();
+    loadData();
   }, []);
 
+  const handleMonthChange = (month) => {
+    setSelectedMonth(month);
+    applyMonthData(month, allDataRows);
+  };
+
+  const handleCopyUserScores = () => {
+    if (!userData || Object.keys(userData).length === 0) {
+      toast.warning('No user scores available to copy for this month.');
+      return;
+    }
+    setScores(prev => ({
+      ...prev,
+      ...userData
+    }));
+    toast.success('User scores copied into COO fields!');
+  };
+
   const handleScoreChange = (kpi, value) => {
-    // Ensure value is within range
     const numValue = parseFloat(value);
     if (numValue < 0) return;
 
@@ -132,8 +180,7 @@ export const SumanBalaSahu = () => {
     const behavioralTotal = Object.values(scores).slice(22).reduce((a, b) => a + (parseFloat(b) || 0), 0);
     const overallTotal = jobAssessmentTotal + behavioralTotal;
 
-    // Calculate target totals (out of values) - Updated for new KPIs
-    const jobAssessmentTargets = [4, 2, 3, 3, 2, 5, 4, 3, 4, 2, 2, 5, 4, 6, 3, 3, 2, 4, 5, 3, 4, 7];
+    const jobAssessmentTargets = [4, 4, 4, 3, 3, 5, 5, 4, 3, 3, 4, 5, 5, 3, 3, 3, 3, 3, 3, 3, 4, 3];
     const behavioralTargets = [1, 2, 2, 2, 2, 2, 2, 2, 2, 3];
 
     const jobAssessmentTargetTotal = jobAssessmentTargets.reduce((a, b) => a + b, 0);
@@ -155,7 +202,6 @@ export const SumanBalaSahu = () => {
   const handleSubmit = async () => {
     if (isSubmitting) return;
 
-    // Validate if all required scores are filled
     const requiredScores = Object.values(scores).filter(score => score === '');
     if (requiredScores.length > 0) {
       if (!confirm('Some scores are empty. Do you want to submit anyway?')) {
@@ -166,10 +212,7 @@ export const SumanBalaSahu = () => {
     setIsSubmitting(true);
 
     try {
-      // Prepare data according to your column structure
       const currentDate = new Date();
-
-      // Format timestamp as dd/mm/yyyy hh:mm:ss
       const day = String(currentDate.getDate()).padStart(2, '0');
       const month = String(currentDate.getMonth() + 1).padStart(2, '0');
       const year = currentDate.getFullYear();
@@ -178,57 +221,60 @@ export const SumanBalaSahu = () => {
       const seconds = String(currentDate.getSeconds()).padStart(2, '0');
 
       const timestamp = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
-      const currentMonth = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
-      const employeeName = "Suman Bala Sahu";
+      const evaluationMonth = selectedMonth || currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+      let evaluatorName = "Hansraj Singh";
+      try {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+          const parsed = JSON.parse(storedUser);
+          evaluatorName = parsed.Name || parsed.Username || "Hansraj Singh";
+        }
+      } catch (e) {
+        console.error(e);
+      }
 
       const rowData = [
-        timestamp, // Column A (index-0)
-        currentMonth, // Column B (index-1)
-        employeeName, // Column C (index-2)
-        "", // Column D (index-3) - Empty column
-        scores.calendarManagement || 0, // Column E (index-4)
-        scores.stakeholderContact || 0, // Column F (index-5)
-        scores.correspondenceManagement || 0, // Column G (index-6)
-        scores.meetingAgendasMinutes || 0, // Column H (index-7)
-        scores.followUpActions || 0, // Column I (index-8)
-        scores.businessPlanning || 0, // Column J (index-9)
-        scores.dataAnalysis || 0, // Column K (index-10)
-        scores.projectCoordination || 0, // Column L (index-11)
-        scores.confidentiality || 0, // Column M (index-12)
-        scores.communicationProfessionalism || 0, // Column N (index-13)
-        scores.pptFollowUp || 0, // Column O (index-14)
-        scores.allComplince || 0, // Column P (index-15)
-        scores.procedureRegisterVerification || 0, // Column Q (index-16)
-        scores.ratingSheet || 0, // Column R (index-17)
-        scores.discountAndCorrection1 || 0, // Column S (index-18)
-        scores.discountAndCorrection2 || 0, // Column T (index-19)
-        scores.discountAndCorrection3 || 0, // Column U (index-20)
-        scores.discountAndCorrection4 || 0, // Column V (index-21)
-        scores.discountAndCorrection5 || 0, // Column W (index-22)
-        scores.discountAndCorrection6 || 0, // Column X (index-23)
-        scores.directorsRecidancy || 0, // Column Y (index-24)
-        scores.dailyRevanueDataShare || 0, // Column Z (index-25)
-        scores.qualityOfWork || 0, // Column AA (index-26)
-        scores.planningExecution || 0, // Column AB (index-27)
-        scores.timeResources || 0, // Column AC (index-28)
-        scores.interpersonalRelations || 0, // Column AD (index-29)
-        scores.flexibilityAdaptability || 0, // Column AE (index-30)
-        scores.communication || 0, // Column AF (index-31)
-        scores.integrity || 0, // Column AG (index-32)
-        scores.leadership || 0, // Column AH (index-33)
-        scores.discipline || 0, // Column AI (index-34)
-        scores.punctuality || 0 // Column AJ (index-35)
+        timestamp,
+        evaluationMonth,
+        evaluatorName,
+        "",
+        scores.calendarManagement || 0,
+        scores.stakeholderContact || 0,
+        scores.correspondenceManagement || 0,
+        scores.meetingAgendasMinutes || 0,
+        scores.followUpActions || 0,
+        scores.businessPlanning || 0,
+        scores.dataAnalysis || 0,
+        scores.projectCoordination || 0,
+        scores.confidentiality || 0,
+        scores.communicationProfessionalism || 0,
+        scores.pptFollowUp || 0,
+        scores.allComplince || 0,
+        scores.procedureRegisterVerification || 0,
+        scores.ratingSheet || 0,
+        scores.discountAndCorrection1 || 0,
+        scores.discountAndCorrection2 || 0,
+        scores.discountAndCorrection3 || 0,
+        scores.discountAndCorrection4 || 0,
+        scores.discountAndCorrection5 || 0,
+        scores.discountAndCorrection6 || 0,
+        scores.directorsRecidancy || 0,
+        scores.dailyRevanueDataShare || 0,
+        scores.qualityOfWork || 0,
+        scores.planningExecution || 0,
+        scores.timeResources || 0,
+        scores.interpersonalRelations || 0,
+        scores.flexibilityAdaptability || 0,
+        scores.communication || 0,
+        scores.integrity || 0,
+        scores.leadership || 0,
+        scores.discipline || 0,
+        scores.punctuality || 0
       ];
 
       const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
       const sheetId = "162o34BXqnJvmJjjtIoQpcBGo8orn2ZO5Jf0p8MgoUCs";
-      const sheetName = "SumanBala Sahu";
-
-      // Use fetch with form data to properly submit to Google Apps Script
-      const formData = new FormData();
-      formData.append('sheetId', sheetId);
-      formData.append('sheetName', sheetName);
-      formData.append('payload', JSON.stringify(rowData));
 
       const response = await fetch(scriptURL, {
         method: 'POST',
@@ -238,17 +284,9 @@ export const SumanBalaSahu = () => {
         body: `sheetId=${encodeURIComponent(sheetId)}&sheetName=${encodeURIComponent(sheetName)}&payload=${encodeURIComponent(JSON.stringify(rowData))}`
       });
 
-      // Check if the response is successful
       if (response.ok) {
-        console.log('Submitted Scores:', scores);
-        console.log('Row Data sent to sheet:', rowData);
-
-        // Show success message
-        toast.success('Scores submitted successfully!');
-
-        // Optional: You can also open the sheet URL to verify data was stored
-        const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/edit#gid=0`;
-        console.log('Check your Google Sheet here:', sheetUrl);
+        toast.success(`Scores for ${evaluationMonth} submitted successfully!`);
+        loadData();
       } else {
         throw new Error(`Server responded with status: ${response.status}`);
       }
@@ -264,6 +302,19 @@ export const SumanBalaSahu = () => {
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', minHeight: '100vh' }}>
       <ToastContainer />
+
+      <MonthSelectorBanner
+        selectedMonth={selectedMonth}
+        onMonthChange={handleMonthChange}
+        availableMonths={availableMonths}
+        onRefresh={loadData}
+        isLoading={isLoading}
+        submissionInfo={userSubmissionInfo}
+        isUserView={false}
+        onCopyUserScores={handleCopyUserScores}
+        employeeName="Suman Bala Sahu"
+      />
+
       <div style={{ marginBottom: '30px', backgroundColor: 'white', borderRadius: '10px', padding: '20px', boxShadow: '0 6px 10px rgba(0, 0, 0, 0.1)' }}>
         <h2 style={{ color: '#1e3a8a', borderBottom: '3px solid #1e3a8a', paddingBottom: '10px', marginBottom: '20px' }}>JOB ASSESSMENT</h2>
         <table style={{ width: '100%', borderCollapse: 'collapse', borderRadius: '8px', overflow: 'hidden' }}>

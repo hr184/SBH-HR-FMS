@@ -16,7 +16,7 @@ import { UserMangeshSahu } from './UserScorecard/UserMangeshSahu';
 import { UserNeeluSahu } from './UserScorecard/UserNeeluSahu';
 import { UserNighatParveen } from './UserScorecard/UserNighatParveen';
 import { UserPannaSenani } from './UserScorecard/UserPannaSenani';
-import { UserPoorwaGajbhiye } from './UserScorecard/UserPoorwaGajbhiye';
+import { UserManaswiMaity, UserPoorwaGajbhiye } from './UserScorecard/UserManaswiMaity';
 import { UserPratimaVarthi } from './UserScorecard/UserPratimaVarthi';
 import { UserPraveenGupta } from './UserScorecard/UserPraveenGupta';
 import { UserSumanBalaSahu } from './UserScorecard/UserSumanBalaSahu';
@@ -24,7 +24,7 @@ import { UserSumanBalaSahu } from './UserScorecard/UserSumanBalaSahu';
 import { UserUmeshDhakkad } from './UserScorecard/UserUmeshDhakkad';
 // import { UserSumanGoud } from './UserScorecard/UserSumanGoud';   
 import { UserNikhileshDavda } from './UserScorecard/UserNikhileshDavda';
-import { UserAlkaDas } from './UserScorecard/UserAlkaDas';
+import { UserSwapnilJain, UserAlkaDas } from './UserScorecard/UserSwapnilJain';
 import { AjayUpadhyayScorecardHistory } from './ScorecardHistory/AjayUpadhyayScorecardHistory'
 import { AlokPandeyScorecardHistory } from './ScorecardHistory/AlokPandeyScorecardHistory'
 import { DeepmalaPatilScorecardHistory } from './ScorecardHistory/DeepmalaPatilScorecardHistory'
@@ -33,9 +33,9 @@ import { GeetanjaliDeepScorecardHistory } from './ScorecardHistory/GeetanjaliDee
 import { UgrasenNayakScorecardHistory } from './ScorecardHistory/UgrasenNayakScorecardHistory'
 import { HarshRaiScorecardHistory } from './ScorecardHistory/HarshRaiScorecardHistory';
 import { JharnaAmbulkarScorecardHistory } from './ScorecardHistory/JharnaAmbulkarScorecardHistory'
-import { AlkaDasScorecardHistory } from './ScorecardHistory/AlkaDasScorecardHistory';
+import { SwapnilJainScorecardHistory, AlkaDasScorecardHistory } from './ScorecardHistory/SwapnilJainScorecardHistory';
 import { NeeluSahuScorecardHistory } from './ScorecardHistory/NeeluSahuScorecardHistory'
-import { PoorwaGajbhiyeScorecardHistory } from './ScorecardHistory/PoorwaGajbhiyeScorecardHistory'
+import { ManaswiMaityScorecardHistory, PoorwaGajbhiyeScorecardHistory } from './ScorecardHistory/ManaswiMaityScorecardHistory'
 import { PratimaVarthiScorecardHistory } from './ScorecardHistory/PratimaVarthiScorecardHistory'
 import { PraveenGuptaScorecardHistory } from './ScorecardHistory/PraveenGuptaScorecardHistory'
 import { SumanBalaSahuScorecardHistory } from './ScorecardHistory/SumanBalaSahuScorecardHistory'
@@ -57,12 +57,12 @@ export const UserBalanceScoreCard = () => {
     { id: 7, name: "Harsh Rai", department: "Marketing" },
     { id: 8, name: "Isha Shrivastava", department: "Marketing" },
     { id: 9, name: "Jharna Ambulkar", department: "Admin" },
-    { id: 10, name: "Alka Das", department: "Operations" },
+    { id: 10, name: "Swapnil Jain", department: "Operations" },
     { id: 11, name: "Mangesh Sahu", department: "Marketing" },
     { id: 12, name: "Neelu Sahu", department: "Operation" },
     { id: 13, name: "Nighat Parveen", department: "Marketing" },
     { id: 14, name: "Panna Senani", department: "Accounts" },
-    { id: 15, name: "Poorwa Gajbhiye", department: "HR" },
+    { id: 15, name: "Manaswi Maity", department: "HR" },
     { id: 16, name: "Pratima Varthi", department: "Store" },
     { id: 17, name: "Praveen Gupta", department: "IT" },
     { id: 18, name: "Suman Bala Sahu", department: "Admin" },
@@ -356,6 +356,15 @@ export const UserBalanceScoreCard = () => {
           });
         }
 
+        // 3. Fallback for renamed profiles
+        if (!matchedEmployee) {
+          if (sheetName.includes('poorwa') || sheetName.includes('gajbhiye')) {
+            matchedEmployee = employees.find(emp => emp.name === "Manaswi Maity");
+          } else if (sheetName.includes('alka') || sheetName.includes('das')) {
+            matchedEmployee = employees.find(emp => emp.name === "Swapnil Jain");
+          }
+        }
+
         if (matchedEmployee) {
           // Filter to show only this employee in the list
           setFilteredEmployees([matchedEmployee]);
@@ -540,7 +549,7 @@ export const UserBalanceScoreCard = () => {
             {/* {viewType === "scorecard" &&
               selectedEmployee === "Lalit Mohan Bisht" && <UserLalitMohanBisht />} */}
             {viewType === "scorecard" &&
-              selectedEmployee === "Alka Das" && <UserAlkaDas />}
+              (selectedEmployee === "Swapnil Jain" || selectedEmployee === "Alka Das") && <UserSwapnilJain />}
             {viewType === "scorecard" &&
               selectedEmployee === "Mangesh Sahu" && <UserMangeshSahu />}
             {viewType === "scorecard" &&
@@ -550,7 +559,7 @@ export const UserBalanceScoreCard = () => {
             {viewType === "scorecard" &&
               selectedEmployee === "Panna Senani" && <UserPannaSenani />}
             {viewType === "scorecard" &&
-              selectedEmployee === "Poorwa Gajbhiye" && <UserPoorwaGajbhiye />}
+              (selectedEmployee === "Manaswi Maity" || selectedEmployee === "Poorwa Gajbhiye") && <UserManaswiMaity />}
             {viewType === "scorecard" &&
               selectedEmployee === "Pratima Varthi" && <UserPratimaVarthi />}
             {viewType === "scorecard" &&
@@ -575,12 +584,12 @@ export const UserBalanceScoreCard = () => {
             {viewType === "history" && selectedEmployee === "Ugrasen Nayak" && <UgrasenNayakScorecardHistory />}
             {viewType === "history" && selectedEmployee === "Harsh Rai" && <HarshRaiScorecardHistory />}
             {viewType === "history" && selectedEmployee === "Jharna Ambulkar" && <JharnaAmbulkarScorecardHistory />}
-            {viewType === "history" && selectedEmployee === "Alka Das" && <AlkaDasScorecardHistory />}
+            {viewType === "history" && (selectedEmployee === "Swapnil Jain" || selectedEmployee === "Alka Das") && <SwapnilJainScorecardHistory />}
             {viewType === "history" && selectedEmployee === "Mangesh Sahu" && <MangeshSahuScorecardHistory />}
             {viewType === "history" && selectedEmployee === "Neelu Sahu" && <NeeluSahuScorecardHistory />}
             {viewType === "history" && selectedEmployee === "Nighat Parveen" && <NighatParveenScorecardHistory />}
             {viewType === "history" && selectedEmployee === "Panna Senani" && <PannaSenaniScorecardHistory />}
-            {viewType === "history" && selectedEmployee === "Poorwa Gajbhiye" && <PoorwaGajbhiyeScorecardHistory />}
+            {viewType === "history" && (selectedEmployee === "Manaswi Maity" || selectedEmployee === "Poorwa Gajbhiye") && <ManaswiMaityScorecardHistory />}
             {viewType === "history" && selectedEmployee === "Pratima Varthi" && <PratimaVarthiScorecardHistory />}
             {viewType === "history" && selectedEmployee === "Praveen Gupta" && <PraveenGuptaScorecardHistory />}
             {viewType === "history" && selectedEmployee === "Suman Bala Sahu" && <SumanBalaSahuScorecardHistory />}

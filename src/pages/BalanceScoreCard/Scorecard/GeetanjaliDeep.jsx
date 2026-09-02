@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react'
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { MonthSelectorBanner } from '../MonthSelectorBanner';
+import { fetchScorecardSheetData, extractDataRows, extractAvailableMonths, getDefaultSelectedMonth, findUserSubmission, findCooEvaluation } from '../scorecardHelper';
 
 export const GeetanjaliDeep = () => {
-  const [scores, setScores] = useState({
-    // Job Assessment Scores - Updated KPIs
+  const initialScores = {
     talenntAquisation1: '',
     talenntAquisation2: '',
     talenntAquisation3: '',
@@ -25,8 +25,6 @@ export const GeetanjaliDeep = () => {
     strategyAndRoadmap5: '',
     strategyAndRoadmap6: '',
     strategyAndRoadmap7: '',
-
-    // Behavioral Assessment Scores (unchanged)
     qualityOfWork: '',
     planningExecution: '',
     timeResources: '',
@@ -37,77 +35,131 @@ export const GeetanjaliDeep = () => {
     leadership: '',
     discipline: '',
     punctuality: ''
-  });
+  };
 
+  const [scores, setScores] = useState(initialScores);
   const [userData, setUserData] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [allDataRows, setAllDataRows] = useState([]);
+  const [availableMonths, setAvailableMonths] = useState([]);
+  const [selectedMonth, setSelectedMonth] = useState('');
+  const [userSubmissionInfo, setUserSubmissionInfo] = useState(null);
+
+  const sheetName = "Geetanjali Deep";
+
+  const parseJobScores = (row) => {
+    if (!row) return {};
+    return {
+      talenntAquisation1: row[4] || "",
+      talenntAquisation2: row[5] || "",
+      talenntAquisation3: row[6] || "",
+      talenntAquisation4: row[7] || "",
+      talenntAquisation5: row[8] || "",
+      talenntAquisation6: row[9] || "",
+      hrPolicy1: row[10] || "",
+      hrPolicy2: row[11] || "",
+      hrPolicy3: row[12] || "",
+      hrPolicy5: row[14] || "",
+      hrPolicy6: row[15] || "",
+      hrPolicy7: row[16] || "",
+      strategyAndRoadmap1: row[17] || "",
+      strategyAndRoadmap2: row[18] || "",
+      strategyAndRoadmap3: row[19] || "",
+      strategyAndRoadmap4: row[20] || "",
+      strategyAndRoadmap5: row[21] || "",
+      strategyAndRoadmap6: row[22] || "",
+      strategyAndRoadmap7: row[23] || "",
+    };
+  };
+
+  const applyMonthData = (targetMonth, rows) => {
+    const userRow = findUserSubmission(rows, targetMonth);
+    if (userRow) {
+      const parsed = parseJobScores(userRow);
+      setUserData(parsed);
+
+      const totalScore = parseFloat(userRow[36]) || Object.values(parsed).reduce((a, b) => a + (parseFloat(b) || 0), 0);
+      const targetScore = parseFloat(userRow[35]) || 80;
+      const percentage = parseFloat(userRow[44]) || (targetScore > 0 ? (totalScore / targetScore) * 100 : 0);
+
+      setUserSubmissionInfo({
+        timestamp: userRow[0],
+        month: userRow[1],
+        totalScore,
+        targetScore,
+        percentage
+      });
+    } else {
+      setUserData({});
+      setUserSubmissionInfo(null);
+    }
+
+    const cooRow = findCooEvaluation(rows, targetMonth);
+    if (cooRow) {
+      setScores({
+        ...parseJobScores(cooRow),
+        qualityOfWork: cooRow[24] || '',
+        planningExecution: cooRow[25] || '',
+        timeResources: cooRow[26] || '',
+        interpersonalRelations: cooRow[27] || '',
+        flexibilityAdaptability: cooRow[28] || '',
+        communication: cooRow[29] || '',
+        integrity: cooRow[30] || '',
+        leadership: cooRow[31] || '',
+        discipline: cooRow[32] || '',
+        punctuality: cooRow[33] || ''
+      });
+    } else {
+      setScores(initialScores);
+    }
+  };
+
+  const loadData = async () => {
+    setIsLoading(true);
+    try {
+      const result = await fetchScorecardSheetData(sheetName);
+      if (result && result.data && result.data.length > 0) {
+        const dataRows = extractDataRows(result.data);
+        setAllDataRows(dataRows);
+
+        const months = extractAvailableMonths(dataRows);
+        setAvailableMonths(months);
+
+        const defaultMonth = getDefaultSelectedMonth(dataRows, months);
+        setSelectedMonth(defaultMonth);
+        applyMonthData(defaultMonth, dataRows);
+      }
+    } catch (err) {
+      console.error('Error loading data:', err);
+      toast.error('Failed to load scorecard data');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
-        const sheetId = "162o34BXqnJvmJjjtIoQpcBGo8orn2ZO5Jf0p8MgoUCs";
-        const sheetName = "Geetanjali Deep";
-
-        const response = await fetch(`${scriptURL}?sheetId=${encodeURIComponent(sheetId)}&sheetName=${encodeURIComponent(sheetName)}&action=getData`);
-
-        if (response.ok) {
-          const data = await response.json();
-          if (data && data.data && data.data.length > 0) {
-            // Data starts from row 5, so we slice from index 4 (row 5) onwards
-            const dataRows = data.data.slice(4);
-
-            // Get current month string
-            const currentDate = new Date();
-            const currentMonthStr = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
-
-            // Filter rows where column C (index 2) has "User" value and column B (index 1) is the current month
-            const userRows = dataRows.filter(row => row[2] === "User" && row[1] && row[1].trim() === currentMonthStr);
-
-            if (userRows.length > 0) {
-              // Find the latest row based on timestamp in Column A (index 0)
-              const latestUserRow = userRows.reduce((latest, current) => {
-                const latestTimestamp = new Date(latest[0]);
-                const currentTimestamp = new Date(current[0]);
-                return currentTimestamp > latestTimestamp ? current : latest;
-              });
-
-              setUserData({
-                talenntAquisation1: latestUserRow[4] || "",
-                talenntAquisation2: latestUserRow[5] || "",
-                talenntAquisation3: latestUserRow[6] || "",
-                talenntAquisation4: latestUserRow[7] || "",
-                talenntAquisation5: latestUserRow[8] || "",
-                talenntAquisation6: latestUserRow[9] || "",
-                hrPolicy1: latestUserRow[11] || "",
-                hrPolicy2: latestUserRow[12] || "",
-                hrPolicy3: latestUserRow[13] || "",
-                hrPolicy5: latestUserRow[15] || "",
-                hrPolicy6: latestUserRow[16] || "",
-                hrPolicy7: latestUserRow[17] || "",
-                strategyAndRoadmap1: latestUserRow[18] || "",
-                strategyAndRoadmap2: latestUserRow[19] || "",
-                strategyAndRoadmap3: latestUserRow[20] || "",
-                strategyAndRoadmap4: latestUserRow[21] || "",
-                strategyAndRoadmap5: latestUserRow[22] || "",
-                strategyAndRoadmap6: latestUserRow[23] || "",
-                strategyAndRoadmap7: latestUserRow[24] || "",
-              });
-            } else {
-              console.log('No row with "User" value found in column C');
-            }
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
-
-    fetchUserData();
+    loadData();
   }, []);
 
+  const handleMonthChange = (month) => {
+    setSelectedMonth(month);
+    applyMonthData(month, allDataRows);
+  };
+
+  const handleCopyUserScores = () => {
+    if (!userData || Object.keys(userData).length === 0) {
+      toast.warning('No user scores available to copy for this month.');
+      return;
+    }
+    setScores(prev => ({
+      ...prev,
+      ...userData
+    }));
+    toast.success('User scores copied into COO fields!');
+  };
+
   const handleScoreChange = (kpi, value) => {
-    // Ensure value is within range
     const numValue = parseFloat(value);
     if (numValue < 0) return;
 
@@ -118,22 +170,11 @@ export const GeetanjaliDeep = () => {
   };
 
   const calculateTotals = () => {
-    const jobAssessmentKeys = [
-      'talenntAquisation1', 'talenntAquisation2', 'talenntAquisation3', 'talenntAquisation4', 'talenntAquisation5', 'talenntAquisation6',
-      'hrPolicy1', 'hrPolicy2', 'hrPolicy3', 'hrPolicy5', 'hrPolicy6', 'hrPolicy7',
-      'strategyAndRoadmap1', 'strategyAndRoadmap2', 'strategyAndRoadmap3', 'strategyAndRoadmap4', 'strategyAndRoadmap5', 'strategyAndRoadmap6', 'strategyAndRoadmap7'
-    ];
-    const jobAssessmentTotal = jobAssessmentKeys.reduce((sum, key) => sum + (parseFloat(scores[key]) || 0), 0);
-
-    const behavioralKeys = [
-      'qualityOfWork', 'planningExecution', 'timeResources', 'interpersonalRelations',
-      'flexibilityAdaptability', 'communication', 'integrity', 'leadership', 'discipline', 'punctuality'
-    ];
-    const behavioralTotal = behavioralKeys.reduce((sum, key) => sum + (parseFloat(scores[key]) || 0), 0);
+    const jobAssessmentTotal = Object.values(scores).slice(0, 19).reduce((a, b) => a + (parseFloat(b) || 0), 0);
+    const behavioralTotal = Object.values(scores).slice(19).reduce((a, b) => a + (parseFloat(b) || 0), 0);
     const overallTotal = jobAssessmentTotal + behavioralTotal;
 
-    // Calculate target totals (out of values) - Updated targets
-    const jobAssessmentTargets = [4, 4, 4, 5, 3, 4, 4, 5, 4, 3, 5, 4, 4, 4, 4, 4, 4, 4, 4];
+    const jobAssessmentTargets = [5, 4, 3, 5, 5, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 4, 3, 3, 3];
     const behavioralTargets = [1, 2, 2, 2, 2, 2, 2, 2, 2, 3];
 
     const jobAssessmentTargetTotal = jobAssessmentTargets.reduce((a, b) => a + b, 0);
@@ -146,7 +187,7 @@ export const GeetanjaliDeep = () => {
       jobAssessmentTargetTotal,
       behavioralTargetTotal,
       overallTargetTotal: jobAssessmentTargetTotal + behavioralTargetTotal,
-      overallPercentage: overallTotal > 0 ? (overallTotal / (jobAssessmentTargetTotal + behavioralTargetTotal)) * 100 : 0
+      overallPercentage: (overallTotal / (jobAssessmentTargetTotal + behavioralTargetTotal)) * 100
     };
   };
 
@@ -155,7 +196,6 @@ export const GeetanjaliDeep = () => {
   const handleSubmit = async () => {
     if (isSubmitting) return;
 
-    // Validate if all required scores are filled
     const requiredScores = Object.values(scores).filter(score => score === '');
     if (requiredScores.length > 0) {
       if (!confirm('Some scores are empty. Do you want to submit anyway?')) {
@@ -166,10 +206,7 @@ export const GeetanjaliDeep = () => {
     setIsSubmitting(true);
 
     try {
-      // Prepare data according to your column structure
       const currentDate = new Date();
-
-      // Format timestamp as dd/mm/yyyy hh:mm:ss
       const day = String(currentDate.getDate()).padStart(2, '0');
       const month = String(currentDate.getMonth() + 1).padStart(2, '0');
       const year = currentDate.getFullYear();
@@ -178,55 +215,58 @@ export const GeetanjaliDeep = () => {
       const seconds = String(currentDate.getSeconds()).padStart(2, '0');
 
       const timestamp = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
-      const currentMonth = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
-      const employeeName = "Geetanjali Deep";
+      const evaluationMonth = selectedMonth || currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+      let evaluatorName = "Hansraj Singh";
+      try {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+          const parsed = JSON.parse(storedUser);
+          evaluatorName = parsed.Name || parsed.Username || "Hansraj Singh";
+        }
+      } catch (e) {
+        console.error(e);
+      }
 
       const rowData = [
-        timestamp, // Column A (index-0) - Timestamp
-        currentMonth, // Column B (index-1) - Current Month
-        employeeName, // Column C (index-2) - Employee Name
-        "", // Column D (index-3) - Empty column
-        scores.talenntAquisation1 || 0, // Column E (index-4) - Talent Acquisition and Management
-        scores.talenntAquisation2 || 0, // Column F (index-5) - Onboarding and Offboarding
-        scores.talenntAquisation3 || 0, // Column G (index-6) - Employee Relations and Engagement
-        scores.talenntAquisation4 || 0, // Column H (index-7) - Performance Management
-        scores.talenntAquisation5 || 0, // Column I (index-8) - Training and Development
-        scores.talenntAquisation6 || 0, // Column J (index-9) - Employee Engagement
-        scores.hrPolicy1 || 0, // Column K (index-10) - HR Policies and Compliance
-        scores.hrPolicy2 || 0, // Column L (index-11) - HR Analytics and Reporting
-        scores.hrPolicy3 || 0, // Column M (index-12) - Change Management and Organizational Effectiveness
-        0, // Column N (index-13) - Stakeholder Management and Leadership (Removed)
-        scores.hrPolicy5 || 0, // Column O (index-14) - HR SOP training should be provided to the new joiners
-        scores.hrPolicy6 || 0, // Column P (index-15) - HR SOP refreshment training to be provided to all employees across the board
-        scores.hrPolicy7 || 0, // Column Q (index-16) - HR Documentation in alignment with the Quality Management System standards
-        scores.strategyAndRoadmap1 || 0, // Column R (index-17) - Design and implement organization structure, HR frameworks, and SOPs
-        scores.strategyAndRoadmap2 || 0, // Column S (index-18) - Oversee talent acquisition, employee engagement, learning & development, and performance management
-        scores.strategyAndRoadmap3 || 0, // Column T (index-19) - Build a service excellence and customer-focused culture across all levels
-        scores.strategyAndRoadmap4 || 0, // Column U (index-20) - Manage payroll, compliance, and HR operations efficiently
-        scores.strategyAndRoadmap5 || 0, // Column V (index-21) - Partner with leadership to align HR strategy with business goals and expansion plans
-        scores.strategyAndRoadmap6 || 0, // Column W (index-22) - Act as a trusted advisor to management, balancing empathy with accountability
-        scores.strategyAndRoadmap7 || 0, // Column X (index-23) - Drive change initiatives and lead by example in implementing modern HR best practices
-        scores.qualityOfWork || 0, // Column AB (index-27) - Effectively and efficiently performs job
-        scores.planningExecution || 0, // Column AC (index-28) - Do Plan in advance and execute without deviation
-        scores.timeResources || 0, // Column AD (index-29) - Conserve Company resources and meet deadlines
-        scores.interpersonalRelations || 0, // Column AE (index-30) - Have healthy work relation with peers and superiors
-        scores.flexibilityAdaptability || 0, // Column AF (index-31) - Flexible in taking additional tasks and adaptable to change
-        scores.communication || 0, // Column AG (index-32) - Exchange of information desired through effective means
-        scores.integrity || 0, // Column AH (index-33) - High integrity towards company
-        scores.leadership || 0, // Column AI (index-34) - Ability to Inspire and take initiatives
-        scores.discipline || 0, // Column AJ (index-35) - Follow rules and code of conduct
-        scores.punctuality || 0 // Column AK (index-36) - Adherence to time and attendance
+        timestamp,
+        evaluationMonth,
+        evaluatorName,
+        "",
+        scores.talenntAquisation1 || 0,
+        scores.talenntAquisation2 || 0,
+        scores.talenntAquisation3 || 0,
+        scores.talenntAquisation4 || 0,
+        scores.talenntAquisation5 || 0,
+        scores.talenntAquisation6 || 0,
+        scores.hrPolicy1 || 0,
+        scores.hrPolicy2 || 0,
+        scores.hrPolicy3 || 0,
+        0,
+        scores.hrPolicy5 || 0,
+        scores.hrPolicy6 || 0,
+        scores.hrPolicy7 || 0,
+        scores.strategyAndRoadmap1 || 0,
+        scores.strategyAndRoadmap2 || 0,
+        scores.strategyAndRoadmap3 || 0,
+        scores.strategyAndRoadmap4 || 0,
+        scores.strategyAndRoadmap5 || 0,
+        scores.strategyAndRoadmap6 || 0,
+        scores.strategyAndRoadmap7 || 0,
+        scores.qualityOfWork || 0,
+        scores.planningExecution || 0,
+        scores.timeResources || 0,
+        scores.interpersonalRelations || 0,
+        scores.flexibilityAdaptability || 0,
+        scores.communication || 0,
+        scores.integrity || 0,
+        scores.leadership || 0,
+        scores.discipline || 0,
+        scores.punctuality || 0
       ];
 
       const scriptURL = "https://script.google.com/macros/s/AKfycbw6xeabQpVzEnNMhLWfMAwLJ0hFZxA2L89aX17-p4b-caM4SdpsETrtq5GT4Lwk84qL/exec";
       const sheetId = "162o34BXqnJvmJjjtIoQpcBGo8orn2ZO5Jf0p8MgoUCs";
-      const sheetName = "Geetanjali Deep";
-
-      // Use fetch with form data to properly submit to Google Apps Script
-      const formData = new FormData();
-      formData.append('sheetId', sheetId);
-      formData.append('sheetName', sheetName);
-      formData.append('payload', JSON.stringify(rowData));
 
       const response = await fetch(scriptURL, {
         method: 'POST',
@@ -236,17 +276,9 @@ export const GeetanjaliDeep = () => {
         body: `sheetId=${encodeURIComponent(sheetId)}&sheetName=${encodeURIComponent(sheetName)}&payload=${encodeURIComponent(JSON.stringify(rowData))}`
       });
 
-      // Check if the response is successful
       if (response.ok) {
-        console.log('Submitted Scores:', scores);
-        console.log('Row Data sent to sheet:', rowData);
-
-        // Show success message
-        toast.success('Scores submitted successfully!');
-
-        // Optional: You can also open the sheet URL to verify data was stored
-        const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/edit#gid=0`;
-        console.log('Check your Google Sheet here:', sheetUrl);
+        toast.success(`Scores for ${evaluationMonth} submitted successfully!`);
+        loadData();
       } else {
         throw new Error(`Server responded with status: ${response.status}`);
       }
@@ -262,6 +294,19 @@ export const GeetanjaliDeep = () => {
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', minHeight: '100vh' }}>
       <ToastContainer />
+
+      <MonthSelectorBanner
+        selectedMonth={selectedMonth}
+        onMonthChange={handleMonthChange}
+        availableMonths={availableMonths}
+        onRefresh={loadData}
+        isLoading={isLoading}
+        submissionInfo={userSubmissionInfo}
+        isUserView={false}
+        onCopyUserScores={handleCopyUserScores}
+        employeeName="Geetanjali Deep"
+      />
+
       <div style={{ marginBottom: '30px', backgroundColor: 'white', borderRadius: '10px', padding: '20px', boxShadow: '0 6px 10px rgba(0, 0, 0, 0.1)' }}>
         <h2 style={{ color: '#1e3a8a', borderBottom: '3px solid #1e3a8a', paddingBottom: '10px', marginBottom: '20px' }}>JOB ASSESSMENT</h2>
         <table style={{ width: '100%', borderCollapse: 'collapse', borderRadius: '8px', overflow: 'hidden' }}>

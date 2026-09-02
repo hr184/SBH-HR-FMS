@@ -20,12 +20,12 @@ import { JharnaAmbulkar } from './Scorecard/JharnaAmbulkar';
 import { JharnaAmbulkarScorecardHistory } from './ScorecardHistory/JharnaAmbulkarScorecardHistory'
 //import { LalitMohanBisht } from './Scorecard/LalitMohanBisht';
 //import { LalitMohanBishtScorecardHistory } from './ScorecardHistory/LalitMohanBishtScorecardHistory'
-import { AlkaDas } from './Scorecard/AlkaDas';
-import { AlkaDasScorecardHistory } from './ScorecardHistory/AlkaDasScorecardHistory';
+import { SwapnilJain, AlkaDas } from './Scorecard/SwapnilJain';
+import { SwapnilJainScorecardHistory, AlkaDasScorecardHistory } from './ScorecardHistory/SwapnilJainScorecardHistory';
 import { NeeluSahu } from './Scorecard/NeeluSahu';
 import { NeeluSahuScorecardHistory } from './ScorecardHistory/NeeluSahuScorecardHistory'
-import { PoorwaGajbhiye } from './Scorecard/PoorwaGajbhiye';
-import { PoorwaGajbhiyeScorecardHistory } from './ScorecardHistory/PoorwaGajbhiyeScorecardHistory'
+import { ManaswiMaity, PoorwaGajbhiye } from './Scorecard/ManaswiMaity';
+import { ManaswiMaityScorecardHistory, PoorwaGajbhiyeScorecardHistory } from './ScorecardHistory/ManaswiMaityScorecardHistory';
 import { PratimaVarthi } from './Scorecard/PratimaVarthi';
 import { PratimaVarthiScorecardHistory } from './ScorecardHistory/PratimaVarthiScorecardHistory'
 import { PraveenGupta } from './Scorecard/PraveenGupta';
@@ -85,12 +85,12 @@ export const BalanceScoreCard = () => {
     { id: 8, name: "Isha Shrivastava", department: "Marketing" },
     { id: 9, name: "Jharna Ambulkar", department: "Admin" },
     //{ id: 10, name: "Lalit Mohan Bisht", department: "Operations" },
-    { id: 10, name: "Alka Das", department: "Operations" },
+    { id: 10, name: "Swapnil Jain", department: "Operations" },
     { id: 11, name: "Mangesh Sahu", department: "Marketing" },
     { id: 12, name: "Neelu Sahu", department: "Operation" },
     { id: 13, name: "Nighat Parveen", department: "Marketing" },
     { id: 14, name: "Panna Senani", department: "Accounts" },
-    { id: 15, name: "Poorwa Gajbhiye", department: "HR" },
+    { id: 15, name: "Manaswi Maity", department: "HR" },
     { id: 16, name: "Pratima Varthi", department: "Store" },
     { id: 17, name: "Praveen Gupta", department: "IT" },
     { id: 18, name: "Suman Bala Sahu", department: "Admin" },
@@ -445,10 +445,10 @@ export const BalanceScoreCard = () => {
         {selectedEmployee ? (
           <div>
             {viewType === "scorecard" &&
-              selectedEmployee === "Poorwa Gajbhiye" && <PoorwaGajbhiye />}
+              (selectedEmployee === "Manaswi Maity" || selectedEmployee === "Poorwa Gajbhiye") && <ManaswiMaity />}
             {viewType === "history" &&
-              selectedEmployee === "Poorwa Gajbhiye" && (
-                <PoorwaGajbhiyeScorecardHistory />
+              (selectedEmployee === "Manaswi Maity" || selectedEmployee === "Poorwa Gajbhiye") && (
+                <ManaswiMaityScorecardHistory />
               )}
             {viewType === "scorecard" &&
               selectedEmployee === "Geetanjali Deep" && <GeetanjaliDeep />}
@@ -462,16 +462,10 @@ export const BalanceScoreCard = () => {
               selectedEmployee === "Deepmala Patil" && (
                 <DeepmalaPatilScorecardHistory />
               )}
-            {/* {viewType === "scorecard" &&
-              selectedEmployee === "Alka Das" && <LalitMohanBisht />}
-            {viewType === "history" &&
-              selectedEmployee === "Alka Das" && (
-                <LalitMohanBishtScorecardHistory />
-              )} */}
             {viewType === "scorecard" &&
-              selectedEmployee === "Alka Das" && <AlkaDas />}
-            {viewType === "history" && selectedEmployee === "Alka Das" && (
-              <AlkaDasScorecardHistory />
+              (selectedEmployee === "Swapnil Jain" || selectedEmployee === "Alka Das") && <SwapnilJain />}
+            {viewType === "history" && (selectedEmployee === "Swapnil Jain" || selectedEmployee === "Alka Das") && (
+              <SwapnilJainScorecardHistory />
             )}
             {viewType === "scorecard" &&
               selectedEmployee === "Ajay Upadhyay" && <AjayUpadhyay />}
@@ -571,10 +565,11 @@ export const BalanceScoreCard = () => {
             )}
             {![
               "Ajay Upadhyay",
+              "Manaswi Maity",
               "Poorwa Gajbhiye",
               "Geetanjali Deep",
               "Deepmala Patil",
-              // "Alka Das",
+              "Swapnil Jain",
               "Alka Das",
               "Deepu Mourya",
               "Pratima Varthi",
