@@ -24,16 +24,29 @@ const Login = () => {
     setSubmitting(true);
 
     try {
-      const [userRes, leavingRes] = await Promise.all([
+      const [userRes, leavingRes] = await Promise.allSettled([
         fetch(SHEET_API_URL),
         fetch(LEAVING_API_URL)
       ]);
 
-      const userJson = await userRes.json();
-      const leavingJson = await leavingRes.json();
+      if (userRes.status !== 'fulfilled' || !userRes.value.ok) {
+        toast.error('Failed to connect to authentication server');
+        setSubmitting(false);
+        return;
+      }
 
-      if (!userJson.success || !leavingJson.success) {
-        toast.error('Error fetching data');
+      let userJson;
+      try {
+        userJson = await userRes.value.json();
+      } catch (parseErr) {
+        console.error('Failed to parse user JSON:', parseErr);
+        toast.error('Authentication server returned invalid response');
+        setSubmitting(false);
+        return;
+      }
+
+      if (!userJson || !userJson.success || !userJson.data) {
+        toast.error('Error fetching user data');
         setSubmitting(false);
         return;
       }
@@ -46,13 +59,26 @@ const Login = () => {
         return obj;
       });
 
-      const leavingRows = leavingJson.data;
-      const leavingHeaders = leavingRows[5];
-      const leavingData = leavingRows.slice(6).map((row) => {
-        let obj = {};
-        leavingHeaders.forEach((h, i) => (obj[h] = row[i]));
-        return obj;
-      });
+      let leavingData = [];
+      let leavingHeaders = [];
+      if (leavingRes.status === 'fulfilled' && leavingRes.value.ok) {
+        try {
+          const leavingJson = await leavingRes.value.json();
+          if (leavingJson && leavingJson.success && Array.isArray(leavingJson.data)) {
+            const leavingRows = leavingJson.data;
+            if (leavingRows.length > 5) {
+              leavingHeaders = leavingRows[5] || [];
+              leavingData = leavingRows.slice(6).map((row) => {
+                let obj = {};
+                leavingHeaders.forEach((h, i) => (obj[h] = row[i]));
+                return obj;
+              });
+            }
+          }
+        } catch (leavingParseErr) {
+          console.warn('Could not parse leaving sheet data, skipping deactivation check:', leavingParseErr);
+        }
+      }
 
       const matchedUser = users.find(
         (u) => u.Username === username && u.Password === password
@@ -65,7 +91,7 @@ const Login = () => {
       }
 
       const userName = matchedUser[userHeaders[2]];
-      const isUserLeaving = leavingData.some(record => {
+      const isUserLeaving = leavingHeaders.length > 13 && leavingData.some(record => {
         const leavingName = record[leavingHeaders[2]];
         const leavingStatus = record[leavingHeaders[13]];
         return leavingName && userName &&
