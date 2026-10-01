@@ -195,7 +195,7 @@ export const UgrasenNayak = () => {
       managementTraining: userData.managementTraining || '',
       additionalWorks: userData.additionalWorks || '',
     }));
-    toast.success('Copied user scores to COO inputs');
+    toast.success('Copied user scores to SBH inputs');
   };
 
   const handleScoreChange = (kpi, value) => {
@@ -265,7 +265,7 @@ export const UgrasenNayak = () => {
       
       // Determine evaluator name from logged in user
       const userDataString = localStorage.getItem('user');
-      let evaluatorName = "COO";
+      let evaluatorName = "SBH";
       if (userDataString) {
         try {
           const u = JSON.parse(userDataString);
@@ -323,7 +323,7 @@ export const UgrasenNayak = () => {
       });
 
       if (response.ok) {
-        toast.success(`COO Evaluation for ${evaluationMonth} submitted successfully!`);
+        toast.success(`SBH Evaluation for ${evaluationMonth} submitted successfully!`);
         // Refresh data
         fetchUserData();
       } else {
@@ -453,7 +453,7 @@ export const UgrasenNayak = () => {
               <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #1e40af' }}>KPI</th>
               <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '100px' }}>Out of</th>
               <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '120px' }}>User</th>
-              <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '120px' }}>COO</th>
+              <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '120px' }}>SBH</th>
             </tr>
           </thead>
           <tbody>

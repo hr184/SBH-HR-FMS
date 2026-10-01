@@ -126,6 +126,8 @@ export const UserDeepmalaPatil = () => {
     };
   };
 
+  const totals = calculateTotals();
+
   const handleSubmit = async () => {
     if (isSubmitting) return;
 
