@@ -227,8 +227,11 @@ export const UserBalanceScoreCard = () => {
               
               if (matchingRows.length > 0) {
                 matchingRows.forEach(row => {
-                  const submittedBy = row[2] === "User" ? "User" : "COO";
-                  const status = submittedBy === "User" ? "Pending COO Evaluation" : "Fully Completed";
+                  const isNikhilesh = emp.name === "Nikhilesh Davda" || emp.name.toLowerCase().includes("nikhilesh");
+                  const submittedBy = row[2] === "User" ? "User" : (isNikhilesh ? (row[2] || "Director Sir") : "COO");
+                  const status = submittedBy === "User" 
+                    ? (isNikhilesh ? "Pending from Director" : "Pending COO Evaluation") 
+                    : "Fully Completed";
                   
                   reportRows.push([
                     row[0] || "-", // Timestamp

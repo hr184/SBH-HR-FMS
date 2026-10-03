@@ -1,7 +1,8 @@
-import { Activity } from 'lucide-react';
+import { Activity, FileText, Users } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as XLSX from 'xlsx';
+import { MonthlyScorecardReport } from './MonthlyScorecardReport';
 import { AjayUpadhyay } from './Scorecard/AjayUpadhyay';
 import { AjayUpadhyayScorecardHistory } from './ScorecardHistory/AjayUpadhyayScorecardHistory'
 import { AlokPandey } from './Scorecard/AlokPandey';
@@ -102,6 +103,7 @@ export const BalanceScoreCard = () => {
 
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [viewType, setViewType] = useState(''); // 'scorecard' or 'history'
+  const [activeTab, setActiveTab] = useState('report'); // 'report' or 'directory'
   const [isDownloadingAll, setIsDownloadingAll] = useState(false);
 
   // Date Range selections
@@ -254,8 +256,11 @@ export const BalanceScoreCard = () => {
               
               if (matchingRows.length > 0) {
                 matchingRows.forEach(row => {
-                  const submittedBy = row[2] === "User" ? "User" : "COO";
-                  const status = submittedBy === "User" ? "Pending COO Evaluation" : "Fully Completed";
+                  const isNikhilesh = emp.name === "Nikhilesh Davda" || emp.name.toLowerCase().includes("nikhilesh");
+                  const submittedBy = row[2] === "User" ? "User" : (isNikhilesh ? (row[2] || "Director Sir") : "COO");
+                  const status = submittedBy === "User" 
+                    ? (isNikhilesh ? "Pending from Director" : "Pending COO Evaluation") 
+                    : "Fully Completed";
                   
                   reportRows.push([
                     row[0] || "-", // Timestamp
@@ -339,14 +344,13 @@ export const BalanceScoreCard = () => {
   return (
     <div className="p-4 md:p-6 bg-gray-50 min-h-screen">
       <div className="max-w-7xl mx-auto">
-        {/* Header Section */}
-        <div className="flex flex-col mb-4 md:mb-6 sticky top-0 bg-gray-50 z-10 py-2 space-y-3">
-          {/* Top Row - Buttons */}
-          <div className="flex justify-between items-center w-full">
-            {selectedEmployee && (
+        {/* Header Section for Selected Employee */}
+        {selectedEmployee && (
+          <div className="flex flex-col mb-4 md:mb-6 sticky top-0 bg-gray-50 z-10 py-2 space-y-3">
+            <div className="flex justify-between items-center w-full">
               <button
                 onClick={handleBackClick}
-                className="px-4 py-2 bg-blue-800 text-white rounded hover:bg-blue-700 flex items-center text-sm md:text-base"
+                className="px-4 py-2 bg-blue-800 text-white rounded hover:bg-blue-700 flex items-center text-sm md:text-base font-semibold shadow-sm"
               >
                 <svg
                   className="w-4 h-4 mr-2"
@@ -362,85 +366,24 @@ export const BalanceScoreCard = () => {
                     d="M10 19l-7-7m0 0l7-7m-7 7h18"
                   />
                 </svg>
-                Back
-              </button>
-            )}
-            <div className="flex flex-wrap items-center gap-2">
-              <div className="flex items-center gap-1 bg-white p-1 rounded border shadow-sm text-xs">
-                <span className="text-gray-500 font-medium px-1">From:</span>
-                <select 
-                  value={startMonth} 
-                  onChange={(e) => setStartMonth(e.target.value)}
-                  className="bg-transparent outline-none cursor-pointer text-gray-700 font-semibold"
-                >
-                  {monthsList.map(m => <option key={m} value={m}>{m}</option>)}
-                </select>
-                <select 
-                  value={startYear} 
-                  onChange={(e) => setStartYear(e.target.value)}
-                  className="bg-transparent outline-none cursor-pointer text-gray-700 font-semibold border-l pl-1"
-                >
-                  {years.map(y => <option key={y} value={y}>{y}</option>)}
-                </select>
-              </div>
-
-              <div className="flex items-center gap-1 bg-white p-1 rounded border shadow-sm text-xs">
-                <span className="text-gray-500 font-medium px-1">To:</span>
-                <select 
-                  value={endMonth} 
-                  onChange={(e) => setEndMonth(e.target.value)}
-                  className="bg-transparent outline-none cursor-pointer text-gray-700 font-semibold"
-                >
-                  {monthsList.map(m => <option key={m} value={m}>{m}</option>)}
-                </select>
-                <select 
-                  value={endYear} 
-                  onChange={(e) => setEndYear(e.target.value)}
-                  className="bg-transparent outline-none cursor-pointer text-gray-700 font-semibold border-l pl-1"
-                >
-                  {years.map(y => <option key={y} value={y}>{y}</option>)}
-                </select>
-              </div>
-
-              <button 
-                onClick={downloadAllReports}
-                disabled={isDownloadingAll}
-                className={`px-4 py-2 text-white rounded flex items-center text-sm md:text-base font-semibold shadow-md ${isDownloadingAll ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'}`}
-              >
-                <svg
-                  className="w-4 h-4 mr-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                  />
-                </svg>
-                <span>{isDownloadingAll ? 'Downloading...' : 'Download Report'}</span>
+                Back to Dashboard
               </button>
             </div>
-          </div>
 
-          {/* Bottom Row - Title and View Type */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between space-y-2 md:space-y-0">
-            <div className="flex flex-col md:flex-row md:items-center space-y-1 md:space-y-0">
-              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 text-center md:text-left">
-                {selectedEmployee ? selectedEmployee : "Balanced Scorecard"}
-              </h1>
-              {selectedEmployee && (
-                <span className="ml-0 md:ml-4 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm md:text-base text-center md:text-left mt-1 md:mt-0">
+            <div className="flex flex-col md:flex-row md:items-center justify-between space-y-2 md:space-y-0">
+              <div className="flex flex-col md:flex-row md:items-center space-y-1 md:space-y-0">
+                <h1 className="text-2xl md:text-3xl font-bold text-gray-900 text-center md:text-left">
+                  {selectedEmployee}
+                </h1>
+                <span className="ml-0 md:ml-4 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm md:text-base text-center md:text-left mt-1 md:mt-0 font-medium">
                   {viewType === "scorecard"
                     ? "Score Card View"
                     : "History View"}
                 </span>
-              )}
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {selectedEmployee ? (
           <div>
@@ -600,152 +543,242 @@ export const BalanceScoreCard = () => {
               )}
           </div>
         ) : (
-          <>
-            {/* Desktop Table View */}
-            <div className="hidden md:block bg-white rounded-lg shadow overflow-hidden">
-              <div
-                className="overflow-x-auto"
-                style={{ maxHeight: "calc(100vh - 180px)" }}
-              >
-                <table className="min-w-full">
-                  <thead className="bg-gray-50 border-b border-gray-200 sticky top-0">
-                    <tr>
-                      <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50 sticky top-0 text-center">
-                        SN
-                      </th>
-                      <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50 sticky top-0 text-center">
-                        Employee Name
-                      </th>
-                      <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50 sticky top-0 text-center">
-                        Department
-                      </th>
-                      <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50 sticky top-0 text-center">
-                        Balance Scorecard
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
+          <div className="space-y-6">
+            {/* Top Navigation Tabs */}
+            <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-3 rounded-xl border border-gray-200 shadow-sm">
+              <div className="flex items-center gap-2 bg-gray-100 p-1 rounded-lg">
+                <button
+                  onClick={() => setActiveTab('report')}
+                  className={`px-4 py-2 rounded-md text-sm font-semibold transition-all flex items-center gap-2 ${
+                    activeTab === 'report' 
+                      ? 'bg-blue-800 text-white shadow-sm' 
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  <FileText className="w-4 h-4" />
+                  Monthly Report &amp; PDF Export
+                </button>
+                <button
+                  onClick={() => setActiveTab('directory')}
+                  className={`px-4 py-2 rounded-md text-sm font-semibold transition-all flex items-center gap-2 ${
+                    activeTab === 'directory' 
+                      ? 'bg-blue-800 text-white shadow-sm' 
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  <Users className="w-4 h-4" />
+                  Employee Directory
+                </button>
+              </div>
+
+              {activeTab === 'directory' && (
+                <div className="flex flex-wrap items-center gap-2">
+                  <div className="flex items-center gap-1 bg-white p-1 rounded border shadow-sm text-xs">
+                    <span className="text-gray-500 font-medium px-1">From:</span>
+                    <select 
+                      value={startMonth} 
+                      onChange={(e) => setStartMonth(e.target.value)}
+                      className="bg-transparent outline-none cursor-pointer text-gray-700 font-semibold"
+                    >
+                      {monthsList.map(m => <option key={m} value={m}>{m}</option>)}
+                    </select>
+                    <select 
+                      value={startYear} 
+                      onChange={(e) => setStartYear(e.target.value)}
+                      className="bg-transparent outline-none cursor-pointer text-gray-700 font-semibold border-l pl-1"
+                    >
+                      {years.map(y => <option key={y} value={y}>{y}</option>)}
+                    </select>
+                  </div>
+
+                  <div className="flex items-center gap-1 bg-white p-1 rounded border shadow-sm text-xs">
+                    <span className="text-gray-500 font-medium px-1">To:</span>
+                    <select 
+                      value={endMonth} 
+                      onChange={(e) => setEndMonth(e.target.value)}
+                      className="bg-transparent outline-none cursor-pointer text-gray-700 font-semibold"
+                    >
+                      {monthsList.map(m => <option key={m} value={m}>{m}</option>)}
+                    </select>
+                    <select 
+                      value={endYear} 
+                      onChange={(e) => setEndYear(e.target.value)}
+                      className="bg-transparent outline-none cursor-pointer text-gray-700 font-semibold border-l pl-1"
+                    >
+                      {years.map(y => <option key={y} value={y}>{y}</option>)}
+                    </select>
+                  </div>
+
+                  <button 
+                    onClick={downloadAllReports}
+                    disabled={isDownloadingAll}
+                    className={`px-3 py-1.5 text-white rounded flex items-center text-xs font-semibold shadow-sm ${isDownloadingAll ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'}`}
+                  >
+                    <span>{isDownloadingAll ? 'Downloading...' : 'Excel Export'}</span>
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* TAB 1: MONTHLY REPORT & PDF EXPORT */}
+            {activeTab === 'report' && (
+              <MonthlyScorecardReport
+                employees={employees}
+                onOpenScorecard={(name) => handleEmployeeClick(name, "scorecard")}
+                onOpenHistory={(name) => handleEmployeeClick(name, "history")}
+              />
+            )}
+
+            {/* TAB 2: EMPLOYEE DIRECTORY */}
+            {activeTab === 'directory' && (
+              <>
+                {/* Desktop Table View */}
+                <div className="hidden md:block bg-white rounded-lg shadow overflow-hidden">
+                  <div
+                    className="overflow-x-auto"
+                    style={{ maxHeight: "calc(100vh - 180px)" }}
+                  >
+                    <table className="min-w-full">
+                      <thead className="bg-gray-50 border-b border-gray-200 sticky top-0">
+                        <tr>
+                          <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50 sticky top-0 text-center">
+                            SN
+                          </th>
+                          <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50 sticky top-0 text-center">
+                            Employee Name
+                          </th>
+                          <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50 sticky top-0 text-center">
+                            Department
+                          </th>
+                          <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50 sticky top-0 text-center">
+                            Balance Scorecard
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        {employees.length > 0 ? (
+                          employees.map((employee, index) => (
+                            <tr
+                              key={employee.id}
+                              className={
+                                index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                              }
+                            >
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                {index + 1}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <div className="flex items-center justify-center">
+                                  <div className="ml-4">
+                                    <button
+                                      onClick={() =>
+                                        handleEmployeeClick(
+                                          employee.name,
+                                          "history"
+                                        )
+                                      }
+                                      className="text-sm font-medium text-blue-600 hover:text-blue-800 focus:outline-none"
+                                    >
+                                      {employee.name}
+                                    </button>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                {employee.department}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <div className="flex items-center justify-center">
+                                  <div className="ml-4">
+                                    <button
+                                      onClick={() =>
+                                        handleEmployeeClick(
+                                          employee.name,
+                                          "scorecard"
+                                        )
+                                      }
+                                      className="text-sm font-medium px-6 py-2 rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none"
+                                    >
+                                      Click Here
+                                    </button>
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td
+                              colSpan="4"
+                              className="px-6 py-4 text-center text-gray-500"
+                            >
+                              No employees available
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {/* Mobile Card View */}
+                <div className="md:hidden bg-white rounded-lg shadow overflow-hidden">
+                  <div className="p-0">
                     {employees.length > 0 ? (
-                      employees.map((employee, index) => (
-                        <tr
-                          key={employee.id}
-                          className={
-                            index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                          }
-                        >
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
-                            {index + 1}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center justify-center">
-                              <div className="ml-4">
+                      <div className="space-y-0">
+                        {employees.map((employee, index) => (
+                          <div
+                            key={employee.id}
+                            className={`p-4 border-b border-gray-200 ${index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                              }`}
+                          >
+                            <div className="flex justify-between items-start mb-3">
+                              <div className="flex items-center">
+                                <span className="text-sm font-medium text-gray-500 mr-3">
+                                  {index + 1}.
+                                </span>
                                 <button
                                   onClick={() =>
-                                    handleEmployeeClick(
-                                      employee.name,
-                                      "history"
-                                    )
+                                    handleEmployeeClick(employee.name, "history")
                                   }
-                                  className="text-sm font-medium text-blue-600 hover:text-blue-800 focus:outline-none"
+                                  className="text-base font-semibold text-blue-600 hover:text-blue-800 focus:outline-none text-left"
                                 >
                                   {employee.name}
                                 </button>
                               </div>
                             </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
-                            {employee.department}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center justify-center">
-                              <div className="ml-4">
-                                <button
-                                  onClick={() =>
-                                    handleEmployeeClick(
-                                      employee.name,
-                                      "scorecard"
-                                    )
-                                  }
-                                  className="text-sm font-medium px-6 py-2 rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none"
-                                >
-                                  Click Here
-                                </button>
+
+                            <div className="flex justify-between items-center">
+                              <div>
+                                <span className="text-sm text-gray-600">
+                                  Department :
+                                </span>
+                                <span className="text-sm font-medium text-gray-800 ml-2">
+                                  {employee.department}
+                                </span>
                               </div>
+                              <button
+                                onClick={() =>
+                                  handleEmployeeClick(employee.name, "scorecard")
+                                }
+                                className="text-sm font-medium px-4 py-2 rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none"
+                              >
+                                Scorecard
+                              </button>
                             </div>
-                          </td>
-                        </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td
-                          colSpan="4"
-                          className="px-6 py-4 text-center text-gray-500"
-                        >
-                          No employees available
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            {/* Mobile Card View */}
-            <div className="md:hidden bg-white rounded-lg shadow overflow-hidden">
-              <div className="p-0">
-                {employees.length > 0 ? (
-                  <div className="space-y-0">
-                    {employees.map((employee, index) => (
-                      <div
-                        key={employee.id}
-                        className={`p-4 border-b border-gray-200 ${index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                          }`}
-                      >
-                        <div className="flex justify-between items-start mb-3">
-                          <div className="flex items-center">
-                            <span className="text-sm font-medium text-gray-500 mr-3">
-                              {index + 1}.
-                            </span>
-                            <button
-                              onClick={() =>
-                                handleEmployeeClick(employee.name, "history")
-                              }
-                              className="text-base font-semibold text-blue-600 hover:text-blue-800 focus:outline-none text-left"
-                            >
-                              {employee.name}
-                            </button>
                           </div>
-                        </div>
-
-                        <div className="flex justify-between items-center">
-                          <div>
-                            <span className="text-sm text-gray-600">
-                              Department :
-                            </span>
-                            <span className="text-sm font-medium text-gray-800 ml-2">
-                              {employee.department}
-                            </span>
-                          </div>
-                          <button
-                            onClick={() =>
-                              handleEmployeeClick(employee.name, "scorecard")
-                            }
-                            className="text-sm font-medium px-4 py-2 rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none"
-                          >
-                            Scorecard
-                          </button>
-                        </div>
+                        ))}
                       </div>
-                    ))}
+                    ) : (
+                      <div className="p-6 text-center text-gray-500">
+                        No employees available
+                      </div>
+                    )}
                   </div>
-                ) : (
-                  <div className="p-6 text-center text-gray-500">
-                    No employees available
-                  </div>
-                )}
-              </div>
-            </div>
-          </>
+                </div>
+              </>
+            )}
+          </div>
         )}
       </div>
     </div>

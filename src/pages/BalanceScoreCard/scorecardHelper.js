@@ -7,11 +7,11 @@ export const SHEET_ID = "162o34BXqnJvmJjjtIoQpcBGo8orn2ZO5Jf0p8MgoUCs";
 export async function fetchScorecardSheetData(primarySheetName, fallbackSheetName = null) {
   try {
     let url = `${SCRIPT_URL}?sheetId=${encodeURIComponent(SHEET_ID)}&sheetName=${encodeURIComponent(primarySheetName)}&action=getData`;
-    let response = await fetch(url);
+    let response = await fetch(url, { credentials: 'omit' });
     
     if (!response.ok && fallbackSheetName) {
       url = `${SCRIPT_URL}?sheetId=${encodeURIComponent(SHEET_ID)}&sheetName=${encodeURIComponent(fallbackSheetName)}&action=getData`;
-      response = await fetch(url);
+      response = await fetch(url, { credentials: 'omit' });
     }
     
     if (!response.ok) return { success: false, data: [] };
@@ -19,7 +19,7 @@ export async function fetchScorecardSheetData(primarySheetName, fallbackSheetNam
     const result = await response.json();
     if (!result.success && fallbackSheetName) {
       url = `${SCRIPT_URL}?sheetId=${encodeURIComponent(SHEET_ID)}&sheetName=${encodeURIComponent(fallbackSheetName)}&action=getData`;
-      const fallbackRes = await fetch(url);
+      const fallbackRes = await fetch(url, { credentials: 'omit' });
       if (fallbackRes.ok) {
         const fallbackResult = await fallbackRes.json();
         if (fallbackResult.success) return fallbackResult;
@@ -31,7 +31,7 @@ export async function fetchScorecardSheetData(primarySheetName, fallbackSheetNam
     if (fallbackSheetName) {
       try {
         const fallbackUrl = `${SCRIPT_URL}?sheetId=${encodeURIComponent(SHEET_ID)}&sheetName=${encodeURIComponent(fallbackSheetName)}&action=getData`;
-        const res = await fetch(fallbackUrl);
+        const res = await fetch(fallbackUrl, { credentials: 'omit' });
         if (res.ok) return await res.json();
       } catch (fallbackErr) {
         console.error(`Fallback failed for ${fallbackSheetName}:`, fallbackErr);
@@ -131,7 +131,8 @@ export function getDefaultSelectedMonth(dataRows = [], months = []) {
  */
 export function findUserSubmission(dataRows, targetMonth = null) {
   const userRows = dataRows.filter(row => {
-    if (row[2] !== "User") return false;
+    const isUser = row[2] === "User" || (row[2] === "Ajay Upadhyay" && (!row[49] || row[49] === ""));
+    if (!isUser) return false;
     if (!targetMonth) return true;
     return row[1] && row[1].toString().trim().toLowerCase() === targetMonth.toString().trim().toLowerCase();
   });
@@ -151,6 +152,8 @@ export function findUserSubmission(dataRows, targetMonth = null) {
 export function findCooEvaluation(dataRows, targetMonth) {
   const cooRows = dataRows.filter(row => {
     if (row[2] === "User") return false;
+    // Exclude legacy self-submissions by Ajay Upadhyay where row[2] was set to his name
+    if (row[2] === "Ajay Upadhyay" && (!row[49] || row[49] === "")) return false;
     if (!targetMonth) return true;
     return row[1] && row[1].toString().trim().toLowerCase() === targetMonth.toString().trim().toLowerCase();
   });
@@ -163,3 +166,4 @@ export function findCooEvaluation(dataRows, targetMonth) {
     return currentTimestamp > latestTimestamp ? current : latest;
   });
 }
+

@@ -206,7 +206,7 @@ export function NikhileshDavda() {
             ...prev,
             ...userData
         }));
-        toast.success('User scores copied into COO fields!');
+        toast.success('User scores copied into Director Sir fields!');
     };
 
     const handleScoreChange = (kpi, value) => {
@@ -267,12 +267,22 @@ export function NikhileshDavda() {
             const timestamp = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
             const evaluationMonth = selectedMonth || currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
 
-            let evaluatorName = "Hansraj Singh";
+            let evaluatorName = "Director Sir";
             try {
                 const storedUser = localStorage.getItem('user');
                 if (storedUser) {
                     const parsed = JSON.parse(storedUser);
-                    evaluatorName = parsed.Name || parsed.Username || "Hansraj Singh";
+                    const currentName = (parsed.Name || parsed.Username || "").toLowerCase();
+                    if (currentName.includes('nikhilesh')) {
+                        toast.error('Only Director Sir can evaluate COO Nikhilesh Davda!');
+                        setIsSubmitting(false);
+                        return;
+                    }
+                    if (parsed.Name && (parsed.Name.toLowerCase().includes('director') || parsed.Role?.toLowerCase().includes('director'))) {
+                        evaluatorName = parsed.Name;
+                    } else {
+                        evaluatorName = "Director Sir";
+                    }
                 }
             } catch (e) {
                 console.error(e);
@@ -391,7 +401,7 @@ export function NikhileshDavda() {
                             <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #1e40af' }}>KPI</th>
                             <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '100px' }}>Out of</th>
                             <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '100px' }}>User</th>
-                            <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '120px' }}>COO</th>
+                            <th style={{ padding: '12px', textAlign: 'center', border: '1px solid #1e40af', width: '120px' }}>Director Sir</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -1444,7 +1454,7 @@ export function NikhileshDavda() {
                         fontWeight: '600'
                     }}
                 >
-                    {isSubmitting ? 'Submitting...' : 'Submit Scores'}
+                    {isSubmitting ? 'Submitting...' : 'Submit Evaluation (Director Sir)'}
                 </button>
             </div>
         </div>

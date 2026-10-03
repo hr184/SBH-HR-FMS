@@ -25,8 +25,8 @@ const Login = () => {
 
     try {
       const [userRes, leavingRes] = await Promise.allSettled([
-        fetch(SHEET_API_URL),
-        fetch(LEAVING_API_URL)
+        fetch(SHEET_API_URL, { credentials: 'omit' }),
+        fetch(LEAVING_API_URL, { credentials: 'omit' })
       ]);
 
       if (userRes.status !== 'fulfilled' || !userRes.value.ok) {
