@@ -23,10 +23,10 @@ function fetchSheetData(sheetName, sheetId, filterMonth) {
     var ss = sheetId ? SpreadsheetApp.openById(sheetId) : SpreadsheetApp.openById("1hA6J-3UNuvz82EJLDJFmtTRwRT9oGa4SsLpw2o3TvAo");
     var sheet = ss.getSheetByName(sheetName);
     if (!sheet) throw new Error("Sheet \"" + sheetName + "\" not found.");
-    
+
     var dataRange = sheet.getDataRange();
     var data = dataRange.getDisplayValues(); // Preserves headers & formatting!
-    var headers = data[0]; 
+    var headers = data[0];
     var timeColumns = [];
     for (var i = 0; i < headers.length; i++) {
       var header = headers[i].toString().toLowerCase();
@@ -38,7 +38,7 @@ function fetchSheetData(sheetName, sheetId, filterMonth) {
       for (var col of timeColumns) {
         if (data[row][col] && data[row][col] !== '') {
           var cell = sheet.getRange(row + 1, col + 1);
-          var displayValue = cell.getDisplayValue(); 
+          var displayValue = cell.getDisplayValue();
           data[row][col] = displayValue;
         }
       }
@@ -46,7 +46,7 @@ function fetchSheetData(sheetName, sheetId, filterMonth) {
 
     if (filterMonth) {
       var headerRows = data.slice(0, 5);
-      var matchingDataRows = data.slice(5).filter(function(row) {
+      var matchingDataRows = data.slice(5).filter(function (row) {
         return row[1] && row[1].toString().trim().toLowerCase() === filterMonth.toString().trim().toLowerCase();
       });
       data = headerRows.concat(matchingDataRows);
@@ -98,7 +98,7 @@ function doPost(e) {
     if (action === 'uploadFile') {
       return handleFileUpload(e);
     }
-    
+
     var sheetName = params.sheetName;
     var sheetId = params.sheetId || params.sheet;
     var ss = sheetId ? SpreadsheetApp.openById(sheetId) : SpreadsheetApp.openById("1hA6J-3UNuvz82EJLDJFmtTRwRT9oGa4SsLpw2o3TvAo");
@@ -106,11 +106,11 @@ function doPost(e) {
     if (!sheet) {
       throw new Error("Sheet \"" + sheetName + "\" not found.");
     }
-    
+
     if (action === 'insert') {
       var rowDataStr = params.rowData || params.payload;
       var rowData = JSON.parse(rowDataStr);
-      
+
       // Convert timestamp safely
       if (rowData[0] && typeof rowData[0] === 'string') {
         var timestampStr = rowData[0];
@@ -131,7 +131,7 @@ function doPost(e) {
           }
         }
       }
-      
+
       // Convert completion date (index 6) to proper date object
       if (rowData[6] && typeof rowData[6] === 'string') {
         var completionParts = rowData[6].split('/');
@@ -144,18 +144,18 @@ function doPost(e) {
           rowData[6] = completionDate;
         }
       }
-      
+
       // Append the row
       sheet.appendRow(rowData);
-      
+
       var lastRow = sheet.getLastRow();
       sheet.getRange(lastRow, 6).setNumberFormat('0');
-      
-      return ContentService.createTextOutput(JSON.stringify({ 
+
+      return ContentService.createTextOutput(JSON.stringify({
         success: true,
         message: "Data inserted successfully"
       })).setMimeType(ContentService.MimeType.JSON);
-    } 
+    }
     else if (action === 'update') {
       var rowIndex = parseInt(params.rowIndex);
       var rowData = JSON.parse(params.rowData);
@@ -171,7 +171,7 @@ function doPost(e) {
           }
         }
       }
-      return ContentService.createTextOutput(JSON.stringify({ 
+      return ContentService.createTextOutput(JSON.stringify({
         success: true,
         message: "Data updated successfully (Column B skipped)"
       })).setMimeType(ContentService.MimeType.JSON);
@@ -198,9 +198,9 @@ function doPost(e) {
         }
       }
 
-      return ContentService.createTextOutput(JSON.stringify({ 
+      return ContentService.createTextOutput(JSON.stringify({
         success: true,
-        message: "Cell updated successfully" 
+        message: "Cell updated successfully"
       })).setMimeType(ContentService.MimeType.JSON);
     }
     else if (action === 'delete') {
@@ -209,7 +209,7 @@ function doPost(e) {
         throw new Error("Invalid row index for delete");
       }
       sheet.deleteRow(rowIndex);
-      return ContentService.createTextOutput(JSON.stringify({ 
+      return ContentService.createTextOutput(JSON.stringify({
         success: true,
         message: "Row deleted successfully"
       })).setMimeType(ContentService.MimeType.JSON);
@@ -218,7 +218,7 @@ function doPost(e) {
       var rowIndex = parseInt(params.rowIndex);
       var columnIndex = parseInt(params.columnIndex);
       var value = params.value || 'Yes';
-      
+
       if (isNaN(rowIndex) || rowIndex < 2) {
         throw new Error("Invalid row index for marking as deleted");
       }
@@ -226,37 +226,37 @@ function doPost(e) {
         throw new Error("Invalid column index for marking as deleted");
       }
       sheet.getRange(rowIndex, columnIndex).setValue(value);
-      
-      return ContentService.createTextOutput(JSON.stringify({ 
+
+      return ContentService.createTextOutput(JSON.stringify({
         success: true,
-        message: "Row marked as deleted successfully" 
+        message: "Row marked as deleted successfully"
       })).setMimeType(ContentService.MimeType.JSON);
     }
     else if (action === 'updateEnquiryColumn') {
       var enquiryNo = params.enquiryNo;
       var timestamp = params.timestamp;
-      
+
       if (!enquiryNo || !timestamp) {
         throw new Error("Missing enquiry number or timestamp for update");
       }
-      
+
       var dataRange = sheet.getDataRange();
       var data = dataRange.getValues();
-      
+
       var headers = data[5];
       var enquiryNoColumnIndex = -1;
-      
+
       for (var i = 0; i < headers.length; i++) {
         if (headers[i] === 'Candidate Enquiry Number') {
           enquiryNoColumnIndex = i;
           break;
         }
       }
-      
+
       if (enquiryNoColumnIndex === -1) {
         throw new Error("Candidate Enquiry Number column not found");
       }
-      
+
       var targetRowIndex = -1;
       for (var row = 6; row < data.length; row++) {
         if (data[row][enquiryNoColumnIndex] === enquiryNo) {
@@ -264,14 +264,14 @@ function doPost(e) {
           break;
         }
       }
-      
+
       if (targetRowIndex === -1) {
         throw new Error("Enquiry number not found: " + enquiryNo);
       }
-      
+
       sheet.getRange(targetRowIndex, 28).setValue(timestamp);
-      
-      return ContentService.createTextOutput(JSON.stringify({ 
+
+      return ContentService.createTextOutput(JSON.stringify({
         success: true,
         message: "Enquiry sheet updated successfully",
         updatedRow: targetRowIndex
@@ -297,13 +297,13 @@ function handleEmailShare(params) {
     var documents = JSON.parse(params.documents);
     var emailSubject = "HR Department - SBH Hospital - " + params.subject;
     var emailBody = params.message + "\n\n\nThis email was sent via Joining Management System.";
-    
+
     MailApp.sendEmail({
       to: params.recipientEmail,
       subject: emailSubject,
       body: emailBody
     });
-    
+
     return ContentService.createTextOutput(JSON.stringify({
       success: true,
       message: "Email sent successfully to " + params.recipientEmail

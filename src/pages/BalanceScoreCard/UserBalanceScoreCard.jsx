@@ -11,7 +11,6 @@ import { UserUgrasenNayak } from './UserScorecard/UserUgrasenNayak';
 import { UserIshaShrivastava } from './UserScorecard/UserIshaShrivastava';
 import { UserHarshRai } from './UserScorecard/UserHarshRai';
 import { UserJharnaAmbulkar } from './UserScorecard/UserJharnaAmbulkar';
-//import { UserLalitMohanBisht } from './UserScorecard/UserLalitMohanBisht';
 import { UserMangeshSahu } from './UserScorecard/UserMangeshSahu';
 import { UserNeeluSahu } from './UserScorecard/UserNeeluSahu';
 import { UserNighatParveen } from './UserScorecard/UserNighatParveen';
@@ -20,30 +19,34 @@ import { UserManaswiMaity, UserPoorwaGajbhiye } from './UserScorecard/UserManasw
 import { UserPratimaVarthi } from './UserScorecard/UserPratimaVarthi';
 import { UserPraveenGupta } from './UserScorecard/UserPraveenGupta';
 import { UserSumanBalaSahu } from './UserScorecard/UserSumanBalaSahu';
-// import { UserSurbhiNetam } from './UserScorecard/UserSurbhiNetam';
+import { UserSurbhiNetam } from './UserScorecard/UserSurbhiNetam';
 import { UserUmeshDhakkad } from './UserScorecard/UserUmeshDhakkad';
-// import { UserSumanGoud } from './UserScorecard/UserSumanGoud';   
+import { UserSumanGoud } from './UserScorecard/UserSumanGoud';   
 import { UserNikhileshDavda } from './UserScorecard/UserNikhileshDavda';
 import { UserSwapnilJain, UserAlkaDas } from './UserScorecard/UserSwapnilJain';
-import { AjayUpadhyayScorecardHistory } from './ScorecardHistory/AjayUpadhyayScorecardHistory'
-import { AlokPandeyScorecardHistory } from './ScorecardHistory/AlokPandeyScorecardHistory'
-import { DeepmalaPatilScorecardHistory } from './ScorecardHistory/DeepmalaPatilScorecardHistory'
-import { DeepuMouryaScorecardHistory } from './ScorecardHistory/DeepuMouryaScorecardHistory'
-import { GeetanjaliDeepScorecardHistory } from './ScorecardHistory/GeetanjaliDeepScorecardHistory'
-import { UgrasenNayakScorecardHistory } from './ScorecardHistory/UgrasenNayakScorecardHistory'
+import { AjayUpadhyayScorecardHistory } from './ScorecardHistory/AjayUpadhyayScorecardHistory';
+import { AlokPandeyScorecardHistory } from './ScorecardHistory/AlokPandeyScorecardHistory';
+import { DeepmalaPatilScorecardHistory } from './ScorecardHistory/DeepmalaPatilScorecardHistory';
+import { DeepuMouryaScorecardHistory } from './ScorecardHistory/DeepuMouryaScorecardHistory';
+import { GeetanjaliDeepScorecardHistory } from './ScorecardHistory/GeetanjaliDeepScorecardHistory';
+import { UgrasenNayakScorecardHistory } from './ScorecardHistory/UgrasenNayakScorecardHistory';
 import { HarshRaiScorecardHistory } from './ScorecardHistory/HarshRaiScorecardHistory';
-import { JharnaAmbulkarScorecardHistory } from './ScorecardHistory/JharnaAmbulkarScorecardHistory'
+import { JharnaAmbulkarScorecardHistory } from './ScorecardHistory/JharnaAmbulkarScorecardHistory';
 import { SwapnilJainScorecardHistory, AlkaDasScorecardHistory } from './ScorecardHistory/SwapnilJainScorecardHistory';
-import { NeeluSahuScorecardHistory } from './ScorecardHistory/NeeluSahuScorecardHistory'
-import { ManaswiMaityScorecardHistory, PoorwaGajbhiyeScorecardHistory } from './ScorecardHistory/ManaswiMaityScorecardHistory'
-import { PratimaVarthiScorecardHistory } from './ScorecardHistory/PratimaVarthiScorecardHistory'
-import { PraveenGuptaScorecardHistory } from './ScorecardHistory/PraveenGuptaScorecardHistory'
-import { SumanBalaSahuScorecardHistory } from './ScorecardHistory/SumanBalaSahuScorecardHistory'
-import { UmeshDhakkadScorecardHistory } from './ScorecardHistory/UmeshDhakkadScorecardHistory'
+import { NeeluSahuScorecardHistory } from './ScorecardHistory/NeeluSahuScorecardHistory';
+import { ManaswiMaityScorecardHistory, PoorwaGajbhiyeScorecardHistory } from './ScorecardHistory/ManaswiMaityScorecardHistory';
+import { PratimaVarthiScorecardHistory } from './ScorecardHistory/PratimaVarthiScorecardHistory';
+import { PraveenGuptaScorecardHistory } from './ScorecardHistory/PraveenGuptaScorecardHistory';
+import { SumanBalaSahuScorecardHistory } from './ScorecardHistory/SumanBalaSahuScorecardHistory';
+import { UmeshDhakkadScorecardHistory } from './ScorecardHistory/UmeshDhakkadScorecardHistory';
 import { MangeshSahuScorecardHistory } from './ScorecardHistory/MangeshSahuScorecardHistory';
 import { NighatParveenScorecardHistory } from './ScorecardHistory/NighatParveenScorecardHistory';
 import { PannaSenaniScorecardHistory } from './ScorecardHistory/PannaSenaniScorecardHistory';
 import { NikhileshDavdaScorecardHistory } from './ScorecardHistory/NikhileshDavdaScorecardHistory';
+import { IshaShrivastavaScorecardHistory } from './ScorecardHistory/IshaShrivastavaScorecardHistory';
+import { SurbhiNetamScorecardHistory } from './ScorecardHistory/SurbhiNetamScorecardHistory';
+import { SumanGoudScorecardHistory } from './ScorecardHistory/SumanGoudScorecardHistory';
+import { LalitMohanBishtScorecardHistory } from './ScorecardHistory/LalitMohanBishtScorecardHistory';
 
 export const UserBalanceScoreCard = () => {
   const navigate = useNavigate();
@@ -57,19 +60,20 @@ export const UserBalanceScoreCard = () => {
     { id: 7, name: "Harsh Rai", department: "Marketing" },
     { id: 8, name: "Isha Shrivastava", department: "Marketing" },
     { id: 9, name: "Jharna Ambulkar", department: "Admin" },
-    { id: 10, name: "Swapnil Jain", department: "Operations" },
-    { id: 11, name: "Mangesh Sahu", department: "Marketing" },
-    { id: 12, name: "Neelu Sahu", department: "Operation" },
-    { id: 13, name: "Nighat Parveen", department: "Marketing" },
-    { id: 14, name: "Panna Senani", department: "Accounts" },
-    { id: 15, name: "Manaswi Maity", department: "HR" },
-    { id: 16, name: "Pratima Varthi", department: "Store" },
-    { id: 17, name: "Praveen Gupta", department: "IT" },
-    { id: 18, name: "Suman Bala Sahu", department: "Admin" },
-    { id: 19, name: "Nikhilesh Davda", department: "COO" },
-    // { id: 20, name: "Suman Goud Kuntla", department: "COO- Operations" },
-    // { id: 21, name: "Surbhi Netam", department: "Marketing" },
-    { id: 22, name: "Umesh Dhakkad", department: "Pharmacy" }
+    { id: 10, name: "Lalit Mohan Bisht", department: "Operations" },
+    { id: 11, name: "Swapnil Jain", department: "Operations" },
+    { id: 12, name: "Mangesh Sahu", department: "Marketing" },
+    { id: 13, name: "Neelu Sahu", department: "Operation" },
+    { id: 14, name: "Nighat Parveen", department: "Marketing" },
+    { id: 15, name: "Panna Senani", department: "Accounts" },
+    { id: 16, name: "Manaswi Maity", department: "HR" },
+    { id: 17, name: "Pratima Varthi", department: "Store" },
+    { id: 18, name: "Praveen Gupta", department: "IT" },
+    { id: 19, name: "Suman Bala Sahu", department: "Admin" },
+    { id: 20, name: "Nikhilesh Davda", department: "COO" },
+    { id: 21, name: "Suman Goud Kuntla", department: "COO- Operations" },
+    { id: 22, name: "Surbhi Netam", department: "Marketing" },
+    { id: 23, name: "Umesh Dhakkad", department: "Pharmacy" }
   ]);
 
   const [selectedEmployee, setSelectedEmployee] = useState(null);
@@ -128,7 +132,6 @@ export const UserBalanceScoreCard = () => {
           if (result.success && result.data && result.data.length > 5) {
             const dataRows = result.data.slice(5);
 
-            // Let's find the header row index
             let headerRowIdx = 5;
             for (let i = 0; i < Math.min(result.data.length, 10); i++) {
               if (result.data[i] && result.data[i][0] && result.data[i][0].toString().toLowerCase().trim() === 'timestamp') {
@@ -138,7 +141,6 @@ export const UserBalanceScoreCard = () => {
             }
             const headers = result.data[headerRowIdx] || [];
             
-            // Helper variable to find indices dynamically
             let targetScoreIdx = -1;
             let actualScoreIdx = -1;
             let oppLossIdx = -1;
@@ -164,8 +166,6 @@ export const UserBalanceScoreCard = () => {
               }
             });
 
-            // Opportunity loss column is trickier because there might be multiple (job opp loss and delegation opp loss).
-            // Usually, job opp loss is the first "opportunity loss" column.
             for (let idx = 0; idx < headers.length; idx++) {
               const txt = headers[idx].toString().toLowerCase().trim();
               if (txt === 'opportunity loss') {
@@ -174,8 +174,7 @@ export const UserBalanceScoreCard = () => {
               }
             }
 
-            // Fallback to end-of-row offsets if not found dynamically
-            const len = headers.length || 72; // default length
+            const len = headers.length || 72;
             if (targetScoreIdx === -1) {
               const hasDelegation = headers.some(h => h.toString().toLowerCase().includes('delegation'));
               if (hasDelegation) {
@@ -193,7 +192,6 @@ export const UserBalanceScoreCard = () => {
             if (overallOppLossIdx === -1) overallOppLossIdx = len - 2;
             if (overallPercentageIdx === -1) overallPercentageIdx = len - 1;
 
-            // Helper function to normalize month formatting (handling strings like 'November 2025' and Dates alike)
             const normalizeMonth = (monthString) => {
               if (!monthString) return "";
               try {
@@ -214,7 +212,6 @@ export const UserBalanceScoreCard = () => {
               }
             };
 
-            // Build history sheet structure matching the dashboard history view
             const reportRows = [
               [`Employee Balance Scorecard Report (${startMonth} ${startYear} to ${endMonth} ${endYear})`],
               ["Employee Name:", emp.name, "Department:", emp.department],
@@ -234,9 +231,9 @@ export const UserBalanceScoreCard = () => {
                     : "Fully Completed";
                   
                   reportRows.push([
-                    row[0] || "-", // Timestamp
-                    month, // Month
-                    emp.name, // Employee Name
+                    row[0] || "-",
+                    month,
+                    emp.name,
                     row[targetScoreIdx] !== undefined && row[targetScoreIdx] !== "" ? row[targetScoreIdx] : "-",
                     row[actualScoreIdx] !== undefined && row[actualScoreIdx] !== "" ? row[actualScoreIdx] : "-",
                     row[oppLossIdx] !== undefined && row[oppLossIdx] !== "" ? row[oppLossIdx] : "-",
@@ -249,17 +246,17 @@ export const UserBalanceScoreCard = () => {
                 });
               } else {
                 reportRows.push([
-                  "-", // Timestamp
-                  month, // Month
-                  emp.name, // Employee Name
-                  "-", // Target Score
-                  "-", // Actual Score
-                  "-", // Opportunity Loss
-                  "-", // Overall Target
-                  "-", // Overall Actual
-                  "-", // Overall Opportunity Loss
-                  "-", // Overall Percentage
-                  "Not Filled" // Submission Status
+                  "-",
+                  month,
+                  emp.name,
+                  "-",
+                  "-",
+                  "-",
+                  "-",
+                  "-",
+                  "-",
+                  "-",
+                  "Not Filled"
                 ]);
               }
             });
@@ -284,11 +281,11 @@ export const UserBalanceScoreCard = () => {
         }
       }
 
-      XLSX.writeFile(workbook, `All_Employees_Balance_Scorecard_Report_${startYear}_${endYear}.xlsx`);
-      alert("Consolidated reports downloaded successfully!");
+      XLSX.writeFile(workbook, `My_Balance_Scorecard_Report_${startYear}_${endYear}.xlsx`);
+      alert("Report downloaded successfully!");
     } catch (error) {
-      console.error("Error downloading consolidated reports:", error);
-      alert("Failed to download reports.");
+      console.error("Error downloading report:", error);
+      alert("Failed to download report.");
     } finally {
       setIsDownloadingAll(false);
     }
@@ -330,7 +327,7 @@ export const UserBalanceScoreCard = () => {
           return;
         }
 
-        // Find the name property dynamically (look for "Name", "User", "Employee", etc.)
+        // Find the name property dynamically
         const nameKey = Object.keys(user).find(k => 
           k.toLowerCase().includes('name') || 
           k.toLowerCase().includes('user')
@@ -369,9 +366,34 @@ export const UserBalanceScoreCard = () => {
         }
 
         if (matchedEmployee) {
+          // Check if employee is marked Inactive in Balance Scorecard
+          const statusSaved = localStorage.getItem('scorecard_employee_status');
+          let isInactive = false;
+          if (statusSaved) {
+            try {
+              const statusMap = JSON.parse(statusSaved);
+              if (statusMap[matchedEmployee.name] === false) {
+                isInactive = true;
+              }
+            } catch (e) {
+              console.error(e);
+            }
+          } else {
+            const defaultInactive = ["Lalit Mohan Bisht", "Suman Goud Kuntla", "Surbhi Netam"];
+            if (defaultInactive.includes(matchedEmployee.name)) {
+              isInactive = true;
+            }
+          }
+
+          if (isInactive) {
+            setFilteredEmployees([]);
+            setError(`Your account (${matchedEmployee.name}) is currently marked Inactive in Balance Score Card. Please contact Admin if you need access.`);
+            setIsLoading(false);
+            return;
+          }
+
           // Filter to show only this employee in the list
           setFilteredEmployees([matchedEmployee]);
-          // Reset selection so the user sees the list first
           setSelectedEmployee(null);
           setViewType('');
           setError(null);
@@ -391,8 +413,6 @@ export const UserBalanceScoreCard = () => {
     fetchData();
   }, [employees, navigate]);
 
-
-
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -410,13 +430,13 @@ export const UserBalanceScoreCard = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Access Denied</h2>
+          <h2 className="text-xl font-bold text-gray-800 mb-2">Access Notice</h2>
           <p className="text-gray-600 mb-6">{error}</p>
-          <button 
-            onClick={() => window.location.href = '/'}
-            className="px-6 py-2 bg-blue-800 text-white rounded-md hover:bg-blue-700 transition-colors"
+          <button
+            onClick={() => navigate('/login')}
+            className="w-full bg-blue-800 text-white font-medium py-2 px-4 rounded hover:bg-blue-700 transition duration-150"
           >
-            Return to Dashboard
+            Back to Login
           </button>
         </div>
       </div>
@@ -433,7 +453,7 @@ export const UserBalanceScoreCard = () => {
             {selectedEmployee && (
               <button
                 onClick={handleBackClick}
-                className="px-4 py-2 bg-blue-800 text-white rounded hover:bg-blue-700 flex items-center text-sm md:text-base"
+                className="px-4 py-2 bg-blue-800 text-white rounded hover:bg-blue-700 flex items-center text-sm md:text-base font-semibold shadow-sm"
               >
                 <svg
                   className="w-4 h-4 mr-2"
@@ -516,10 +536,10 @@ export const UserBalanceScoreCard = () => {
           <div className="flex flex-col md:flex-row md:items-center justify-between space-y-2 md:space-y-0">
             <div className="flex flex-col md:flex-row md:items-center space-y-1 md:space-y-0">
               <h1 className="text-2xl md:text-3xl font-bold text-gray-900 text-center md:text-left">
-                {selectedEmployee ? selectedEmployee : "Balanced Scorecard"}
+                {selectedEmployee ? selectedEmployee : "Balance Scorecard"}
               </h1>
               {selectedEmployee && (
-                <span className="ml-0 md:ml-4 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm md:text-base text-center md:text-left mt-1 md:mt-0">
+                <span className="ml-0 md:ml-4 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm md:text-base text-center md:text-left mt-1 md:mt-0 font-medium">
                   {viewType === "scorecard"
                     ? "Score Card View"
                     : "History View"}
@@ -545,12 +565,10 @@ export const UserBalanceScoreCard = () => {
               selectedEmployee === "Ugrasen Nayak" && <UserUgrasenNayak />}
             {viewType === "scorecard" &&
               selectedEmployee === "Harsh Rai" && <UserHarshRai />}
-            {/* {viewType === "scorecard" &&
-              selectedEmployee === "Isha Shrivastava" && <UserIshaShrivastava />} */}
+            {viewType === "scorecard" &&
+              selectedEmployee === "Isha Shrivastava" && <UserIshaShrivastava />}
             {viewType === "scorecard" &&
               selectedEmployee === "Jharna Ambulkar" && <UserJharnaAmbulkar />}
-            {/* {viewType === "scorecard" &&
-              selectedEmployee === "Lalit Mohan Bisht" && <UserLalitMohanBisht />} */}
             {viewType === "scorecard" &&
               (selectedEmployee === "Swapnil Jain" || selectedEmployee === "Alka Das") && <UserSwapnilJain />}
             {viewType === "scorecard" &&
@@ -569,12 +587,12 @@ export const UserBalanceScoreCard = () => {
               selectedEmployee === "Praveen Gupta" && <UserPraveenGupta />}
             {viewType === "scorecard" &&
               selectedEmployee === "Suman Bala Sahu" && <UserSumanBalaSahu />}
-            {/* {viewType === "scorecard" &&
-              selectedEmployee === "Suman Goud Kuntla" && <UserSumanGoud />} */}
+            {viewType === "scorecard" &&
+              selectedEmployee === "Suman Goud Kuntla" && <UserSumanGoud />}
             {viewType === "scorecard" &&
               selectedEmployee === "Nikhilesh Davda" && <UserNikhileshDavda />}
-            {/* {viewType === "scorecard" &&
-              selectedEmployee === "Surbhi Netam" && <UserSurbhiNetam />} */}
+            {viewType === "scorecard" &&
+              selectedEmployee === "Surbhi Netam" && <UserSurbhiNetam />}
             {viewType === "scorecard" &&
               selectedEmployee === "Umesh Dhakkad" && <UserUmeshDhakkad />}
             
@@ -598,39 +616,10 @@ export const UserBalanceScoreCard = () => {
             {viewType === "history" && selectedEmployee === "Suman Bala Sahu" && <SumanBalaSahuScorecardHistory />}
             {viewType === "history" && selectedEmployee === "Umesh Dhakkad" && <UmeshDhakkadScorecardHistory />}
             {viewType === "history" && selectedEmployee === "Nikhilesh Davda" && <NikhileshDavdaScorecardHistory />}
-            {![
-              "Ajay Upadhyay",
-              "Alok Pandey",
-              "Deepmala Patil",
-              "Deepu Mourya",
-              "Geetanjali Deep",
-              "Ugrasen Nayak",
-              "Harsh Rai",
-              //"Isha Shrivastava",
-              "Jharna Ambulkar",
-              "Alka Das",
-              "Mangesh Sahu",
-              "Neelu Sahu",
-              "Nighat Parveen",
-              "Panna Senani",
-              "Poorwa Gajbhiye",
-              "Pratima Varthi",
-              "Praveen Gupta",
-              "Suman Bala Sahu",
-              // "Suman Goud Kuntla",
-              "Nikhilesh Davda",
-              //"Surbhi Netam",
-              "Umesh Dhakkad",
-            ].includes(selectedEmployee) && (
-                <div className="bg-white rounded-lg shadow p-4 md:p-6">
-                  <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-4">
-                    Employee Details
-                  </h2>
-                  <p className="text-gray-600">
-                    Details for {selectedEmployee} will be displayed here.
-                  </p>
-                </div>
-              )}
+            {viewType === "history" && selectedEmployee === "Isha Shrivastava" && <IshaShrivastavaScorecardHistory />}
+            {viewType === "history" && selectedEmployee === "Surbhi Netam" && <SurbhiNetamScorecardHistory />}
+            {viewType === "history" && selectedEmployee === "Suman Goud Kuntla" && <SumanGoudScorecardHistory />}
+            {viewType === "history" && selectedEmployee === "Lalit Mohan Bisht" && <LalitMohanBishtScorecardHistory />}
           </div>
         ) : (
           <>
@@ -714,7 +703,7 @@ export const UserBalanceScoreCard = () => {
                           colSpan="4"
                           className="px-6 py-4 text-center text-gray-500"
                         >
-                          No employees available
+                          No scorecard profile found.
                         </td>
                       </tr>
                     )}
@@ -773,7 +762,7 @@ export const UserBalanceScoreCard = () => {
                   </div>
                 ) : (
                   <div className="p-6 text-center text-gray-500">
-                    No employees available
+                    No scorecard profile found.
                   </div>
                 )}
               </div>
@@ -784,3 +773,5 @@ export const UserBalanceScoreCard = () => {
     </div>
   );
 };
+
+export default UserBalanceScoreCard;
